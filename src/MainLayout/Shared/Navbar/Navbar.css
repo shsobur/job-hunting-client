@@ -1,0 +1,280 @@
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 60px;
+}
+
+.main_navbar_container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  padding: 5px 0;
+  background-color: #67c090;
+  backdrop-filter: blur(10px);
+  transition: 0.2s ease-out;
+  z-index: 555;
+  box-shadow: 0 4px 6px -4px black;
+}
+
+#navbar_close {
+  top: -90px;
+}
+
+#navbar_open {
+  top: 0px;
+}
+
+.navbar_content_container {
+  width: 80%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+}
+
+/* Logo style__ */
+
+.navbar_logo {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #124170;
+  cursor: pointer;
+}
+
+/* Routes style__ */
+
+.navbar_routes_container {
+  gap: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  list-style: none;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.router_none_active_style {
+  color: #124170;
+  cursor: pointer;
+  padding: 0 20px 0 0;
+  text-decoration: none;
+  display: inline-block;
+  border-bottom: 3px solid transparent;
+}
+
+.route_active_style {
+  transition: 0.3s ease-in-out;
+  color: #124170;
+  text-decoration: none;
+  display: inline-block;
+  border-bottom: 3px solid #124170;
+}
+
+/* Dropdown style__ */
+
+.dropdown_wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown_button {
+  color: #124170;
+  font-size: 2.5rem;
+  border: none;
+  cursor: pointer;
+  background-color: transparent;
+  transition: 0.3s ease-in-out;
+}
+
+.dropdown_button:hover {
+  transform: scale(1.2);
+  background-color: transparent;
+}
+
+.dropdown_menu {
+  position: absolute;
+  top: 110%;
+  right: 0;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 8px 16px #0000001a;
+  opacity: 0;
+  transform: scaleY(0.95);
+  transform-origin: top;
+  pointer-events: none;
+  transition: all 0.2s ease;
+  z-index: 100;
+  min-width: 420px;
+  padding: 10px;
+}
+
+.dropdown_menu.open {
+  opacity: 1;
+  transform: scaleY(1);
+  pointer-events: auto;
+}
+
+.dropdown_item {
+  gap: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 10px 16px;
+  color: #333;
+  font-size: 18px;
+  font-weight: 500;
+  transition: background 0.2s;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.dropdown_item:hover {
+  background-color: #f3f4f6;
+}
+
+/* Mobile menu style__ */
+
+.mobile_menu_container {
+  display: none;
+  font-size: 1.6rem;
+}
+
+.main_mobile_menu_container {
+  width: 60%;
+  height: calc(100vh - 83px);
+  padding: 20px;
+  color: #151515;
+  position: absolute;
+  top: 79px;
+  right: 0;
+  backdrop-filter: blur(20px);
+  background-color: #ffffffea;
+  transition: 0.5s ease-out;
+}
+
+.mobile_menu_routes ul {
+  list-style: none;
+  width: 100%;
+}
+
+.mobile_menu_routes ul li {
+  margin-bottom: 20px;
+  font-size: 20px;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.mobile_menu_non_active_style {
+  width: 100%;
+  gap: 20px;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  justify-content: flex-start;
+}
+
+.mobile_menu_active_style {
+  width: 100%;
+  gap: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 10px;
+  border-radius: 8px;
+  background-color: #cfcccc;
+}
+
+.others_routes_container {
+  border-top: 2px solid black;
+  margin-top: 20px;
+}
+
+/* Menu default style__ */
+
+.main_mobile_menu_container {
+  display: none;
+}
+
+/* Responsive style__ */
+
+@media screen and (max-width: 1280px) {
+  .navbar_content_container {
+    width: 90%;
+  }
+
+  .navbar_routes_container {
+    gap: 40px;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  nav {
+    margin-bottom: 64px;
+  }
+
+  .navbar_content_container {
+    width: 100%;
+  }
+
+  .navbar_routes_container {
+    gap: 30px;
+  }
+
+  .navbar_logo {
+    font-size: 2.2rem;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  nav {
+    margin-bottom: 60px;
+  }
+
+  .navbar_logo {
+    font-size: 2rem;
+  }
+
+  .navbar_routes_container {
+    display: none;
+  }
+
+  .dropdown_wrapper {
+    display: none;
+  }
+
+  .mobile_menu_container {
+    display: block;
+  }
+
+  .main_mobile_menu_container {
+    display: block;
+    top: 68px;
+    height: calc(100vh - 68px);
+  }
+
+  #menu_close {
+    right: 900px;
+  }
+}
+
+@media screen and (max-width: 640px) {
+  nav {
+    margin-bottom: 55px;
+  }
+
+  .navbar_logo {
+    font-size: 1.8rem;
+  }
+}
+
+@media screen and (max-width: 475px) {
+  .main_mobile_menu_container {
+    width: 100%;
+    height: calc(100vh - 54px);
+  }
+}
