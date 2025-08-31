@@ -15,14 +15,15 @@
   background-position: center;
   background-repeat: no-repeat;
   background-image: url("../../../../assets/bannerImage.webp");
-  box-shadow: #00000066 0px 2px 4px, #0000004d 0px 7px 13px -3px, #00000033 0px -3px 0px inset;
+  box-shadow: #00000066 0px 2px 4px, #0000004d 0px 7px 13px -3px,
+    #00000033 0px -3px 0px inset;
 }
 
 .banner_overlay_container {
   height: 100%;
   width: 100%;
   border-radius: 8px;
-  background-color: #00000076;
+  background-color: #00000085;
   /* ------ */
   display: flex;
   align-items: center;
@@ -52,7 +53,7 @@
 
 .jon_search_input_container input {
   width: 60%;
-  padding: 30px 30px 30px 20px;
+  padding: 30px 150px 30px 20px;
   outline: none;
   border-radius: 8px;
   color: #151515;
@@ -70,4 +71,101 @@
   position: absolute;
   top: 23%;
   right: 21%;
+}
+
+/* Responsive styles__ */
+
+@media screen and (max-width: 1536px) {
+  .banner_content h1 {
+    max-width: 90%;
+    margin: auto;
+    font-size: 4.8rem;
+  }
+}
+
+@media screen and (max-width: 1280px) {
+  .banner_bg_image_container {
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+  }
+
+  .banner_overlay_container {
+    border-radius: 0;
+  }
+
+  .banner_content h1 {
+    font-size: 4.5rem;
+  }
+
+  .banner_content p {
+    max-width: 75%;
+    margin: auto;
+  }
+
+  .jon_search_input_container input {
+    width: 70%;
+    padding-right: 180px;
+  }
+
+  .jon_search_input_container button {
+    right: 17%;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  #main_banner_container {
+    height: calc(100vh - 55px);
+  }
+
+  .jon_search_input_container input {
+    padding: 20px 150px 20px 20px;
+  }
+
+  .jon_search_input_container button {
+    padding: 5px 30px;
+  }
+}
+
+@media screen and (max-width: 640px) {
+  .banner_content h1 {
+    max-width: 95%;
+    font-size: 3.5rem;
+  }
+
+  .banner_content p {
+    max-width: 95%;
+  }
+
+  .jon_search_input_container input {
+    width: 90%;
+    padding-right: 180px;
+  }
+
+  .jon_search_input_container button {
+    right: 8%;
+  }
+}
+
+@media screen and (max-width: 475px) {
+  .banner_content h1 {
+    font-size: 3rem;
+  }
+
+  .banner_content p {
+    font-size: 16px;
+  }
+
+  .jon_search_input_container input {
+    padding-right: 20px;
+  }
+
+  .jon_search_input_container button {
+    width: 90%;
+    padding: 5px 10px;
+    font-size: 16px;
+    font-weight: 400;
+    top: 110%;
+    right: 5%;
+  }
 }

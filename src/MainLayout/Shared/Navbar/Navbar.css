@@ -224,7 +224,7 @@ nav {
 
 @media screen and (max-width: 1024px) {
   nav {
-    margin-bottom: 64px;
+    margin-bottom: 58px;
   }
 
   .navbar_content_container {
@@ -246,7 +246,7 @@ nav {
 
 @media screen and (max-width: 768px) {
   nav {
-    margin-bottom: 60px;
+    margin-bottom: 55px;
   }
 
   .navbar_logo {
