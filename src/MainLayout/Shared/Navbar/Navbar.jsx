@@ -1,5 +1,6 @@
 import "./Navbar.css";
-import { NavLink } from "react-router";
+import logo from "../../../../public/fab.png";
+import { NavLink } from "react-router-dom";
 
 // React icons__
 import { RxCross1 } from "react-icons/rx";
@@ -72,7 +73,10 @@ const Navbar = () => {
           className="main_navbar_container"
         >
           <div className="navbar_content_container">
-            <h1 className="navbar_logo">JobHunting</h1>
+            <div className="navbar_logo">
+              <img src={logo}></img>
+              <h1>JobHunting</h1>
+            </div>
 
             <ul className="navbar_routes_container">
               <NavLink

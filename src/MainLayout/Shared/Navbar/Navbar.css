@@ -12,11 +12,11 @@ nav {
   justify-content: center;
   position: fixed;
   padding: 5px 0;
-  background-color: #67c090;
+  background-color: #ffffff;
   backdrop-filter: blur(10px);
   transition: 0.2s ease-out;
   z-index: 555;
-  box-shadow: 0 4px 6px -4px black;
+  border-bottom: 2px solid #3c8f63;
 }
 
 #navbar_close {
@@ -28,7 +28,7 @@ nav {
 }
 
 .navbar_content_container {
-  width: 80%;
+  width: 90%;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -38,10 +38,20 @@ nav {
 /* Logo style__ */
 
 .navbar_logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.navbar_logo h1 {
   font-size: 2rem;
   font-weight: 600;
-  color: #124170;
-  cursor: pointer;
+  color: #3c8f63;
+}
+
+.navbar_logo img {
+  width: 60px;
 }
 
 /* Routes style__ */
@@ -57,7 +67,7 @@ nav {
 }
 
 .router_none_active_style {
-  color: #124170;
+  color: #151515;
   cursor: pointer;
   padding: 0 20px 0 0;
   text-decoration: none;
@@ -67,10 +77,10 @@ nav {
 
 .route_active_style {
   transition: 0.3s ease-in-out;
-  color: #124170;
+  color: #3c8f63;
   text-decoration: none;
   display: inline-block;
-  border-bottom: 3px solid #124170;
+  border-bottom: 3px solid #3c8f63;
 }
 
 /* Dropdown style__ */
@@ -81,7 +91,7 @@ nav {
 }
 
 .dropdown_button {
-  color: #124170;
+  color: #3c8f63;
   font-size: 2.5rem;
   border: none;
   cursor: pointer;
@@ -147,12 +157,12 @@ nav {
   width: 60%;
   height: calc(100vh - 83px);
   padding: 20px;
-  color: #151515;
+  color: #ffffff;
   position: absolute;
   top: 79px;
   right: 0;
   backdrop-filter: blur(20px);
-  background-color: #ffffffea;
+  background-color: #3c8f63;
   transition: 0.5s ease-out;
 }
 
@@ -186,11 +196,11 @@ nav {
   justify-content: flex-start;
   padding: 10px;
   border-radius: 8px;
-  background-color: #cfcccc;
+  background-color: #1d5d3b;
 }
 
 .others_routes_container {
-  border-top: 2px solid black;
+  border-top: 2px solid #ffffff;
   margin-top: 20px;
 }
 
@@ -225,8 +235,12 @@ nav {
     gap: 30px;
   }
 
-  .navbar_logo {
-    font-size: 2.2rem;
+  .navbar_logo h1 {
+    font-size: 1.8rem;
+  }
+
+  .navbar_logo img {
+    width: 55px;
   }
 }
 
@@ -253,8 +267,8 @@ nav {
 
   .main_mobile_menu_container {
     display: block;
-    top: 68px;
-    height: calc(100vh - 68px);
+    top: 55px;
+    height: calc(100vh - 50px);
   }
 
   #menu_close {
