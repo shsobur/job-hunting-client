@@ -1,0 +1,73 @@
+#main_banner_container {
+  background-color: #fbfffd;
+  height: calc(100vh - 60px);
+  /* ------ */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.banner_bg_image_container {
+  height: 80%;
+  width: 75%;
+  border-radius: 8px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-image: url("../../../../assets/bannerImage.webp");
+  box-shadow: #00000066 0px 2px 4px, #0000004d 0px 7px 13px -3px, #00000033 0px -3px 0px inset;
+}
+
+.banner_overlay_container {
+  height: 100%;
+  width: 100%;
+  border-radius: 8px;
+  background-color: #000000aa;
+  /* ------ */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.banner_content {
+  text-align: center;
+  color: #ffffff;
+}
+
+.banner_content h1 {
+  font-size: 5rem;
+  font-weight: 800;
+}
+
+.banner_content p {
+  font-size: 20px;
+  max-width: 800px;
+  margin: auto;
+}
+
+.jon_search_input_container {
+  margin-top: 50px;
+  position: relative;
+}
+
+.jon_search_input_container input {
+  width: 60%;
+  padding: 30px 30px 30px 20px;
+  outline: none;
+  border-radius: 8px;
+  color: #151515;
+  font-size: 18px;
+}
+
+.jon_search_input_container button {
+  color: #151515;
+  padding: 10px 30px;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 18px;
+  background-color: #59b182;
+  position: absolute;
+  top: 23%;
+  right: 21%;
+}
