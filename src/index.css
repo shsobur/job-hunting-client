@@ -2,7 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"); /* Roboto */
+
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"); /* Montserrat */
+
 @import "nprogress/nprogress.css";
+
+body {
+  font-family: "Roboto", sans-serif;
+}
 
 #nprogress {
   pointer-events: none;
