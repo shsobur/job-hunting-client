@@ -1,6 +1,6 @@
 import "./Navbar.css";
 import logo from "../../../../public/fab.png";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 
 // React icons__
 import { RxCross1 } from "react-icons/rx";
@@ -18,6 +18,7 @@ import { useEffect, useRef, useState } from "react";
 
 const Navbar = () => {
   const menuRef = useRef();
+  // eslint-disable-next-line no-unused-vars
   const [open, setOpen] = useState(false);
   const [isScrollingDown, setIsScrollingDown] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -107,7 +108,11 @@ const Navbar = () => {
               </NavLink>
             </ul>
 
-            <div className="dropdown_wrapper" ref={menuRef}>
+            <Link to="/sign-up">
+              <button className="btn btn-accent">Sign Up</button>
+            </Link>
+
+            {/* <div className="dropdown_wrapper" ref={menuRef}>
               <button
                 className="dropdown_button"
                 onClick={() => setOpen(!open)}
@@ -129,7 +134,7 @@ const Navbar = () => {
                   </span>
                 </NavLink>
               </div>
-            </div>
+            </div> */}
 
             <div className="mobile_menu_container">
               <span onClick={() => setMenuOpen(!menuOpen)}>
