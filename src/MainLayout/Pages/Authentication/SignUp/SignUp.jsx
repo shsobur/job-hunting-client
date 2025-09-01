@@ -3,12 +3,22 @@ import logo from "../../../../assets/companyLogo.png";
 import { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { HiOutlineInformationCircle } from "react-icons/hi";
+import { FcCheckmark } from "react-icons/fc";
 
 const SignUp = () => {
   const [step, setStep] = useState(1);
+  const [selected, setSelected] = useState("");
 
+  // Handle Slide__
   const handleNext = () => setStep(step + 1);
   const handleBack = () => setStep(step - 1);
+
+  const options = [
+    "Social Media",
+    "Friend or Family",
+    "Google / Search Engine",
+    "Randomly",
+  ];
 
   return (
     <>
@@ -47,12 +57,31 @@ const SignUp = () => {
 
                 <div className="step">
                   <div className="step_two_content">
-                    
+                    <h1>How do you hear about us?</h1>
+                    <div className="hear_options">
+                      {options.map((option) => (
+                        <div
+                          key={option}
+                          className={`option ${
+                            selected === option ? "selected" : ""
+                          }`}
+                          onClick={() => setSelected(option)}
+                        >
+                          <p>{option}</p>
+                          {selected === option && (
+                            <FcCheckmark className="check_icon" />
+                          )}
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
 
+                <div className="step">
+                  <div >
 
-                <div className="step">This is content 3</div>
+                  </div>
+                </div>
                 <div className="step">This is content 4</div>
               </div>
             </div>

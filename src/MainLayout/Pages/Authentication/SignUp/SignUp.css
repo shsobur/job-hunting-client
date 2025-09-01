@@ -42,7 +42,7 @@
   height: 100%;
   flex: 0 0 25%;
   box-sizing: border-box;
-  /* border: 1px solid #871010; */
+  border: 1px solid #871010;
 }
 
 /* Step - 01 content__ */
@@ -99,6 +99,48 @@
 
 .step_one_content button:nth-of-type(2) p {
   font-size: 16px;
+}
+
+/* Step - 02 content__ */
+
+.step_two_content h1 {
+  font-size: 2.5rem;
+  font-weight: 600;
+  color: #151515;
+  font-family: "Montserrat", sans-serif;
+}
+
+.hear_options {
+  margin-top: 100px;
+  flex-wrap: wrap;
+  font-size: 20px;
+  /* ------ */
+  gap: 1rem;
+  display: flex;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.option:hover {
+  border-color: #3C8F63;
+}
+
+.option.selected {
+  border-color: #3C8F63;
+  background-color: #e6f5ee;
+}
+
+.check_icon {
+  font-size: 1.2rem;
 }
 
 .signUp_process_button {
