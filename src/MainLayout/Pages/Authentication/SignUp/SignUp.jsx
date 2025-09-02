@@ -4,6 +4,7 @@ import { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { HiOutlineInformationCircle } from "react-icons/hi";
 import { FcCheckmark } from "react-icons/fc";
+import { useForm } from "react-hook-form";
 import { PiSmileyXEyesBold } from "react-icons/pi";
 import { BsEmojiHeartEyes } from "react-icons/bs";
 import ReCAPTCHA from "react-google-recaptcha";
@@ -44,6 +45,17 @@ const SignUp = () => {
     setCaptchaValue(value);
   };
 
+  const {
+    watch,
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = (data) => {
+    console.log(data);
+  };
+
   return (
     <>
       <section id="main_signUp_container">
@@ -52,7 +64,9 @@ const SignUp = () => {
             <div className="signUp_content">
               <div
                 className="slider"
-                style={{ transform: `translateX(-${(step - 1) * (100 / 4)}%)` }}
+                style={{
+                  transform: `translateX(-${(step - 1) * (100 / 4)}%)`,
+                }}
               >
                 <div className="step">
                   <div className="step_one_content">
@@ -129,58 +143,72 @@ const SignUp = () => {
                 </div>
 
                 <div className="step">
-                  <div className="step_four_content">
-                    <h1>Enter Your Email and Password</h1>
+                  <form onSubmit={handleSubmit(onSubmit)}>
+                    <div className="step_four_content">
+                      <h1>Enter Your Email and Password</h1>
 
-                    <div className="sign_up_input_container">
-                      <input
-                        type="email"
-                        name="email"
-                        placeholder="Enter you email"
-                      />
-                      <input
-                        type={passwordOpen ? "text" : "password"}
-                        name="password"
-                        placeholder="Enter you password"
-                      />
-                      <input
-                        type="password"
-                        name="confirmPassword"
-                        placeholder="Confirm password"
-                      />
-
-                      <span
-                        onClick={handlePassword}
-                        className="pass_show_icons"
-                      >
-                        {passwordOpen ? (
-                          <button>
-                            <BsEmojiHeartEyes size={25} />
-                          </button>
-                        ) : (
-                          <button>
-                            <PiSmileyXEyesBold size={25} />
-                          </button>
-                        )}
-                      </span>
-
-                      <div className="not_robot_container">
-                        <ReCAPTCHA
-                          sitekey={import.meta.env.VITE_SITE_KEY}
-                          onChange={handleCaptcha}
+                      <div className="sign_up_input_container">
+                        <input
+                          type="email"
+                          name="email"
+                          placeholder="Enter you email"
+                          {...register("email", { required: true })}
                         />
-                      </div>
+                        {errors.email && (
+                          <span className="text-red-500 text-sm">
+                            This field is required
+                          </span>
+                        )}
+                        <input
+                          type={passwordOpen ? "text" : "password"}
+                          name="password"
+                          placeholder="Enter you password"
+                        />
+                        <input
+                          type="password"
+                          name="confirmPassword"
+                          placeholder="Confirm password"
+                        />
 
-                      <div className="check_box">
-                        <label className="checkbox_label">
-                          <input type="checkbox" />
-                          <span className="custom_checkbox"></span>I agree to
-                          the <a href="#">Terms & Conditions</a>
-                        </label>
+                        <span
+                          onClick={handlePassword}
+                          className="pass_show_icons"
+                        >
+                          {passwordOpen ? (
+                            <button>
+                              <BsEmojiHeartEyes size={25} />
+                            </button>
+                          ) : (
+                            <button>
+                              <PiSmileyXEyesBold size={25} />
+                            </button>
+                          )}
+                        </span>
+
+                        <div className="not_robot_container">
+                          <ReCAPTCHA
+                            sitekey={import.meta.env.VITE_SITE_KEY}
+                            onChange={handleCaptcha}
+                          />
+                        </div>
+
+                        <div className="check_box">
+                          <label className="checkbox_label">
+                            <input type="checkbox" />
+                            <span className="custom_checkbox"></span>I agree to
+                            the <a href="#">Terms & Conditions</a>
+                          </label>
+                        </div>
+
+                        <button
+                          type="submit"
+                          className="min-w-[70%] text-lg btn bg-[#3C8F63] text-white mt-5"
+                        >
+                          Submit
+                        </button>
                       </div>
-                      
                     </div>
-                  </div>
+                  </form>
                 </div>
               </div>
             </div>
@@ -192,31 +220,29 @@ const SignUp = () => {
 
           <div className="signUp_process_button">
             <button
+              type="button"
               disabled={step === 1}
               onClick={handleBack}
-              className="btn btn-accent"
+              className="btn bg-[#3C8F63] text-white"
             >
               Previous
             </button>
 
-            {step === 4 ? (
-              <button className="btn btn-accent">Submit</button>
-            ) : (
-              step > 1 && (
-                <button
-                  disabled={
-                    step === 2 && selected === ""
-                      ? true
-                      : step === 3 && selectedRole === ""
-                      ? true
-                      : false
-                  }
-                  onClick={handleNext}
-                  className="btn btn-accent"
-                >
-                  Next
-                </button>
-              )
+            {step !== 4 && step > 1 && (
+              <button
+                type="button"
+                disabled={
+                  step === 2 && selected === ""
+                    ? true
+                    : step === 3 && selectedRole === ""
+                    ? true
+                    : false
+                }
+                onClick={handleNext}
+                className="btn bg-[#3C8F63] text-white"
+              >
+                Next
+              </button>
             )}
           </div>
         </div>

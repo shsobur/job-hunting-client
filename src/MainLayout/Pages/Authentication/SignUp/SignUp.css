@@ -9,10 +9,11 @@
 
 .signUp_inner_container {
   width: 60%;
-  height: 60%;
+  height: 75%;
   padding: 50px;
   background-color: #ffffff;
   border-radius: 8px;
+  position: relative;
   box-shadow: #00000030 0px 10px 20px, #0000003b 0px 6px 6px;
 }
 
@@ -20,7 +21,7 @@
   height: 90%;
   /* ------ */
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: space-between;
 }
 
@@ -29,6 +30,10 @@
   height: 100%;
   overflow: hidden;
   position: relative;
+}
+
+.company_logo {
+  margin-bottom: 40px;
 }
 
 .slider {
@@ -207,7 +212,7 @@
 /* Step - 04 content__ */
 
 .step_four_content h1 {
-  font-size: 2rem;
+  font-size: 2.3rem;
   font-weight: 600;
   color: #151515;
   font-family: "Montserrat", sans-serif;
@@ -215,7 +220,7 @@
 
 .sign_up_input_container {
   position: relative;
-  margin-top: 10px;
+  margin-top: 30px;
 }
 
 .sign_up_input_container input {
@@ -240,7 +245,7 @@
 
 .pass_show_icons {
   position: absolute;
-  top: 25%;
+  top: 21%;
   right: 31%;
   cursor: pointer;
 }
@@ -277,7 +282,7 @@
 .checkbox_label input:checked + .custom_checkbox::after {
   content: "✔";
   color: white;
-  position: absolute; 
+  position: absolute;
   top: -2px;
   left: 2px;
   font-size: 14px;
