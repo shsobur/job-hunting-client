@@ -10,7 +10,7 @@
 .signUp_inner_container {
   width: 60%;
   height: 60%;
-  padding: 80px;
+  padding: 50px;
   background-color: #ffffff;
   border-radius: 8px;
   box-shadow: #00000030 0px 10px 20px, #0000003b 0px 6px 6px;
@@ -42,7 +42,7 @@
   height: 100%;
   flex: 0 0 25%;
   box-sizing: border-box;
-  border: 1px solid #871010;
+  /* border: 1px solid #871010; */
 }
 
 /* Step - 01 content__ */
@@ -204,8 +204,6 @@
   font-size: 14px;
 }
 
-
-
 /* Step - 04 content__ */
 
 .step_four_content h1 {
@@ -217,7 +215,7 @@
 
 .sign_up_input_container {
   position: relative;
-  margin-top: 20px;
+  margin-top: 10px;
 }
 
 .sign_up_input_container input {
@@ -226,7 +224,8 @@
   padding: 10px;
   font-size: 18px;
   width: 70%;
-  border-radius: 4px;
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
   outline: none;
   border-bottom: 2px solid transparent;
   box-shadow: #88a5bf7a 6px 2px 16px 0px, #ffffffcc -6px -2px 16px 0px;
@@ -234,16 +233,68 @@
 }
 
 .sign_up_input_container input:focus {
-  border-bottom-left-radius:  0;
-  border-bottom-right-radius:  0;
-  border-bottom: 2px solid #3C8F63;
+  border-bottom: 2px solid #3c8f63;
 }
 
 /* Password show icons__ */
 
 .pass_show_icons {
   position: absolute;
-  top: 43%;
+  top: 25%;
   right: 31%;
   cursor: pointer;
+}
+
+/* Terms & Conditions__ */
+
+.checkbox_label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #151515;
+}
+
+.checkbox_label input {
+  display: none;
+}
+
+.custom_checkbox {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #3c8f63;
+  border-radius: 4px;
+  display: inline-block;
+  position: relative;
+  transition: 0.2s ease;
+}
+
+.checkbox_label input:checked + .custom_checkbox {
+  background-color: #3c8f63;
+}
+
+.checkbox_label input:checked + .custom_checkbox::after {
+  content: "✔";
+  color: white;
+  position: absolute; 
+  top: -2px;
+  left: 2px;
+  font-size: 14px;
+}
+
+.checkbox_label a {
+  color: #3c8f63;
+  text-decoration: none;
+}
+
+.checkbox_label a:hover {
+  text-decoration: underline;
+}
+
+/* I am not robot__ */
+
+.not_robot_container {
+  margin-top: 10px;
+  margin-bottom: 10px;
 }

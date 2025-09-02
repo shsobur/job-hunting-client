@@ -6,12 +6,14 @@ import { HiOutlineInformationCircle } from "react-icons/hi";
 import { FcCheckmark } from "react-icons/fc";
 import { PiSmileyXEyesBold } from "react-icons/pi";
 import { BsEmojiHeartEyes } from "react-icons/bs";
+import ReCAPTCHA from "react-google-recaptcha";
 
 const SignUp = () => {
   const [step, setStep] = useState(1);
   const [passwordOpen, setPasswordOpen] = useState(false);
   const [selected, setSelected] = useState("");
   const [selectedRole, setSelectedRole] = useState("");
+  const [captchaValue, setCaptchaValue] = useState(null);
 
   // How use know us__
   const options = [
@@ -36,6 +38,11 @@ const SignUp = () => {
   const handleNext = () => setStep(step + 1);
   const handleBack = () => setStep(step - 1);
   const handlePassword = () => setPasswordOpen(!passwordOpen);
+
+  // Google recaptcha__
+  const handleCaptcha = (value) => {
+    setCaptchaValue(value);
+  };
 
   return (
     <>
@@ -156,6 +163,22 @@ const SignUp = () => {
                           </button>
                         )}
                       </span>
+
+                      <div className="not_robot_container">
+                        <ReCAPTCHA
+                          sitekey={import.meta.env.VITE_SITE_KEY}
+                          onChange={handleCaptcha}
+                        />
+                      </div>
+
+                      <div className="check_box">
+                        <label className="checkbox_label">
+                          <input type="checkbox" />
+                          <span className="custom_checkbox"></span>I agree to
+                          the <a href="#">Terms & Conditions</a>
+                        </label>
+                      </div>
+                      
                     </div>
                   </div>
                 </div>
