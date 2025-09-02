@@ -4,16 +4,16 @@ import { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { HiOutlineInformationCircle } from "react-icons/hi";
 import { FcCheckmark } from "react-icons/fc";
+import { PiSmileyXEyesBold } from "react-icons/pi";
+import { BsEmojiHeartEyes } from "react-icons/bs";
 
 const SignUp = () => {
   const [step, setStep] = useState(1);
+  const [passwordOpen, setPasswordOpen] = useState(false);
   const [selected, setSelected] = useState("");
   const [selectedRole, setSelectedRole] = useState("");
 
-  // Handle Slide__
-  const handleNext = () => setStep(step + 1);
-  const handleBack = () => setStep(step - 1);
-
+  // How use know us__
   const options = [
     "Social Media",
     "Friend or Family",
@@ -21,6 +21,7 @@ const SignUp = () => {
     "Randomly",
   ];
 
+  // User role__
   const roles = [
     {
       name: "Job Seeker",
@@ -31,6 +32,10 @@ const SignUp = () => {
       tip: "Post job listings, review applications, and find top talent.",
     },
   ];
+
+  const handleNext = () => setStep(step + 1);
+  const handleBack = () => setStep(step - 1);
+  const handlePassword = () => setPasswordOpen(!passwordOpen);
 
   return (
     <>
@@ -116,7 +121,44 @@ const SignUp = () => {
                   </div>
                 </div>
 
-                <div className="step">This is content 4</div>
+                <div className="step">
+                  <div className="step_four_content">
+                    <h1>Enter Your Email and Password</h1>
+
+                    <div className="sign_up_input_container">
+                      <input
+                        type="email"
+                        name="email"
+                        placeholder="Enter you email"
+                      />
+                      <input
+                        type={passwordOpen ? "text" : "password"}
+                        name="password"
+                        placeholder="Enter you password"
+                      />
+                      <input
+                        type="password"
+                        name="confirmPassword"
+                        placeholder="Confirm password"
+                      />
+
+                      <span
+                        onClick={handlePassword}
+                        className="pass_show_icons"
+                      >
+                        {passwordOpen ? (
+                          <button>
+                            <BsEmojiHeartEyes size={25} />
+                          </button>
+                        ) : (
+                          <button>
+                            <PiSmileyXEyesBold size={25} />
+                          </button>
+                        )}
+                      </span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -139,7 +181,13 @@ const SignUp = () => {
             ) : (
               step > 1 && (
                 <button
-                  disabled={step === 4}
+                  disabled={
+                    step === 2 && selected === ""
+                      ? true
+                      : step === 3 && selectedRole === ""
+                      ? true
+                      : false
+                  }
                   onClick={handleNext}
                   className="btn btn-accent"
                 >

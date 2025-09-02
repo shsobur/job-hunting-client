@@ -203,3 +203,47 @@
   gap: 5px;
   font-size: 14px;
 }
+
+
+
+/* Step - 04 content__ */
+
+.step_four_content h1 {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #151515;
+  font-family: "Montserrat", sans-serif;
+}
+
+.sign_up_input_container {
+  position: relative;
+  margin-top: 20px;
+}
+
+.sign_up_input_container input {
+  display: block;
+  margin: 20px 0;
+  padding: 10px;
+  font-size: 18px;
+  width: 70%;
+  border-radius: 4px;
+  outline: none;
+  border-bottom: 2px solid transparent;
+  box-shadow: #88a5bf7a 6px 2px 16px 0px, #ffffffcc -6px -2px 16px 0px;
+  transition: 0.2s ease-in;
+}
+
+.sign_up_input_container input:focus {
+  border-bottom-left-radius:  0;
+  border-bottom-right-radius:  0;
+  border-bottom: 2px solid #3C8F63;
+}
+
+/* Password show icons__ */
+
+.pass_show_icons {
+  position: absolute;
+  top: 43%;
+  right: 31%;
+  cursor: pointer;
+}
