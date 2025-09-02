@@ -8,6 +8,7 @@ import { FcCheckmark } from "react-icons/fc";
 const SignUp = () => {
   const [step, setStep] = useState(1);
   const [selected, setSelected] = useState("");
+  const [selectedRole, setSelectedRole] = useState("");
 
   // Handle Slide__
   const handleNext = () => setStep(step + 1);
@@ -18,6 +19,17 @@ const SignUp = () => {
     "Friend or Family",
     "Google / Search Engine",
     "Randomly",
+  ];
+
+  const roles = [
+    {
+      name: "Job Seeker",
+      tip: "Create your profile, apply for jobs, and track your applications.",
+    },
+    {
+      name: "Recruiter",
+      tip: "Post job listings, review applications, and find top talent.",
+    },
   ];
 
   return (
@@ -78,10 +90,32 @@ const SignUp = () => {
                 </div>
 
                 <div className="step">
-                  <div >
-
+                  <div className="step_three_content">
+                    <h1>Choose your role</h1>
+                    <div className="user_role_container">
+                      {roles.map((role) => (
+                        <div key={role.name} className="role_item">
+                          <button
+                            className={
+                              selectedRole === role.name ? "selected" : ""
+                            }
+                            onClick={() => setSelectedRole(role.name)}
+                          >
+                            {role.name}
+                            {selectedRole === role.name && (
+                              <FcCheckmark style={{ marginLeft: "8px" }} />
+                            )}
+                          </button>
+                          <p>
+                            <HiOutlineInformationCircle size={20} />{" "}
+                            <i>{role.tip}</i>
+                          </p>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
+
                 <div className="step">This is content 4</div>
               </div>
             </div>

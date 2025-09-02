@@ -131,11 +131,11 @@
 }
 
 .option:hover {
-  border-color: #3C8F63;
+  border-color: #3c8f63;
 }
 
 .option.selected {
-  border-color: #3C8F63;
+  border-color: #3c8f63;
   background-color: #e6f5ee;
 }
 
@@ -148,4 +148,58 @@
   align-items: center;
   justify-content: space-between;
   /* border: 2px solid purple; */
+}
+
+/* Step - 03 content__ */
+
+.step_three_content h1 {
+  font-size: 2.5rem;
+  font-weight: 600;
+  color: #151515;
+  font-family: "Montserrat", sans-serif;
+}
+
+.user_role_container {
+  margin-top: 40px;
+  /* ------ */
+  gap: 3.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.role_item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.user_role_container button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 10px 40px;
+  font-size: 20px;
+  border-radius: 8px;
+  background-color: #00000030;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.user_role_container button:hover {
+  border-color: #3c8f63;
+}
+
+.user_role_container button.selected {
+  border-color: #3c8f63;
+  background-color: #e6f5ee;
+}
+
+.user_role_container p {
+  color: #00000090;
+  margin-top: 5px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 14px;
 }
