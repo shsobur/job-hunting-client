@@ -1,20 +1,23 @@
+// File path__
 import "./SignUp.css";
 import logo from "../../../../assets/companyLogo.png";
+
+// From react__
 import { useState } from "react";
-import { FcGoogle } from "react-icons/fc";
-import { HiOutlineInformationCircle } from "react-icons/hi";
-import { FcCheckmark } from "react-icons/fc";
+
+// Package(REACT ICONS, REACT HOOK FROM, GOOGLE RECAPTCHA)__
 import { useForm } from "react-hook-form";
-import { PiSmileyXEyesBold } from "react-icons/pi";
-import { BsEmojiHeartEyes } from "react-icons/bs";
+import { FcGoogle } from "react-icons/fc";
+import { FcCheckmark } from "react-icons/fc";
 import ReCAPTCHA from "react-google-recaptcha";
+import { HiOutlineInformationCircle } from "react-icons/hi";
 
 const SignUp = () => {
   const [step, setStep] = useState(1);
-  const [passwordOpen, setPasswordOpen] = useState(false);
   const [selected, setSelected] = useState("");
   const [selectedRole, setSelectedRole] = useState("");
   const [captchaValue, setCaptchaValue] = useState(null);
+  const [robotError, setRobotError] = useState("");
 
   // How use know us__
   const options = [
@@ -38,7 +41,6 @@ const SignUp = () => {
 
   const handleNext = () => setStep(step + 1);
   const handleBack = () => setStep(step - 1);
-  const handlePassword = () => setPasswordOpen(!passwordOpen);
 
   // Google recaptcha__
   const handleCaptcha = (value) => {
@@ -53,7 +55,13 @@ const SignUp = () => {
   } = useForm();
 
   const onSubmit = (data) => {
+    if (!captchaValue) {
+      setRobotError("Confirm you are not robot");
+      return;
+    }
+
     console.log(data);
+    setRobotError("");
   };
 
   return (
@@ -160,44 +168,88 @@ const SignUp = () => {
                           </span>
                         )}
                         <input
-                          type={passwordOpen ? "text" : "password"}
+                          type="password"
                           name="password"
                           placeholder="Enter you password"
+                          {...register("password", {
+                            required: true,
+                            minLength: 6,
+                            pattern: /^(?=.*[a-z])(?=.*[A-Z]).*$/,
+                          })}
                         />
+
+                        {/* handling password field error__ST */}
+                        <div>
+                          {errors.password?.type === "required" && (
+                            <span className="text-sm text-red-400">
+                              Password is required
+                            </span>
+                          )}
+                        </div>
+
+                        <div>
+                          {errors.password?.type === "minLength" && (
+                            <span className="text-sm text-red-400">
+                              Password should be at least 6 characters
+                            </span>
+                          )}
+                        </div>
+
+                        <div>
+                          {errors.password?.type === "pattern" && (
+                            <span className="text-sm text-red-400">
+                              Use at least one uppercase(A-Z) and lowercase(a-z)
+                              character
+                            </span>
+                          )}
+                        </div>
+                        {/* handling password field error__END */}
                         <input
                           type="password"
                           name="confirmPassword"
                           placeholder="Confirm password"
+                          {...register("confirmPassword", {
+                            required: true,
+                            validate: (value) => {
+                              if (watch("password") !== value) {
+                                return "Password do not match";
+                              }
+                            },
+                          })}
                         />
-
-                        <span
-                          onClick={handlePassword}
-                          className="pass_show_icons"
-                        >
-                          {passwordOpen ? (
-                            <button>
-                              <BsEmojiHeartEyes size={25} />
-                            </button>
-                          ) : (
-                            <button>
-                              <PiSmileyXEyesBold size={25} />
-                            </button>
+                        <div>
+                          {errors.confirmPassword && (
+                            <span className="text-sm text-red-400">
+                              Password don't match!
+                            </span>
                           )}
-                        </span>
+                        </div>
 
                         <div className="not_robot_container">
                           <ReCAPTCHA
                             sitekey={import.meta.env.VITE_SITE_KEY}
                             onChange={handleCaptcha}
                           />
+                          <span className="text-sm text-red-400">
+                            {robotError}
+                          </span>
                         </div>
 
                         <div className="check_box">
                           <label className="checkbox_label">
-                            <input type="checkbox" />
+                            <input
+                              name="terms"
+                              type="checkbox"
+                              {...register("terms", { required: true })}
+                            />
                             <span className="custom_checkbox"></span>I agree to
                             the <a href="#">Terms & Conditions</a>
                           </label>
+                          {errors.terms && (
+                            <span className="text-sm text-red-400">
+                              Accept our terms &conditions.
+                            </span>
+                          )}
                         </div>
 
                         <button
@@ -218,7 +270,7 @@ const SignUp = () => {
             </div>
           </div>
 
-          <div className="signUp_process_button">
+          <div className="signUp_process_button  mt-3">
             <button
               type="button"
               disabled={step === 1}

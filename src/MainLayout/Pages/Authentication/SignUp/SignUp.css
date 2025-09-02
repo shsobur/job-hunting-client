@@ -9,12 +9,12 @@
 
 .signUp_inner_container {
   width: 60%;
-  height: 75%;
   padding: 50px;
   background-color: #ffffff;
   border-radius: 8px;
   position: relative;
   box-shadow: #00000030 0px 10px 20px, #0000003b 0px 6px 6px;
+  transition: 0.2s ease-in-out;
 }
 
 .signUp_parent_content_container {
@@ -225,7 +225,7 @@
 
 .sign_up_input_container input {
   display: block;
-  margin: 20px 0;
+  margin-top: 15px;
   padding: 10px;
   font-size: 18px;
   width: 70%;
