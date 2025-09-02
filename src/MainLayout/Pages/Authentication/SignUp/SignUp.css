@@ -224,11 +224,11 @@
 }
 
 .sign_up_input_container input {
+  width: 70%;
   display: block;
   margin-top: 15px;
   padding: 10px;
   font-size: 18px;
-  width: 70%;
   border-top-right-radius: 8px;
   border-bottom-right-radius: 8px;
   outline: none;
@@ -239,15 +239,6 @@
 
 .sign_up_input_container input:focus {
   border-bottom: 2px solid #3c8f63;
-}
-
-/* Password show icons__ */
-
-.pass_show_icons {
-  position: absolute;
-  top: 21%;
-  right: 31%;
-  cursor: pointer;
 }
 
 /* Terms & Conditions__ */
@@ -300,6 +291,152 @@
 /* I am not robot__ */
 
 .not_robot_container {
-  margin-top: 10px;
-  margin-bottom: 10px;
+  margin: 10px 0;
+}
+
+/* Responsive style__ */
+
+@media screen and (max-width: 1536px) {
+  .signUp_inner_container {
+    width: 70%;
+  }
+}
+
+@media screen and (max-width: 1280px) {
+  .signUp_inner_container {
+    width: 85%;
+  }
+
+  .step_one_content h1 {
+    font-size: 2.2rem;
+  }
+
+  .step_one_content button:nth-of-type(1) {
+    font-size: 20px;
+  }
+
+  .step_one_content button:nth-of-type(2) {
+    font-size: 20px;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .signUp_content {
+    width: 100%;
+  }
+
+  .company_logo {
+    display: none;
+  }
+
+  .sign_up_input_container input {
+    width: 95%;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .step_two_content h1 {
+    font-size: 2.3rem;
+  }
+
+  .hear_options {
+    margin-top: 70px;
+  }
+
+  .step_four_content h1 {
+    font-size: 2rem;
+  }
+}
+
+@media screen and (max-width: 640px) {
+  .signUp_inner_container {
+    padding: 30px;
+  }
+
+  .step_one_content h1 {
+    font-size: 1.8rem;
+  }
+
+  .step_one_content button:nth-of-type(1) {
+    font-size: 18px;
+  }
+
+  .step_one_content button:nth-of-type(2) {
+    font-size: 18px;
+    padding: 5px 20px;
+  }
+
+  .step_one_content button:nth-of-type(2) p {
+    font-size: 14px;
+  }
+
+  .step_two_content h1 {
+    font-size: 1.8rem;
+  }
+
+  .step_three_content h1 {
+    font-size: 1.8rem;
+  }
+
+  .step_four_content h1 {
+    font-size: 1.8rem;
+  }
+
+  .sign_up_input_container {
+    margin-top: 20px;
+  }
+
+  .sign_up_input_container input {
+    width: 98%;
+    font-size: 16px;
+  }
+}
+
+@media screen and (max-width: 475px) {
+  .signUp_inner_container {
+    width: 90%;
+    padding: 20px;
+  }
+
+  .step_one_content h1 {
+    font-size: 1.5rem;
+  }
+
+  .step_one_content button:nth-of-type(1) {
+    font-size: 16px;
+    padding: 10px 38px;
+  }
+
+  .step_one_content button:nth-of-type(2) {
+    font-size: 16px;
+    padding: 10px 55px;
+    /* ------ */
+    gap: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .step_one_content button:nth-of-type(2) p {
+    font-size: 14px;
+  }
+
+  .step_two_content h1 {
+    font-size: 1.5rem;
+  }
+
+  .hear_options {
+    font-size: 18px;
+  }
+
+  .step_three_content h1 {
+    font-size: 1.5rem;
+  }
+
+  .user_role_container button {
+    font-size: 18px;
+  }
+
+  .step_four_content h1 {
+    font-size: 1.5rem;
+  }
 }
