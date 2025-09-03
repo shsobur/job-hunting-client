@@ -1,15 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import auth from "../Firebase/firebase.config";
 import { AuthContext } from "../Context/AuthContext";
 import {
   createUserWithEmailAndPassword,
+  onAuthStateChanged,
   signInWithEmailAndPassword,
+  signOut,
 } from "firebase/auth";
 import Swal from "sweetalert2";
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [userLoading, setUserLoading] = useState(true);
   const [firebaseLoading, setFirebaseLoading] = useState(false);
+  console.log(user);
 
   // Creates a new user with email and password__
   const handleCreateUser = async (email, password) => {
@@ -37,6 +41,7 @@ const AuthProvider = ({ children }) => {
     }
   };
 
+  // Login user with email and password__
   const handleLoginUser = async (email, password) => {
     setFirebaseLoading(true);
 
@@ -58,11 +63,30 @@ const AuthProvider = ({ children }) => {
     }
   };
 
+  // Handle log out__
+  const logOut = () => {
+    return signOut(auth);
+  };
+
+  // Monitor the current authenticated user__
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+      setUserLoading(false);
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
   const authInfo = {
     user,
+    userLoading,
     firebaseLoading,
     handleCreateUser,
     handleLoginUser,
+    logOut
   };
 
   return (

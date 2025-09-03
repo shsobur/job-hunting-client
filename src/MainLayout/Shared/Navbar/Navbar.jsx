@@ -6,22 +6,26 @@ import { Link, NavLink } from "react-router-dom";
 import { RxCross1 } from "react-icons/rx";
 import { PiSignIn } from "react-icons/pi";
 import { IoIosMenu } from "react-icons/io";
-import { IoHomeOutline } from "react-icons/io5";
+import { IoChevronDown, IoChevronUp, IoHomeOutline } from "react-icons/io5";
 import { FiMessageCircle } from "react-icons/fi";
 import { HiMiniUserCircle } from "react-icons/hi2";
 import { AiOutlineShopping } from "react-icons/ai";
 import { RiContactsBook2Line } from "react-icons/ri";
-import { MdOutlineSpaceDashboard } from "react-icons/md";
+import { MdOutlineLogout, MdOutlineSpaceDashboard } from "react-icons/md";
 
 // From react__
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
+import { AuthContext } from "../../../Context/AuthContext";
+import { ImProfile } from "react-icons/im";
+import Swal from "sweetalert2";
 
 const Navbar = () => {
   const menuRef = useRef();
-  // eslint-disable-next-line no-unused-vars
   const [open, setOpen] = useState(false);
   const [isScrollingDown, setIsScrollingDown] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
+
+  const { user, logOut } = useContext(AuthContext);
 
   // Handle Close Dropdown__
   useEffect(() => {
@@ -64,6 +68,30 @@ const Navbar = () => {
     }
     document.body.style.overflow = "hidden";
   }, [menuOpen]);
+
+  // User logout__
+  const handleSignOut = () => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You went to log out!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#f70000",
+      cancelButtonColor: "#007c01",
+      confirmButtonText: "Yes, Log out",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        logOut().then(() => {
+          Swal.fire({
+            title: "Finished!",
+            text: "Log out successfully",
+            icon: "success",
+          });
+        });
+      }
+    });
+    setOpen(!open);
+  };
 
   return (
     <>
@@ -108,33 +136,45 @@ const Navbar = () => {
               </NavLink>
             </ul>
 
-            <Link to="/sign-in">
-              <button className="btn btn-accent">Sign Up</button>
-            </Link>
+            {user ? (
+              <div className="dropdown_wrapper" ref={menuRef}>
+                <button
+                  className="dropdown_button"
+                  onClick={() => setOpen(!open)}
+                >
+                  <HiMiniUserCircle />
+                  {open ? (
+                    <IoChevronUp size={25} />
+                  ) : (
+                    <IoChevronDown size={25} />
+                  )}
+                </button>
 
-            {/* <div className="dropdown_wrapper" ref={menuRef}>
-              <button
-                className="dropdown_button"
-                onClick={() => setOpen(!open)}
-              >
-                <HiMiniUserCircle />{" "}
-              </button>
+                <div
+                  id="dropdown_item_parent_container"
+                  className={`dropdown_menu ${open ? "open" : ""}`}
+                >
+                  <NavLink>
+                    <span
+                      onClick={() => setOpen(!open)}
+                      className="dropdown_item"
+                    >
+                      <ImProfile />
+                      Profile
+                    </span>
+                  </NavLink>
 
-              <div
-                id="dropdown_item_parent_container"
-                className={`dropdown_menu ${open ? "open" : ""}`}
-              >
-                <NavLink>
-                  <span
-                    onClick={() => setOpen(!open)}
-                    className="dropdown_item"
-                  >
-                    <MdOutlineSpaceDashboard />
-                    Profile
+                  <span onClick={handleSignOut} className="dropdown_item">
+                    <MdOutlineLogout />
+                    Log Out
                   </span>
-                </NavLink>
+                </div>
               </div>
-            </div> */}
+            ) : (
+              <Link to="/sign-in">
+                <button className="btn btn-accent">Sign Up</button>
+              </Link>
+            )}
 
             <div className="mobile_menu_container">
               <span onClick={() => setMenuOpen(!menuOpen)}>

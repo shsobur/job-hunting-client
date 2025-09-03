@@ -96,11 +96,15 @@ nav {
   border: none;
   cursor: pointer;
   background-color: transparent;
-  transition: 0.3s ease-in-out;
+  transition: 0.2s ease-in-out;
+  /* ------ */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .dropdown_button:hover {
-  transform: scale(1.2);
+  transform: scale(1.04);
   background-color: transparent;
 }
 

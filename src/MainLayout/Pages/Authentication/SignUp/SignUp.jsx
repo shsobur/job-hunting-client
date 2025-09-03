@@ -3,7 +3,7 @@ import "./SignUp.css";
 import logo from "../../../../assets/companyLogo.png";
 
 // From react__
-import { useState } from "react";
+import { useContext, useState } from "react";
 
 // Package(REACT ICONS, REACT HOOK FROM, GOOGLE RECAPTCHA)__
 import { useForm } from "react-hook-form";
@@ -11,6 +11,9 @@ import { FcGoogle } from "react-icons/fc";
 import { FcCheckmark } from "react-icons/fc";
 import ReCAPTCHA from "react-google-recaptcha";
 import { HiOutlineInformationCircle } from "react-icons/hi";
+import { AuthContext } from "../../../../Context/AuthContext";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router";
 
 const SignUp = () => {
   const [step, setStep] = useState(1);
@@ -18,6 +21,10 @@ const SignUp = () => {
   const [selectedRole, setSelectedRole] = useState("");
   const [captchaValue, setCaptchaValue] = useState(null);
   const [robotError, setRobotError] = useState("");
+
+  const navigate = useNavigate();
+
+  const { handleCreateUser, firebaseLoading } = useContext(AuthContext);
 
   // How use know us__
   const options = [
@@ -54,12 +61,14 @@ const SignUp = () => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     if (!captchaValue) {
       setRobotError("Confirm you are not robot");
       return;
     }
 
+    const email = data.email;
+    const password = data.password;
     // Random name__
     const firstLetter = "user";
     const number = Math.floor(1000 + Math.random() * 9000);
@@ -67,9 +76,32 @@ const SignUp = () => {
     const userData = {
       hearFrom: selected,
       userRole: selectedRole,
-      userEmail: data.email,
-      userName: firstLetter + number
+      userEmail: email,
+      userName: firstLetter + number,
     };
+
+    await handleCreateUser(email, password)
+      .then(() => {
+        navigate("/");
+
+        Swal.mixin({
+          toast: true,
+          position: "bottom",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          },
+        }).fire({
+          icon: "success",
+          title: "Signed up successfully",
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
 
     console.log(userData);
     setRobotError("");
@@ -267,7 +299,7 @@ const SignUp = () => {
                           type="submit"
                           className="min-w-[70%] text-lg btn bg-[#3C8F63] text-white mt-5"
                         >
-                          Submit
+                          {firebaseLoading ? "Working...." : "Submit"}
                         </button>
                       </div>
                     </div>
