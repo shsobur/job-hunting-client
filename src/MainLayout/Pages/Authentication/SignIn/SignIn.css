@@ -13,8 +13,7 @@
   padding: 40px;
   border-radius: 8px;
   background-color: #ffffff;
-  background: 
-    linear-gradient(#ffffffeb, #ffffffeb), 
+  background: linear-gradient(#ffffffeb, #ffffffeb),
     url("../../../../../public/fab.png");
   background-size: contain;
   background-position: center;
@@ -33,7 +32,7 @@
   margin-top: 50px;
   padding: 10px 20px;
   font-size: 20px;
-  border-radius: 8px; 
+  border-radius: 8px;
   cursor: pointer;
   background-color: #06060631;
   /* ------ */
@@ -67,7 +66,7 @@
 
 .signIn_input_container li input:focus {
   transition: 0.3s ease-in-out;
-  border-bottom: 2px solid #3C8F63;
+  border-bottom: 2px solid #3c8f63;
 }
 
 #input-1 {
@@ -122,7 +121,7 @@
   font-size: 18px;
   border-radius: 8px;
   padding: 10px 10px;
-  background-color: #3C8F63;
+  background-color: #3c8f63;
 }
 
 .signIn_button:hover {
@@ -132,14 +131,33 @@
 
 /* Responsive style__ */
 
-@media screen and (max-width: 768px) {
-  
-}
-
 @media screen and (max-width: 640px) {
-  
+  .signIn_inner_container {
+    min-width: 95%;
+    padding: 20px;
+  }
 }
 
 @media screen and (max-width: 475px) {
-  
+  .signIn_content h1 {
+    font-size: 1.8rem;
+  }
+
+  .google_signIn_btn {
+    margin-top: 20px;
+  }
+
+  .google_signIn_btn {
+    font-size: 18px;
+  }
+
+  .signIn_input_container li input {
+    font-size: 16px;
+    margin-bottom: 20px;
+  }
+
+  .signIn_button {
+    margin-top: 20px;
+    font-size: 16px;
+  }
 }

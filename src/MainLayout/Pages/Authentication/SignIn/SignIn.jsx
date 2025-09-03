@@ -57,6 +57,7 @@ const SignIn = () => {
                   for free now
                 </p>
               </li>
+
             </ul>
           </div>
         </form>
