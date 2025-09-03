@@ -1,18 +1,42 @@
 import "./SignIn.css";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { FcGoogle } from "react-icons/fc";
 import { useForm } from "react-hook-form";
+import { useContext } from "react";
+import { AuthContext } from "../../../../Context/AuthContext";
+import Swal from "sweetalert2";
 
 const SignIn = () => {
+  const { handleLoginUser, firebaseLoading } = useContext(AuthContext);
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log("Form Data:", data);
-    // You can send this to your backend or handle login logic
+  const onSubmit = async (data) => {
+    const email = data.email;
+    const password = data.password;
+
+    await handleLoginUser(email, password).then(() => {
+      navigate("/");
+
+      Swal.mixin({
+        toast: true,
+        position: "bottom",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        },
+      }).fire({
+        icon: "success",
+        title: "Sign In successfully",
+      });
+    });
   };
 
   return (
@@ -64,7 +88,9 @@ const SignIn = () => {
             </li>
 
             <li className="signIn_button">
-              <button type="submit">Sign in</button>
+              <button type="submit">
+                {firebaseLoading ? "Working...." : "Sign In"}
+              </button>
             </li>
 
             <li>

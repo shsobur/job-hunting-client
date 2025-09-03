@@ -27,8 +27,6 @@ const AuthProvider = ({ children }) => {
       );
       return result;
     } catch (error) {
-      console.log("From Provider line-___30___", error.code);
-
       if (error.code === "auth/email-already-in-use") {
         Swal.fire({
           title: "Invalid email address",
@@ -57,13 +55,21 @@ const AuthProvider = ({ children }) => {
       const result = await signInWithEmailAndPassword(auth, email, password);
       return result;
     } catch (error) {
-      console.log(error);
+      console.log("___From auth___line-58!!!=> ", error.code);
 
-      Swal.fire({
-        title: "Sign In Failed",
-        text: "There might be some issue, Please try again!",
-        icon: "error",
-      });
+      if (error.code === "auth/invalid-credential") {
+        Swal.fire({
+          title: "Invalid Credential!",
+          text: "Invalid email or password. Try again with valid email and password",
+          icon: "error",
+        });
+      } else {
+        Swal.fire({
+          title: "Sign In Failed",
+          text: "There might be some issue, Please try again!",
+          icon: "error",
+        });
+      }
 
       throw error;
     } finally {
