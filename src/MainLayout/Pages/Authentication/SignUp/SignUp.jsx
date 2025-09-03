@@ -80,28 +80,24 @@ const SignUp = () => {
       userName: firstLetter + number,
     };
 
-    await handleCreateUser(email, password)
-      .then(() => {
-        navigate("/");
+    await handleCreateUser(email, password).then(() => {
+      navigate("/");
 
-        Swal.mixin({
-          toast: true,
-          position: "bottom",
-          showConfirmButton: false,
-          timer: 3000,
-          timerProgressBar: true,
-          didOpen: (toast) => {
-            toast.onmouseenter = Swal.stopTimer;
-            toast.onmouseleave = Swal.resumeTimer;
-          },
-        }).fire({
-          icon: "success",
-          title: "Signed up successfully",
-        });
-      })
-      .catch((error) => {
-        console.log(error);
+      Swal.mixin({
+        toast: true,
+        position: "bottom",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        },
+      }).fire({
+        icon: "success",
+        title: "Signed up successfully",
       });
+    });
 
     console.log(userData);
     setRobotError("");

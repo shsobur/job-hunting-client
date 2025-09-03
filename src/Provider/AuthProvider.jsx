@@ -27,13 +27,21 @@ const AuthProvider = ({ children }) => {
       );
       return result;
     } catch (error) {
-      console.log(error);
+      console.log("From Provider line-___30___", error.code);
 
-      Swal.fire({
-        title: "Sign Up Failed",
-        text: "There might be some issue, Please try again!",
-        icon: "error",
-      });
+      if (error.code === "auth/email-already-in-use") {
+        Swal.fire({
+          title: "Invalid email address",
+          text: "Email already in exist. Use another email to sign up!",
+          icon: "error",
+        });
+      } else {
+        Swal.fire({
+          title: "Sign Up Failed",
+          text: "There might be some issue, Please try again!",
+          icon: "error",
+        });
+      }
 
       throw error;
     } finally {
@@ -86,7 +94,7 @@ const AuthProvider = ({ children }) => {
     firebaseLoading,
     handleCreateUser,
     handleLoginUser,
-    logOut
+    logOut,
   };
 
   return (
