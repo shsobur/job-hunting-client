@@ -50,12 +50,12 @@
 
 .signIn_input_container {
   width: 100%;
-  margin-top: 40px;
+  margin-top: 20px;
 }
 
 .signIn_input_container li input {
   width: 100%;
-  margin-bottom: 30px;
+  margin-top: 20px;
   padding: 15px 20px;
   font-size: 18px;
   outline: none;
