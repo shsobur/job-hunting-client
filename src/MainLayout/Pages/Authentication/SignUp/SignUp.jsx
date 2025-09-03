@@ -60,7 +60,18 @@ const SignUp = () => {
       return;
     }
 
-    console.log(data);
+    // Random name__
+    const firstLetter = "user";
+    const number = Math.floor(1000 + Math.random() * 9000);
+
+    const userData = {
+      hearFrom: selected,
+      userRole: selectedRole,
+      userEmail: data.email,
+      userName: firstLetter + number
+    };
+
+    console.log(userData);
     setRobotError("");
   };
 

@@ -108,7 +108,7 @@ const Navbar = () => {
               </NavLink>
             </ul>
 
-            <Link to="/sign-up">
+            <Link to="/sign-in">
               <button className="btn btn-accent">Sign Up</button>
             </Link>
 

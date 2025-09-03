@@ -1,5 +1,6 @@
 // File__
 import Main from "../MainLayout/Main";
+import SignIn from "../MainLayout/Pages/Authentication/SignIn/SignIn";
 import SignUp from "../MainLayout/Pages/Authentication/SignUp/SignUp";
 import HomeLayout from "../MainLayout/Pages/HomePageLayout/HomeLayout/HomeLayout";
 
@@ -17,8 +18,12 @@ const router = createBrowserRouter([
       },
       {
         path: "/sign-up",
-        element: <SignUp></SignUp>
-       }
+        element: <SignUp></SignUp>,
+      },
+      {
+        path: "/sign-in",
+        element: <SignIn></SignIn>,
+      },
     ],
   },
 ]);
