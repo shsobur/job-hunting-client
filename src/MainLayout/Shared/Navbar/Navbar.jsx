@@ -1,30 +1,29 @@
 import "./Navbar.css";
 import logo from "../../../../public/fab.png";
 import { Link, NavLink } from "react-router-dom";
+import { AuthContext } from "../../../Context/AuthContext";
 
-// React icons__
+// From react__
+import { useContext, useEffect, useRef, useState } from "react";
+
+// Package(REACT ICONS, SWEET ALERT)__
+import Swal from "sweetalert2";
 import { RxCross1 } from "react-icons/rx";
-import { PiSignIn } from "react-icons/pi";
+import { PiSignIn, PiSignOut } from "react-icons/pi";
+import { ImProfile } from "react-icons/im";
 import { IoIosMenu } from "react-icons/io";
-import { IoChevronDown, IoChevronUp, IoHomeOutline } from "react-icons/io5";
 import { FiMessageCircle } from "react-icons/fi";
 import { HiMiniUserCircle } from "react-icons/hi2";
 import { AiOutlineShopping } from "react-icons/ai";
 import { RiContactsBook2Line } from "react-icons/ri";
 import { MdOutlineLogout, MdOutlineSpaceDashboard } from "react-icons/md";
-
-// From react__
-import { useContext, useEffect, useRef, useState } from "react";
-import { AuthContext } from "../../../Context/AuthContext";
-import { ImProfile } from "react-icons/im";
-import Swal from "sweetalert2";
+import { IoChevronDown, IoChevronUp, IoHomeOutline } from "react-icons/io5";
 
 const Navbar = () => {
   const menuRef = useRef();
   const [open, setOpen] = useState(false);
   const [isScrollingDown, setIsScrollingDown] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
-
   const { user, logOut } = useContext(AuthContext);
 
   // Handle Close Dropdown__
@@ -172,7 +171,9 @@ const Navbar = () => {
               </div>
             ) : (
               <Link to="/sign-in">
-                <button className="desktop_signIn_btn btn text-white bg-[#3C8F63]">Sign Up</button>
+                <button className="desktop_signIn_btn btn text-white bg-[#3C8F63]">
+                  Sign Up
+                </button>
               </Link>
             )}
 
@@ -215,32 +216,6 @@ const Navbar = () => {
                     <AiOutlineShopping /> Community
                   </NavLink>
                 </li>
-
-                <li onClick={() => setMenuOpen(!menuOpen)}>
-                  <NavLink
-                    to="/about"
-                    className={({ isActive }) =>
-                      isActive
-                        ? "mobile_menu_active_style"
-                        : "mobile_menu_non_active_style"
-                    }
-                  >
-                    <FiMessageCircle /> About Us
-                  </NavLink>
-                </li>
-
-                <li onClick={() => setMenuOpen(!menuOpen)}>
-                  <NavLink
-                    to="/contact"
-                    className={({ isActive }) =>
-                      isActive
-                        ? "mobile_menu_active_style"
-                        : "mobile_menu_non_active_style"
-                    }
-                  >
-                    <RiContactsBook2Line /> _Contact
-                  </NavLink>
-                </li>
               </ul>
 
               <div className="others_routes_container">
@@ -258,19 +233,29 @@ const Navbar = () => {
                     </NavLink>
                   </li>
 
-                  <li onClick={() => setMenuOpen(!menuOpen)}>
-                    <NavLink
-                      to="/sign-in"
-                      className={({ isActive }) =>
-                        isActive
-                          ? "mobile_menu_active_style"
-                          : "mobile_menu_non_active_style"
-                      }
+                  {user ? (
+                    <li
+                      onClick={handleSignOut}
+                      className="flex items-center gap-2 ml-3"
                     >
-                      <PiSignIn />
-                      Sign In
-                    </NavLink>
-                  </li>
+                      <PiSignOut />
+                      Sign Out
+                    </li>
+                  ) : (
+                    <li onClick={() => setMenuOpen(!menuOpen)}>
+                      <NavLink
+                        to="/sign-in"
+                        className={({ isActive }) =>
+                          isActive
+                            ? "mobile_menu_active_style"
+                            : "mobile_menu_non_active_style"
+                        }
+                      >
+                        <PiSignIn />
+                        Sign In
+                      </NavLink>
+                    </li>
+                  )}
                 </ul>
               </div>
             </div>
