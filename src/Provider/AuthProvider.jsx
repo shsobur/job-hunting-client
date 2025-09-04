@@ -1,13 +1,18 @@
-import { useEffect, useState } from "react";
+// File path__
 import auth from "../Firebase/firebase.config";
 import { AuthContext } from "../Context/AuthContext";
+
+// From react__
+import { useEffect, useState } from "react";
+
+// Package(FIREBASE AUTH, SWEET ALERT)__
 import {
-  createUserWithEmailAndPassword,
+  signOut,
+  signInWithPopup,
   onAuthStateChanged,
   GoogleAuthProvider,
   signInWithEmailAndPassword,
-  signInWithPopup,
-  signOut,
+  createUserWithEmailAndPassword,
 } from "firebase/auth";
 import Swal from "sweetalert2";
 
@@ -50,7 +55,7 @@ const AuthProvider = ({ children }) => {
     }
   };
 
-  // Creates use with google__
+  // Sign in use with google__
   const handleGoogleSignIn = async () => {
     firebaseLoading(true);
 
@@ -101,7 +106,7 @@ const AuthProvider = ({ children }) => {
     }
   };
 
-  // Handle log out__
+  // log out user__
   const logOut = () => {
     return signOut(auth);
   };

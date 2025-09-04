@@ -1,19 +1,19 @@
 // File path__
 import "./SignUp.css";
 import logo from "../../../../assets/companyLogo.png";
+import { AuthContext } from "../../../../Context/AuthContext";
 
 // From react__
 import { useContext, useState } from "react";
 
-// Package(REACT ICONS, REACT HOOK FROM, GOOGLE RECAPTCHA)__
+// Package(REACT ICONS, REACT HOOK FROM, GOOGLE RECAPTCHA, SWEET ALERT)__
+import Swal from "sweetalert2";
 import { useForm } from "react-hook-form";
 import { FcGoogle } from "react-icons/fc";
+import { useNavigate } from "react-router";
 import { FcCheckmark } from "react-icons/fc";
 import ReCAPTCHA from "react-google-recaptcha";
 import { HiOutlineInformationCircle } from "react-icons/hi";
-import { AuthContext } from "../../../../Context/AuthContext";
-import Swal from "sweetalert2";
-import { useNavigate } from "react-router";
 
 const SignUp = () => {
   const [step, setStep] = useState(1);
@@ -53,12 +53,8 @@ const SignUp = () => {
     setCaptchaValue(value);
   };
 
-  const {
-    watch,
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
+  // React hook form state__
+  const {watch, register, handleSubmit, formState: { errors }} = useForm();
 
   const onSubmit = async (data) => {
     if (!captchaValue) {
@@ -68,10 +64,11 @@ const SignUp = () => {
 
     const email = data.email;
     const password = data.password;
-    // Random name__
+    // Generate random name__
     const firstLetter = "user";
     const number = Math.floor(1000 + Math.random() * 9000);
 
+    // eslint-disable-next-line no-unused-vars
     const userData = {
       hearFrom: selected,
       userRole: selectedRole,
@@ -98,7 +95,6 @@ const SignUp = () => {
       });
     });
 
-    console.log(userData);
     setRobotError("");
   };
 
