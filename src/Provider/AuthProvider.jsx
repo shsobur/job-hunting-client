@@ -4,7 +4,9 @@ import { AuthContext } from "../Context/AuthContext";
 import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
+  GoogleAuthProvider,
   signInWithEmailAndPassword,
+  signInWithPopup,
   signOut,
 } from "firebase/auth";
 import Swal from "sweetalert2";
@@ -13,7 +15,8 @@ const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [userLoading, setUserLoading] = useState(true);
   const [firebaseLoading, setFirebaseLoading] = useState(false);
-  console.log(user);
+  const googleProvider = new GoogleAuthProvider();
+  // console.log(user);
 
   // Creates a new user with email and password__
   const handleCreateUser = async (email, password) => {
@@ -44,6 +47,27 @@ const AuthProvider = ({ children }) => {
       throw error;
     } finally {
       setFirebaseLoading(false);
+    }
+  };
+
+  // Creates use with google__
+  const handleGoogleSignIn = async () => {
+    firebaseLoading(true);
+
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      console.log(result);
+      return result;
+    } catch (error) {
+      console.log("Error google signing up:", error);
+
+      Swal.fire({
+        title: "Google Sign In Failed",
+        text: "There might be some issue, Please try again!",
+        icon: "error",
+      });
+    } finally {
+      firebaseLoading(false);
     }
   };
 
@@ -100,6 +124,7 @@ const AuthProvider = ({ children }) => {
     firebaseLoading,
     handleCreateUser,
     handleLoginUser,
+    handleGoogleSignIn,
     logOut,
   };
 

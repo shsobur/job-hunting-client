@@ -8,7 +8,8 @@ import Swal from "sweetalert2";
 
 const SignIn = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const { handleLoginUser, firebaseLoading } = useContext(AuthContext);
+  const { handleLoginUser, handleGoogleSignIn, firebaseLoading } =
+    useContext(AuthContext);
   const navigate = useNavigate();
   const {
     register,
@@ -49,7 +50,12 @@ const SignIn = () => {
         <div className="signIn_content">
           <h1>Sign In with</h1>
 
-          <button type="button" className="google_signIn_btn">
+          <button
+            type="button"
+            onClick={handleGoogleSignIn}
+            disabled={firebaseLoading}
+            className="google_signIn_btn"
+          >
             <FcGoogle />
             Sign In With Google
           </button>

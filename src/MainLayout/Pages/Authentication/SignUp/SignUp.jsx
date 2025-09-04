@@ -21,10 +21,9 @@ const SignUp = () => {
   const [selectedRole, setSelectedRole] = useState("");
   const [captchaValue, setCaptchaValue] = useState(null);
   const [robotError, setRobotError] = useState("");
-
   const navigate = useNavigate();
-
-  const { handleCreateUser, firebaseLoading } = useContext(AuthContext);
+  const { handleCreateUser, handleGoogleSignIn, firebaseLoading } =
+    useContext(AuthContext);
 
   // How use know us__
   const options = [
@@ -118,7 +117,10 @@ const SignUp = () => {
                 <div className="step">
                   <div className="step_one_content">
                     <h1>How would you like to sign up?</h1>
-                    <button>
+                    <button
+                      onClick={handleGoogleSignIn}
+                      disabled={firebaseLoading}
+                    >
                       <FcGoogle /> Sign In With Google
                     </button>
                     <p>
