@@ -5,9 +5,13 @@ import { useForm } from "react-hook-form";
 import { useContext, useState } from "react";
 import { AuthContext } from "../../../../Context/AuthContext";
 import Swal from "sweetalert2";
+import { sendPasswordResetEmail } from "firebase/auth";
+import auth from "../../../../Firebase/firebase.config";
 
 const SignIn = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [recoverEmail, setRecoverEmail] = useState("");
+  const [passwordLoading, setPasswordLoading] = useState(false);
   const { handleLoginUser, handleGoogleSignIn, firebaseLoading } =
     useContext(AuthContext);
   const navigate = useNavigate();
@@ -41,7 +45,29 @@ const SignIn = () => {
     });
   };
 
-  const handleForgotPassword = () => {};
+  const handleForgotPassword = async () => {
+    setPasswordLoading(true);
+
+    try {
+      await sendPasswordResetEmail(auth, recoverEmail);
+
+      Swal.fire({
+        title: "Check Your Email",
+        text: "We sent a reset link to your email inbox. If you don't find it on inbox then check you spam folder",
+        icon: "info",
+      });
+    } catch (error) {
+      console.log(error.code, error.message);
+      Swal.fire({
+        title: "Password Recover Failed",
+        text: "There might be some issue. Try again!",
+        icon: "error",
+      });
+    } finally {
+      setPasswordLoading(false);
+      document.getElementById("forget_pass_modal_close").click();
+    }
+  };
 
   return (
     <section id="main_signIn_container">
@@ -125,43 +151,28 @@ const SignIn = () => {
                     type="email"
                     name="email"
                     placeholder="Enter your email"
+                    value={recoverEmail}
+                    onChange={(e) => setRecoverEmail(e.target.value)}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3C8F63]"
                   />
                   <button
                     type="button"
+                    disabled={passwordLoading}
+                    onClick={handleForgotPassword}
                     className="w-full bg-[#3C8F63] text-white py-2 rounded-lg hover:bg-[rgb(53,127,88)] transition"
                   >
-                    Send Email
+                    {passwordLoading ? "Sending...." : "Send recover email"}
                   </button>
                 </div>
 
                 <div className="modal-action">
                   <form method="dialog">
-                    <button className="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300">
+                    <button
+                      id="forget_pass_modal_close"
+                      className="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300"
+                    >
                       Close
                     </button>
-                  </form>
-                </div>
-              </div>
-            </dialog>
-            <dialog id="my_modal_1" className="modal">
-              <div className="modal-box w-[800px]">
-                <h3 className="font-bold text-2xl">
-                  Don't worry we will recover you password!
-                </h3>
-                <div>
-                  <p>Enter you email that you use to create account</p>
-                  <input
-                    type="email"
-                    name="email"
-                    placeholder="Enter you email"
-                  />
-                  <button type="button">Send Email</button>
-                </div>
-                <div className="modal-action">
-                  <form method="dialog">
-                    {/* if there is a button in form, it will close the modal */}
-                    <button className="btn">Close</button>
                   </form>
                 </div>
               </div>
@@ -169,11 +180,13 @@ const SignIn = () => {
 
             {/* Forgot password modal__END */}
 
-            <li className="signIn_button">
-              <button type="submit" disabled={firebaseLoading}>
-                {firebaseLoading ? "Working...." : "Sign In"}
-              </button>
-            </li>
+            <button
+              className="signIn_button"
+              type="submit"
+              disabled={firebaseLoading}
+            >
+              {firebaseLoading ? "Working...." : "Sign In"}
+            </button>
 
             <li className="mt-5">
               <p>
