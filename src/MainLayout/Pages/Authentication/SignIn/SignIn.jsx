@@ -1,15 +1,21 @@
+// File path__
 import "./SignIn.css";
-import { Link, useNavigate } from "react-router";
+import auth from "../../../../Firebase/firebase.config";
+import { AuthContext } from "../../../../Context/AuthContext";
+
+// From react__
+import { useContext, useState } from "react";
+
+// Package(REACT ICONS, SWEET ALERT)__
+import Swal from "sweetalert2";
 import { FcGoogle } from "react-icons/fc";
 import { useForm } from "react-hook-form";
-import { useContext, useState } from "react";
-import { AuthContext } from "../../../../Context/AuthContext";
-import Swal from "sweetalert2";
+import { Link, useNavigate } from "react-router";
 import { sendPasswordResetEmail } from "firebase/auth";
-import auth from "../../../../Firebase/firebase.config";
 
 const SignIn = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [googleBtnOff, setGoogleBtnOff] = useState(false);
   const [recoverEmail, setRecoverEmail] = useState("");
   const [passwordLoading, setPasswordLoading] = useState(false);
   const { handleLoginUser, handleGoogleSignIn, firebaseLoading } =
@@ -69,6 +75,21 @@ const SignIn = () => {
     }
   };
 
+  const handleGoogleLogin = async () => {
+    setGoogleBtnOff(true);
+
+    await handleGoogleSignIn()
+      .then((res) => {
+        if (res) {
+          setGoogleBtnOff(false);
+          navigate("/");
+        }
+      })
+      .catch(() => {
+        setGoogleBtnOff(false);
+      });
+  };
+
   return (
     <section id="main_signIn_container">
       <form
@@ -80,8 +101,8 @@ const SignIn = () => {
 
           <button
             type="button"
-            onClick={handleGoogleSignIn}
-            disabled={firebaseLoading}
+            disabled={googleBtnOff}
+            onClick={handleGoogleLogin}
             className="google_signIn_btn"
           >
             <FcGoogle />

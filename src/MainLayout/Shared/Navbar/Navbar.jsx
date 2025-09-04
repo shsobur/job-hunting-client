@@ -172,7 +172,7 @@ const Navbar = () => {
               </div>
             ) : (
               <Link to="/sign-in">
-                <button className="btn btn-accent">Sign Up</button>
+                <button className="desktop_signIn_btn btn text-white bg-[#3C8F63]">Sign Up</button>
               </Link>
             )}
 

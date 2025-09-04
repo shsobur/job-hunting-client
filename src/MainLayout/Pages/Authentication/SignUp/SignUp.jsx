@@ -21,6 +21,7 @@ const SignUp = () => {
   const [selectedRole, setSelectedRole] = useState("");
   const [captchaValue, setCaptchaValue] = useState(null);
   const [robotError, setRobotError] = useState("");
+  const [googleBtnOff, setGoogleBtnOff] = useState(false);
   const navigate = useNavigate();
   const { handleCreateUser, handleGoogleSignIn, firebaseLoading } =
     useContext(AuthContext);
@@ -54,7 +55,12 @@ const SignUp = () => {
   };
 
   // React hook form state__
-  const {watch, register, handleSubmit, formState: { errors }} = useForm();
+  const {
+    watch,
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
   const onSubmit = async (data) => {
     if (!captchaValue) {
@@ -93,9 +99,33 @@ const SignUp = () => {
         icon: "success",
         title: "Sign up successfully",
       });
+
+      setTimeout(() => {
+        Swal.fire({
+          title: "Welcome to Job Hunting",
+          text: "Tip: A fully completed profile increases your chances of getting noticed by recruiters. Add your skills, experience, and a professional photo to make the best impression!",
+          icon: "info",
+          confirmButtonText: "Got it!",
+        });
+      }, 5000);
     });
 
     setRobotError("");
+  };
+
+  const handleGoogleLogin = async () => {
+    setGoogleBtnOff(true);
+
+    await handleGoogleSignIn()
+      .then((res) => {
+        if (res) {
+          setGoogleBtnOff(false);
+          navigate("/");
+        }
+      })
+      .catch(() => {
+        setGoogleBtnOff(false);
+      });
   };
 
   return (
@@ -113,10 +143,7 @@ const SignUp = () => {
                 <div className="step">
                   <div className="step_one_content">
                     <h1>How would you like to sign up?</h1>
-                    <button
-                      onClick={handleGoogleSignIn}
-                      disabled={firebaseLoading}
-                    >
+                    <button disabled={googleBtnOff} onClick={handleGoogleLogin}>
                       <FcGoogle /> Sign In With Google
                     </button>
                     <p>

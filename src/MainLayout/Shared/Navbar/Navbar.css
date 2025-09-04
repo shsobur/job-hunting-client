@@ -261,6 +261,10 @@ nav {
     display: none;
   }
 
+  .desktop_signIn_btn {
+    display: none;
+  }
+
   .dropdown_wrapper {
     display: none;
   }

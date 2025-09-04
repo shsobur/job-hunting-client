@@ -20,6 +20,7 @@ const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [userLoading, setUserLoading] = useState(true);
   const [firebaseLoading, setFirebaseLoading] = useState(false);
+
   const googleProvider = new GoogleAuthProvider();
   // console.log(user);
 
@@ -57,22 +58,43 @@ const AuthProvider = ({ children }) => {
 
   // Sign in use with google__
   const handleGoogleSignIn = async () => {
-    firebaseLoading(true);
-
     try {
       const result = await signInWithPopup(auth, googleProvider);
-      console.log(result);
-      return result;
-    } catch (error) {
-      console.log("Error google signing up:", error);
 
-      Swal.fire({
-        title: "Google Sign In Failed",
-        text: "There might be some issue, Please try again!",
-        icon: "error",
+      Swal.mixin({
+        toast: true,
+        position: "bottom",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        },
+      }).fire({
+        icon: "success",
+        title: "Signed in successfully",
       });
-    } finally {
-      firebaseLoading(false);
+
+      return result
+
+      // optional: handle result.user here (save to DB, etc.)
+    } catch (error) {
+      console.log(error.code, error.message);
+
+      if (error.code === "auth/popup-closed-by-user") {
+        Swal.fire({
+          title: "Google Sign-In Cancelled",
+          text: "You closed the sign-in popup. If you don’t want to use Google, try creating an account with email instead.",
+          icon: "warning",
+        });
+      } else {
+        Swal.fire({
+          title: "Google Sign-In Failed",
+          text: "There was an issue signing in. Please try again.",
+          icon: "error",
+        });
+      }
     }
   };
 
@@ -84,8 +106,6 @@ const AuthProvider = ({ children }) => {
       const result = await signInWithEmailAndPassword(auth, email, password);
       return result;
     } catch (error) {
-      console.log("___From auth___line-58!!!=> ", error.code);
-
       if (error.code === "auth/invalid-credential") {
         Swal.fire({
           title: "Invalid Credential!",
