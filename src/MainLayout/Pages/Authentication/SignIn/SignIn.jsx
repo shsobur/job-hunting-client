@@ -2,11 +2,12 @@ import "./SignIn.css";
 import { Link, useNavigate } from "react-router";
 import { FcGoogle } from "react-icons/fc";
 import { useForm } from "react-hook-form";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AuthContext } from "../../../../Context/AuthContext";
 import Swal from "sweetalert2";
 
 const SignIn = () => {
+  const [showPassword, setShowPassword] = useState(false);
   const { handleLoginUser, firebaseLoading } = useContext(AuthContext);
   const navigate = useNavigate();
   const {
@@ -56,6 +57,7 @@ const SignIn = () => {
           <ul className="signIn_input_container">
             <li>
               <input
+                id="input-1"
                 type="email"
                 placeholder="Enter your email"
                 {...register("email", { required: true })}
@@ -67,14 +69,20 @@ const SignIn = () => {
 
             <li>
               <input
-                id="input-1"
-                type="password"
+                id="input-2"
+                type={showPassword ? "text" : "password"}
                 placeholder="Enter your password"
                 {...register("password", { required: true })}
               />
               {errors.password && (
                 <p className="text-red-500 text-sm">Password is required</p>
               )}
+              <span
+                className="show_password_content cursor-pointer"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? "Hide " : "Show"}
+              </span>
             </li>
 
             <li className="signIn_options">

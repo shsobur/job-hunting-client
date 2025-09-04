@@ -69,8 +69,19 @@
   border-bottom: 2px solid #3c8f63;
 }
 
-#input-1 {
+.signIn_input_container li:nth-child(2) {
+  position: relative;
+}
+
+#input-2 {
   margin-bottom: 10px;
+}
+
+.show_password_content {
+  top: 38px;
+  right: 10px;
+  font-weight: 600;
+  position: absolute;
 }
 
 /* Forget password & Remember__ */
