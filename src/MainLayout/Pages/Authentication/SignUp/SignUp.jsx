@@ -1,5 +1,6 @@
 // File path__
 import "./SignUp.css";
+import useAxios from "../../../../Hooks/Axios";
 import logo from "../../../../assets/companyLogo.png";
 import { AuthContext } from "../../../../Context/AuthContext";
 
@@ -16,13 +17,14 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { HiOutlineInformationCircle } from "react-icons/hi";
 
 const SignUp = () => {
+  const navigate = useNavigate();
+  const api = useAxios();
   const [step, setStep] = useState(1);
   const [selected, setSelected] = useState("");
   const [selectedRole, setSelectedRole] = useState("");
   const [captchaValue, setCaptchaValue] = useState(null);
   const [robotError, setRobotError] = useState("");
   const [googleBtnOff, setGoogleBtnOff] = useState(false);
-  const navigate = useNavigate();
   const { handleCreateUser, handleGoogleSignIn, firebaseLoading } =
     useContext(AuthContext);
 
@@ -74,41 +76,72 @@ const SignUp = () => {
     const firstLetter = "user";
     const number = Math.floor(1000 + Math.random() * 9000);
 
-    // eslint-disable-next-line no-unused-vars
     const userData = {
       hearFrom: selected,
       userRole: selectedRole,
       userEmail: email,
       userName: firstLetter + number,
+      profilePhoto: "",
+      headline: "",
+      bio: "",
+      age: null,
+      education: [],
+      experience: [],
+      skills: [],
+      certifications: [],
+      projects: [],
+      social: {
+        linkedin: "",
+        github: "",
+        portfolio: "",
+      },
+      languages: [],
+      location: {
+        city: "",
+        country: "",
+      },
+      openToWork: true,
     };
 
-    await handleCreateUser(email, password).then(() => {
-      navigate("/");
+    try {
+      await handleCreateUser(email, password);
+      const res = await api.post("/new-user-data", userData);
 
-      Swal.mixin({
-        toast: true,
-        position: "bottom",
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-        didOpen: (toast) => {
-          toast.onmouseenter = Swal.stopTimer;
-          toast.onmouseleave = Swal.resumeTimer;
-        },
-      }).fire({
-        icon: "success",
-        title: "Sign up successfully",
-      });
+      if (res.data.insertedId) {
+        navigate("/");
 
-      setTimeout(() => {
-        Swal.fire({
-          title: "Welcome to Job Hunting",
-          text: "Tip: A fully completed profile increases your chances of getting noticed by recruiters. Add your skills, experience, and a professional photo to make the best impression!",
-          icon: "info",
-          confirmButtonText: "Got it!",
+        Swal.mixin({
+          toast: true,
+          position: "bottom",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          },
+        }).fire({
+          icon: "success",
+          title: "Sign up successfully",
         });
-      }, 5000);
-    });
+
+        setTimeout(() => {
+          Swal.fire({
+            title: "Welcome to Job Hunting",
+            text: "Tip: A fully completed profile increases your chances of getting noticed by recruiters. Add your skills, experience, and a professional photo to make the best impression!",
+            icon: "info",
+            confirmButtonText: "Got it!",
+          });
+        }, 5000);
+      }
+    } catch (error) {
+      console.log(error);
+      Swal.fire({
+        title: "Sign Up Failed",
+        text: "There was an issue creating your account. Please try again!",
+        icon: "error",
+      });
+    }
 
     setRobotError("");
   };
