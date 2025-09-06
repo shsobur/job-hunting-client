@@ -105,7 +105,7 @@ const SignUp = () => {
 
     try {
       await handleCreateUser(email, password);
-      const res = await api.post("/new-user-data", userData);
+      const res = await api.post("/user-api/new-user-data", userData);
 
       if (res.data.insertedId) {
         navigate("/");

@@ -6,6 +6,7 @@ import HomeLayout from "../MainLayout/Pages/HomePageLayout/HomeLayout/HomeLayout
 
 // Package__
 import { createBrowserRouter } from "react-router-dom";
+import UserProfile from "../MainLayout/Pages/UserProfile/UserProfile";
 
 const router = createBrowserRouter([
   {
@@ -15,6 +16,10 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <HomeLayout></HomeLayout>,
+      },
+      {
+        path: "/user-profile",
+        element: <UserProfile></UserProfile>,
       },
       {
         path: "/sign-up",
