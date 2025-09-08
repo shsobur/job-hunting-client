@@ -116,6 +116,7 @@ const UserProfile = () => {
                     <span className="material-symbols-outlined">edit</span>
                   </button>
                 </div>
+
                 <div
                   className="header_banner"
                   style={{
@@ -123,22 +124,25 @@ const UserProfile = () => {
                       "url('https://lh3.googleusercontent.com/aida-public/AB6AXuAuIfwPFD1JIrtD5IMavuFqP_YXpU-HdtYPGXvUCp0V2bX5S9-4dq0mWuTkLeexSpqzwGnyizj_fG4w6PTTjz4nX1MQQ_SwqevkDQzZX8TwYzinu477HE3iCDgj-cB1kEoAYecMZRplkqJ4QPlNndYopeneCvPXmeJSuxNTFXhgxnXvnnJKNpQmRxk90uVjYgqZlF6EoInGPjjkNoFi8BJikIE_hYgYhjXMht4aX8JHjm-llqRkZrdS2MwdNJU7sZNStRxjghaKxXc')",
                   }}
                 ></div>
+
                 <div className="header_content">
                   <div className="header_edit_button_secondary">
                     <button className="edit_btn_gray">
                       <span className="material-symbols-outlined">edit</span>
                     </button>
                   </div>
+
                   <div className="profile_info_container">
                     <div className="profile_avatar_container">
                       <div
                         className="profile_avatar"
                         style={{
                           backgroundImage:
-                            'url("https://lh3.googleusercontent.com/aida-public/AB6AXuAr0-blNlLHkSEJME4V8bPYsQQIj2kWlhF7a20F3otCVJNlvC3X5Yvt1KFuQDDqDfs3USrH1jEUSs_sH8rLjJ93q7K71jU_e6ItN8WvtLX_pik-Cd1PslJDD2M-Vu66zafXTFzSs-W7FzAnIj2JmdSXHGD5xATzXYU6L6z03SWu7wKNTiwbOqnDJjsiHkZVz7HmpWNbso_LngdBa9bQbfZVkVv0JM9aAkJNvEJlMqlLVHeMFcQRz7KhVwEcZqoBNp7MRNMUHpm_JOY")',
+                            'url("https://i.postimg.cc/jSbwtz9X/IMG-20250703-173742.jpg")',
                         }}
                       ></div>
                     </div>
+
                     <div className="profile_details">
                       <div className="profile_details_content">
                         <div className="mobile_status_badge">
@@ -147,33 +151,41 @@ const UserProfile = () => {
                             Open to Work
                           </span>
                         </div>
-                        <h2 className="profile_name">Ethan Carter, 28</h2>
+
+                        <h2 className="profile_name">Sobur Hossen</h2>
+
                         <div className="mobile_location">
                           <span className="material-symbols-outlined location_icon_sm">
                             location_on
                           </span>
                           <span>London, UK</span>
                         </div>
+
                         <p className="profile_title">
-                          Product Designer in London, UK, He/Him
+                          Front-End Developer | Skill In React | Focus on react
+                          mystery
                         </p>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
+
               <div className="profile_card">
                 <button className="card_edit_button">
                   <span className="material-symbols-outlined edit_icon">
                     edit
                   </span>
                 </button>
+
                 <h3 className="card_title_lg">About</h3>
+
                 <p className="about_text">
                   I'm a British designer currently living in London, UK. I'm
                   huge fan of gothic typefaces and single shot espressos. I love
                   talking about comic books.
                 </p>
+
                 <div className="mobile_social_links">
                   <a className="social_link" href="#">
                     <svg
@@ -207,12 +219,19 @@ const UserProfile = () => {
                   </span>
                 </button>
                 <h3 className="card_title_lg">Experience</h3>
+
                 <div className="timeline">
                   <div className="timeline_item">
                     <div className="timeline_dot_current"></div>
                     <p className="timeline_role">Product Designer at Figma</p>
                     <p className="timeline_period">2023 - Present</p>
+                    <p className="timeline_description">
+                      I worked on the reactions feature that allows anyone to
+                      send cute emojis feature that allows anyone to send cute
+                      emojis.
+                    </p>
                   </div>
+
                   <div className="timeline_item">
                     <div className="timeline_dot"></div>
                     <p className="timeline_role">
@@ -226,31 +245,6 @@ const UserProfile = () => {
                       send cute emojis.
                     </p>
                   </div>
-                  <div className="timeline_item">
-                    <div className="timeline_dot"></div>
-                    <p className="timeline_role">Product Designer at Quip</p>
-                    <p className="timeline_period">
-                      2019 - 2021 • San Francisco, CA
-                    </p>
-                  </div>
-                  <div className="timeline_item">
-                    <div className="timeline_dot"></div>
-                    <p className="timeline_role">
-                      Product Designer at Facebook
-                    </p>
-                    <p className="timeline_period">
-                      2013 - 2019 • Menlo Park, CA
-                    </p>
-                  </div>
-                  <div className="timeline_item">
-                    <div className="timeline_dot"></div>
-                    <p className="timeline_role">
-                      Product Design Intern at Facebook
-                    </p>
-                    <p className="timeline_period">
-                      2010 - 2013 • Menlo Park, CA
-                    </p>
-                  </div>
                 </div>
               </div>
               <div className="profile_card">
@@ -259,33 +253,43 @@ const UserProfile = () => {
                     edit
                   </span>
                 </button>
+
                 <h3 className="card_title_lg">Education</h3>
+
                 <div className="education_list">
                   <div className="education_item">
                     <h4 className="education_institution">
                       Stanford University
                     </h4>
+
                     <p className="education_department">
                       Department of Computer Science
                     </p>
+
                     <p className="education_period">2009 - 2013</p>
                   </div>
+
                   <div className="education_item">
                     <h4 className="education_institution">
                       London College of Communication
                     </h4>
+
                     <p className="education_department">Department of Design</p>
+
                     <p className="education_period">2007 - 2009</p>
                   </div>
                 </div>
               </div>
+
               <div className="profile_card">
                 <button className="card_edit_button">
                   <span className="material-symbols-outlined edit_icon">
                     edit
                   </span>
                 </button>
+
                 <h3 className="card_title_lg">Skills</h3>
+
                 <div className="skill_tags">
                   <span className="skill_tag">UI Design</span>
                   <span className="skill_tag">UX Research</span>
@@ -294,37 +298,46 @@ const UserProfile = () => {
                   <span className="skill_tag">React</span>
                   <span className="skill_tag">Tailwind CSS</span>
                 </div>
+
                 <div className="mobile_languages">
                   <h4 className="card_title_md">Languages</h4>
+
                   <div className="language_tags">
                     <span className="language_tag">English (Native)</span>
                     <span className="language_tag">French (Professional)</span>
                   </div>
                 </div>
               </div>
+
               <div className="profile_card">
                 <button className="card_edit_button">
                   <span className="material-symbols-outlined edit_icon">
                     edit
                   </span>
                 </button>
+
                 <h3 className="card_title_lg">Projects</h3>
+
                 <div className="projects_grid">
                   <div className="project_card">
                     <h4 className="project_title">Reactions at Slack</h4>
+
                     <p className="project_description">
                       A feature to express emotions through emojis.
                     </p>
+
                     <div className="project_footer">
                       <div className="project_tags">
                         <span className="project_tag_blue">React</span>
                         <span className="project_tag_purple">GraphQL</span>
                       </div>
+
                       <a className="project_link" href="#">
                         View Project →
                       </a>
                     </div>
                   </div>
+
                   <div className="project_card">
                     <h4 className="project_title">Deep Comments at Slack</h4>
                     <p className="project_description">
@@ -342,18 +355,18 @@ const UserProfile = () => {
                   </div>
                 </div>
               </div>
+
               <div className="profile_card">
                 <button className="card_edit_button">
                   <span className="material-symbols-outlined edit_icon">
                     edit
                   </span>
                 </button>
+
                 <h3 className="card_title_lg">Certifications</h3>
+
                 <ul className="certification_list">
                   <li className="certification_item">
-                    <span className="material-symbols-outlined certification_icon">
-                      workspace_premium
-                    </span>
                     <div>
                       <p className="certification_name">
                         Certified UX Designer
@@ -361,19 +374,7 @@ const UserProfile = () => {
                       <p className="certification_issuer">
                         Nielsen Norman Group
                       </p>
-                    </div>
-                  </li>
-                  <li className="certification_item">
-                    <span className="material-symbols-outlined certification_icon">
-                      workspace_premium
-                    </span>
-                    <div>
-                      <p className="certification_name">
-                        Interaction Design Specialist
-                      </p>
-                      <p className="certification_issuer">
-                        Interaction Design Foundation
-                      </p>
+                      <p className="certification_issuer">2023-2024</p>
                     </div>
                   </li>
                 </ul>
