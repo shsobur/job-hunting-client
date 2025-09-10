@@ -7,6 +7,7 @@ import { useContext } from "react";
 
 // Package__
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import NProgress from "nprogress";
 
 const useUserData = () => {
   const api = useAxios();
@@ -16,8 +17,13 @@ const useUserData = () => {
   // Fetch user data by email__
   const fetchUserData = async (email) => {
     if (!email) throw new Error("Email is required to fetch profile");
-    const { data } = await api.get(`/users/email/${email}`);
-    return data;
+    try {
+      NProgress.start();
+      const { data } = await api.get(`/user-api/users/email/${email}`);
+      return data;
+    } finally {
+      NProgress.done();
+    }
   };
 
   // React Query: fetch and cache profile__
@@ -37,7 +43,7 @@ const useUserData = () => {
     mutationFn: async (updatedFields) => {
       if (!user?.email) throw new Error("Email missing");
       const { data } = await api.patch(
-        `/users/email/${user.email}`,
+        `/user-api/users/email/${user.email}`,
         updatedFields
       );
       return data;

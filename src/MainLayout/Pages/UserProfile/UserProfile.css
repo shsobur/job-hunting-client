@@ -1,4 +1,7 @@
-/* Main container styles */
+#main_profile_container {
+  background-color: #ededed;
+}
+
 .profile-container {
   max-width: 1536px;
   margin-left: auto;
