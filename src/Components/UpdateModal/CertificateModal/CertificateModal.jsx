@@ -1,11 +1,10 @@
-import "./ContactModal.css";
+import React from "react";
 
-const ContactModal = () => {
-
+const CertificateModal = () => {
   return (
     <>
       <section>
-        <dialog id="contact_update_modal" className="modal">
+        <dialog id="certificate_update_modal" className="modal">
           <div className="modal-box max-w-[1024px]">
             <form method="dialog" className="mb-5">
               <button className="btn btn-sm btn-circle btn-ghost border border-gray-400 absolute right-2 top-2">
@@ -15,7 +14,7 @@ const ContactModal = () => {
 
             <div className="contact_update_main_content_container">
               <h1 className="modal_title font-semibold font-[Montserrat] text-[1.5rem]">
-                Let's update you contacts
+                Let's update you certificates
               </h1>
             </div>
           </div>
@@ -25,4 +24,4 @@ const ContactModal = () => {
   );
 };
 
-export default ContactModal;
+export default CertificateModal;

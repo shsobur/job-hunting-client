@@ -14,6 +14,15 @@ import {
 } from "react-icons/fi";
 import { SiGraphql } from "react-icons/si";
 import ContactModal from "../../../Components/UpdateModal/ContactModal/ContactModal";
+import LanguageModal from "../../../Components/UpdateModal/LanguageModal/LanguageModal";
+import BannerModal from "../../../Components/UpdateModal/BannerModal/BannerModal";
+import ProfileModal from "../../../Components/UpdateModal/ProfileModal/ProfileModal";
+import AboutModal from "../../../Components/UpdateModal/AboutModal/AboutModal";
+import ExperienceModal from "../../../Components/UpdateModal/ExperienceModal/ExperienceModal";
+import EducationModal from "../../../Components/UpdateModal/EducationModal/EducationModal";
+import SkillModal from "../../../Components/UpdateModal/SkillModal/SkillModal";
+import CertificateModal from "../../../Components/UpdateModal/CertificateModal/CertificateModal";
+import ProjectModal from "../../../Components/UpdateModal/ProjectModal/ProjectModal";
 
 const UserProfile = () => {
   const { profile } = useUserData();
@@ -21,10 +30,18 @@ const UserProfile = () => {
   return (
     <>
       <section id="main_profile_container">
-
         {/* All modals__ */}
         <ContactModal></ContactModal>
-        
+        <LanguageModal></LanguageModal>
+        <BannerModal></BannerModal>
+        <ProfileModal></ProfileModal>
+        <AboutModal></AboutModal>
+        <ExperienceModal></ExperienceModal>
+        <EducationModal></EducationModal>
+        <SkillModal></SkillModal>
+        <ProjectModal></ProjectModal>
+        <CertificateModal></CertificateModal>
+
         {/* Main container with max width and padding */}
         <div className="profile-container">
           {/* Grid layout for sidebar and main content */}
@@ -63,7 +80,7 @@ const UserProfile = () => {
               </div>
 
               {/* Contact information with edit button */}
-              
+
               <div className="profile-card">
                 <button
                   onClick={() =>
@@ -141,7 +158,14 @@ const UserProfile = () => {
               {/* Languages section with edit button */}
               <div className="profile-card">
                 <button className="card-edit-button">
-                  <FiEdit className="edit-icon" />
+                  <FiEdit
+                    onClick={() =>
+                      document
+                        .getElementById("language_update_modal")
+                        .showModal()
+                    }
+                    className="edit-icon"
+                  />
                 </button>
                 <h3 className="profile-card-title">Languages</h3>
                 <div className="language-tags">
@@ -161,7 +185,12 @@ const UserProfile = () => {
               {/* Profile header with banner and avatar */}
               <div className="profile-header-card">
                 <button className="header-edit-button">
-                  <FiEdit className="edit-icon" />
+                  <FiEdit
+                    onClick={() =>
+                      document.getElementById("banner_update_modal").showModal()
+                    }
+                    className="edit-icon"
+                  />
                 </button>
                 <div
                   className="header-banner"
@@ -175,7 +204,14 @@ const UserProfile = () => {
                 ></div>
                 <div className="header-content">
                   <button className="header-edit-button-secondary">
-                    <FiEdit className="edit-icon" />
+                    <FiEdit
+                      onClick={() =>
+                        document
+                          .getElementById("profile_update_modal")
+                          .showModal()
+                      }
+                      className="edit-icon"
+                    />
                   </button>
                   <div className="profile-info-container">
                     <div className="profile-avatar-container">
@@ -207,7 +243,14 @@ const UserProfile = () => {
               {/* Mobile contact info (visible only on small screens) */}
               <div className="profile-card mobile-contact-info">
                 <button className="card-edit-button">
-                  <FiEdit className="edit-icon" />
+                  <FiEdit
+                    onClick={() =>
+                      document
+                        .getElementById("contact_update_modal")
+                        .showModal()
+                    }
+                    className="edit-icon"
+                  />
                 </button>
                 <h3 className="card-title-lg">Contact Info</h3>
                 <div className="contact-info">
@@ -276,7 +319,12 @@ const UserProfile = () => {
               {/* About section */}
               <div className="profile-card">
                 <button className="card-edit-button">
-                  <FiEdit className="edit-icon" />
+                  <FiEdit
+                    onClick={() =>
+                      document.getElementById("about_update_modal").showModal()
+                    }
+                    className="edit-icon"
+                  />
                 </button>
                 <h3 className="card-title-lg">About</h3>
                 <p className="about-text">
@@ -289,7 +337,14 @@ const UserProfile = () => {
               {/* Experience section with timeline */}
               <div className="profile-card">
                 <button className="card-edit-button">
-                  <FiEdit className="edit-icon" />
+                  <FiEdit
+                    onClick={() =>
+                      document
+                        .getElementById("experience_update_modal")
+                        .showModal()
+                    }
+                    className="edit-icon"
+                  />
                 </button>
 
                 <h3 className="card-title-lg">Experience</h3>
@@ -322,7 +377,14 @@ const UserProfile = () => {
               {/* Education section */}
               <div className="profile-card">
                 <button className="card-edit-button">
-                  <FiEdit className="edit-icon" />
+                  <FiEdit
+                    onClick={() =>
+                      document
+                        .getElementById("education_update_modal")
+                        .showModal()
+                    }
+                    className="edit-icon"
+                  />
                 </button>
                 <h3 className="card-title-lg">Education</h3>
                 <div className="education-list">
@@ -345,7 +407,12 @@ const UserProfile = () => {
               {/* Skills section */}
               <div className="profile-card">
                 <button className="card-edit-button">
-                  <FiEdit className="edit-icon" />
+                  <FiEdit
+                    onClick={() =>
+                      document.getElementById("skill_update_modal").showModal()
+                    }
+                    className="edit-icon"
+                  />
                 </button>
 
                 <h3 className="card-title-lg">Skills</h3>
@@ -364,7 +431,14 @@ const UserProfile = () => {
               {/* Mobile languages section (visible only on small screens) */}
               <div className="profile-card mobile-languages">
                 <button className="card-edit-button">
-                  <FiEdit className="edit-icon" />
+                  <FiEdit
+                    onClick={() =>
+                      document
+                        .getElementById("language_update_modal")
+                        .showModal()
+                    }
+                    className="edit-icon"
+                  />
                 </button>
                 <h3 className="card-title-lg">Languages</h3>
 
@@ -382,7 +456,14 @@ const UserProfile = () => {
               {/* Projects section */}
               <div className="profile-card">
                 <button className="card-edit-button">
-                  <FiEdit className="edit-icon" />
+                  <FiEdit
+                    onClick={() =>
+                      document
+                        .getElementById("project_update_modal")
+                        .showModal()
+                    }
+                    className="edit-icon"
+                  />
                 </button>
                 <h3 className="card-title-lg">Projects</h3>
                 <div className="project-grid">
@@ -415,7 +496,14 @@ const UserProfile = () => {
               {/* Certifications section */}
               <div className="profile-card">
                 <button className="card-edit-button">
-                  <FiEdit className="edit-icon" />
+                  <FiEdit
+                    onClick={() =>
+                      document
+                        .getElementById("certificate_update_modal")
+                        .showModal()
+                    }
+                    className="edit-icon"
+                  />
                 </button>
                 <h3 className="card-title-lg">Certifications</h3>
                 <ul className="certification-list">
