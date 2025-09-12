@@ -23,12 +23,14 @@ import EducationModal from "../../../Components/UpdateModal/EducationModal/Educa
 import SkillModal from "../../../Components/UpdateModal/SkillModal/SkillModal";
 import CertificateModal from "../../../Components/UpdateModal/CertificateModal/CertificateModal";
 import ProjectModal from "../../../Components/UpdateModal/ProjectModal/ProjectModal";
+import ScrollToTop from "../../../Components/ScrollToTop/ScrollToTop";
 
 const UserProfile = () => {
   const { profile } = useUserData();
 
   return (
     <>
+      <ScrollToTop></ScrollToTop>
       <section id="main_profile_container">
         {/* All modals__ */}
         <ContactModal></ContactModal>
