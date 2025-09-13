@@ -99,7 +99,7 @@ const LanguageModal = () => {
   return (
     <>
       <section>
-        <dialog id="language_update_modal" className="modal">
+        <dialog id="language_update_modal" className="modal p-6">
           <div className="modal-box max-w-[1024px] w-full p-6">
             <div className="contact_update_main_content_container">
               <div className="flex justify-between items-center mb-6">

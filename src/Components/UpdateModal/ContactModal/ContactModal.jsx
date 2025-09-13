@@ -180,7 +180,7 @@ const ContactModal = () => {
   return (
     <section>
       <dialog id="contact_update_modal" className="modal">
-        <div className="modal-box max-w-[1024px] p-8">
+        <div className="modal-box max-w-[1024px] p-6">
           <div className="contact_update_main_content_container">
             {/* Header */}
             <div className="mb-8">
