@@ -26,7 +26,7 @@ import ProjectModal from "../../../Components/UpdateModal/ProjectModal/ProjectMo
 import ScrollToTop from "../../../Components/ScrollToTop/ScrollToTop";
 
 const UserProfile = () => {
-  const { profile, isLoading } = useUserData();
+  const { profile} = useUserData();
 
   return (
     <>

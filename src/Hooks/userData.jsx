@@ -58,7 +58,6 @@ const useUserData = () => {
     isLoading,
     error,
     updateProfile: updateProfileMutation.mutate,
-    isUpdating: updateProfileMutation.isLoading,
   };
 };
 

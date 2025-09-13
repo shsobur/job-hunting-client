@@ -1,8 +1,13 @@
+// File path__
 import "./ContactModal.css";
-import { useEffect, useState } from "react";
-import { FaLightbulb } from "react-icons/fa";
-import Swal from "sweetalert2";
 import useUserData from "../../../Hooks/userData";
+
+// From react__
+import { useEffect, useState } from "react";
+
+// Package__
+import Swal from "sweetalert2";
+import { FaLightbulb } from "react-icons/fa";
 
 const ContactModal = () => {
   const { profile, updateProfile } = useUserData();
