@@ -26,7 +26,7 @@ import ProjectModal from "../../../Components/UpdateModal/ProjectModal/ProjectMo
 import ScrollToTop from "../../../Components/ScrollToTop/ScrollToTop";
 
 const UserProfile = () => {
-  const { profile } = useUserData();
+  const { profile, isLoading } = useUserData();
 
   return (
     <>
@@ -126,7 +126,11 @@ const UserProfile = () => {
                       size={25}
                     ></FaLinkedin>
                   ) : (
-                    <a className="social-link" href="#">
+                    <a
+                      className="social-link"
+                      href={profile?.social?.linkedin}
+                      target="main"
+                    >
                       <FaLinkedin size={30} className="social-icon" />
                     </a>
                   )}
@@ -138,7 +142,11 @@ const UserProfile = () => {
                       size={25}
                     ></FaGithub>
                   ) : (
-                    <a className="social-link" href="#">
+                    <a
+                      className="social-link"
+                      href={profile?.social?.github}
+                      target="main"
+                    >
                       <FaGithub size={30} className="social-icon" />
                     </a>
                   )}
@@ -150,7 +158,11 @@ const UserProfile = () => {
                       size={25}
                     ></FiLink>
                   ) : (
-                    <a className="social-link" href="#">
+                    <a
+                      className="social-link"
+                      href={profile?.social?.portfolio}
+                      target="main"
+                    >
                       <FiLink size={30} className="social-icon" />
                     </a>
                   )}

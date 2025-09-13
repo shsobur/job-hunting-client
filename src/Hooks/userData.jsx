@@ -43,7 +43,7 @@ const useUserData = () => {
     mutationFn: async (updatedFields) => {
       if (!user?.email) throw new Error("Email missing");
       const { data } = await api.patch(
-        `/user-api/users/email/${user.email}`,
+        `/user-api/update-profile/${user.email}`,
         updatedFields
       );
       return data;

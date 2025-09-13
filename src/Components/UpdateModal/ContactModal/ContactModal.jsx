@@ -2,9 +2,12 @@ import "./ContactModal.css";
 import { useEffect, useState } from "react";
 import { FaLightbulb } from "react-icons/fa";
 import Swal from "sweetalert2";
+import useUserData from "../../../Hooks/userData";
 
 const ContactModal = () => {
-  // Data from inputs__
+  const { profile, updateProfile } = useUserData();
+  const [updateLoading, setUpdateLoading] = useState(false);
+  // Form state
   const [countriesList, setCountriesList] = useState([]);
   const [selectedCountry, setSelectedCountry] = useState("");
   const [citiesList, setCitiesList] = useState([]);
@@ -13,7 +16,7 @@ const ContactModal = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [isPhoneValid, setIsPhoneValid] = useState(false);
 
-  // Load countries.json from public folder__
+  // Load countries.json__
   useEffect(() => {
     fetch("/countries.json")
       .then((res) => res.json())
@@ -21,17 +24,49 @@ const ContactModal = () => {
       .catch((err) => console.error("Error loading countries.json:", err));
   }, []);
 
+  // Pre-fill form with profile data__
+  useEffect(() => {
+    if (profile && countriesList.length) {
+      const country = profile.location?.country || "";
+      const city = profile.location?.city || "";
+
+      setSelectedCountry(country);
+
+      const countryData = countriesList.find((c) => c.country === country);
+      if (countryData) {
+        setCitiesList(countryData.cities || []);
+        setSelectedCity(city); // auto-fill city after citiesList is set
+        setPhoneCode(countryData.phone || "");
+      } else {
+        setCitiesList([]);
+        setSelectedCity("");
+        setPhoneCode("");
+      }
+
+      // Phone
+      if (profile.number) {
+        if (profile.number.startsWith("+")) {
+          const codeLength = profile.number.length - 10;
+          setPhoneCode(profile.number.slice(0, codeLength));
+          setPhoneNumber(profile.number.slice(codeLength));
+        } else {
+          setPhoneCode("");
+          setPhoneNumber(profile.number);
+        }
+      }
+    }
+  }, [profile, countriesList]);
+
   // Handle country change__
   const handleCountryChange = (e) => {
     const country = e.target.value;
     setSelectedCountry(country);
 
     const countryData = countriesList.find((c) => c.country === country);
-
     if (countryData) {
       setCitiesList(countryData.cities || []);
       setPhoneCode(countryData.phone || "");
-      setSelectedCity("");
+      setSelectedCity(countryData.cities?.[0] || "");
     } else {
       setCitiesList([]);
       setPhoneCode("");
@@ -43,49 +78,68 @@ const ContactModal = () => {
   const handlePhoneChange = (e) => {
     const value = e.target.value.replace(/\D/g, "");
     setPhoneNumber(value);
-
-    const isValid = /^[0-9]{7,15}$/.test(value);
-    setIsPhoneValid(isValid);
+    setIsPhoneValid(/^[0-9]{7,15}$/.test(value));
   };
 
-  // Merge phone code + number__
   const getFullPhoneNumber = () => {
     if (!phoneCode || !phoneNumber) return "";
-
-    let number = phoneNumber;
-    if (number.startsWith("0")) number = number.slice(1);
-
+    let number = phoneNumber.startsWith("0")
+      ? phoneNumber.slice(1)
+      : phoneNumber;
     return `${phoneCode}${number}`;
   };
 
   const sendOtp = () => {
     const modal = document.getElementById("contact_update_modal");
-    modal.close(); // closes the dialog temporarily
+    modal.close();
 
     Swal.fire({
       title: "Money Problem 💸",
-      text: "Sending OTP via SMS is expensive 😅 I tried free options, but they all ask for money after the trial. One day I’ll be rich and add this feature! For now, just type anything you want.",
+      text: "Sending OTP via SMS is expensive 😅 and I am poor. Just type anything for now or leave it empty.",
       icon: "info",
-    }).then(() => {
-      modal.showModal();
-    });
+    }).then(() => modal.showModal());
   };
 
-  // Submit contact form
+  // Submit contact form__
   const handleContactSubmit = async (e) => {
     e.preventDefault();
 
     const data = {
-      country: selectedCountry,
-      city: selectedCity,
-      phone: getFullPhoneNumber(),
-      linkedin: e.target.linkedin?.value,
-      github: e.target.github?.value,
-      portfolio: e.target.portfolio?.value,
+      number: getFullPhoneNumber() || profile.number,
+      location: {
+        city: selectedCity || profile.location?.city,
+        country: selectedCountry || profile.location?.country,
+      },
+      social: {
+        linkedin: e.target.linkedin?.value || profile.social?.linkedin,
+        github: e.target.github?.value || profile.social?.github,
+        portfolio: e.target.portfolio?.value || profile.social?.portfolio,
+      },
     };
 
-    console.log("Final object:", data);
-    // TODO: send `data` to your backend
+    setUpdateLoading(true);
+    updateProfile(data, {
+      onSuccess: () => {
+        Swal.fire({
+          title: "Success!",
+          text: "Contacts updated successfully.",
+          icon: "success",
+        });
+
+        handleCancel();
+        setUpdateLoading(false);
+      },
+      onError: () => {
+        Swal.fire({
+          title: "Oops!",
+          text: "Something went wrong while updating.",
+          icon: "error",
+        });
+
+        handleCancel();
+        setUpdateLoading(false);
+      },
+    });
   };
 
   // Cancel / reset form
@@ -93,10 +147,28 @@ const ContactModal = () => {
     const modal = document.getElementById("contact_update_modal");
     modal.close();
 
-    setSelectedCountry("");
-    setSelectedCity("");
-    setPhoneCode("");
-    setPhoneNumber("");
+    if (profile) {
+      setSelectedCountry(profile.location?.country || "");
+      setSelectedCity(profile.location?.city || "");
+      if (profile.number) {
+        if (profile.number.startsWith("+")) {
+          const codeLength = profile.number.length - 10;
+          setPhoneCode(profile.number.slice(0, codeLength));
+          setPhoneNumber(profile.number.slice(codeLength));
+        } else {
+          setPhoneCode("");
+          setPhoneNumber(profile.number);
+        }
+      } else {
+        setPhoneCode("");
+        setPhoneNumber("");
+      }
+    } else {
+      setSelectedCountry("");
+      setSelectedCity("");
+      setPhoneCode("");
+      setPhoneNumber("");
+    }
     setIsPhoneValid(false);
   };
 
@@ -185,7 +257,7 @@ const ContactModal = () => {
                       value={phoneNumber}
                       onChange={handlePhoneChange}
                       placeholder="01787548843"
-                      className="input input-bordered w-full bg-white text-lg py-6 px-4 border-2 border-gray-300 rounded-lg focus:border-[#3C8F63] focus:ring-[#3C8F63]  focus:outline-none transition-colors"
+                      className="input input-bordered w-full bg-white text-lg py-6 px-4 border-2 border-gray-300 rounded-lg focus:border-[#3C8F63] focus:ring-[#3C8F63] focus:outline-none transition-colors"
                     />
                   </div>
                 </div>
@@ -220,8 +292,6 @@ const ContactModal = () => {
                 </div>
               </div>
 
-              <div id="recaptcha-container"></div>
-
               {/* Social Links */}
               <div>
                 <h3 className="text-2xl font-semibold text-gray-800 mb-6">
@@ -237,6 +307,7 @@ const ContactModal = () => {
                     <input
                       type="url"
                       name="linkedin"
+                      defaultValue={profile?.social?.linkedin || ""}
                       placeholder="https://linkedin.com/in/yourname"
                       className="input input-bordered w-full bg-white text-lg py-6 px-5 border-2 border-gray-300 rounded-lg focus:border-[#3C8F63] focus:ring-[#3C8F63] focus:outline-none transition-colors"
                     />
@@ -251,6 +322,7 @@ const ContactModal = () => {
                     <input
                       type="url"
                       name="github"
+                      defaultValue={profile?.social?.github || ""}
                       placeholder="https://github.com/yourname"
                       className="input input-bordered w-full bg-white text-lg py-6 px-5 border-2 border-gray-300 rounded-lg focus:border-[#3C8F63] focus:ring-[#3C8F63] focus:outline-none transition-colors"
                     />
@@ -265,6 +337,7 @@ const ContactModal = () => {
                     <input
                       type="url"
                       name="portfolio"
+                      defaultValue={profile?.social?.portfolio || ""}
                       placeholder="https://yourwebsite.com"
                       className="input input-bordered w-full bg-white text-lg py-6 px-5 border-2 border-gray-300 rounded-lg focus:border-[#3C8F63] focus:ring-[#3C8F63] focus:outline-none transition-colors"
                     />
@@ -278,18 +351,18 @@ const ContactModal = () => {
                   <FaLightbulb className="text-green-600 text-xl mt-1 mr-4" />
                   <div>
                     <div className="text-[#3C8F63] text-base">
-                      Make sure your contact information is up to date to
-                      receive important notifications and for potential
-                      employers to reach you.
+                      Keep your <b>phone</b>, <b>location</b>, and professional
+                      links <b>(LinkedIn, GitHub, portfolio)</b> up-to-date.
                     </div>
                   </div>
                 </div>
               </div>
 
               {/* Action Buttons */}
-              <div className="flex justify-end gap-4 pt-8">
+              <div className="flex justify-end gap-4">
                 <button
                   type="button"
+                  disabled={updateLoading}
                   onClick={handleCancel}
                   className="btn btn-outline px-8 py-3 text-lg border-2 border-gray-300 hover:bg-gray-100 hover:border-gray-400"
                 >
@@ -298,9 +371,10 @@ const ContactModal = () => {
 
                 <button
                   type="submit"
+                  disabled={updateLoading}
                   className="btn bg-[#3C8F63] border-[#3C8F63] hover:bg-[#337954] hover:border-green-700 px-8 py-3 text-lg text-white"
                 >
-                  Save Changes
+                  {updateLoading ? "Working...." : "Save Changes"}
                 </button>
               </div>
             </form>
