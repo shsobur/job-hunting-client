@@ -28,7 +28,7 @@ const LanguageModal = () => {
     }
   }, [profile]);
 
-  const handleAddLanguage = () => {
+  const handleAddLanguage = () => { 
     if (newLanguage && proficiency) {
       const exists = languages.some(
         (lang) =>

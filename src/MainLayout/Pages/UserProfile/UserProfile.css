@@ -34,7 +34,7 @@
 
 /* Profile card title styles */
 .profile-card-title {
-  font-size: 1.125rem;
+  font-size: 1.5rem;
   line-height: 1.75rem;
   font-weight: 700;
   color: #111827;
@@ -156,18 +156,29 @@
 .language-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 1rem;
 }
 
 /* Language tag styles */
 .language-tag {
-  background-color: #e5e7eb;
+  width: 100%;
+  background-color: #f1f1f2;
   color: #374151;
-  font-size: 0.875rem;
   line-height: 1.25rem;
   font-weight: 500;
-  padding: 0.25rem 0.75rem;
-  border-radius: 9999px;
+  padding: 10px 20px;
+  border-radius: 8px;
+}
+
+.language-text-content li:nth-child(1) {
+  color: #151515;
+  font-weight: 600;
+  font-size: 1.3rem;
+}
+
+.language-text-content li:nth-child(2) {
+  margin-top: 10px;
+  font-size: 1.1rem;
 }
 
 /* Main content area styles */

@@ -187,7 +187,10 @@ const UserProfile = () => {
                     ? "N/A"
                     : profile?.languages.map((lang) => (
                         <span key={lang.id} className="language-tag">
-                          {lang.name} ({lang.proficiency})
+                          <ul className="language-text-content">
+                            <li>{lang.name}</li>
+                            <li>{lang.proficiency}</li>
+                          </ul>
                         </span>
                       ))}
                 </div>
@@ -461,7 +464,10 @@ const UserProfile = () => {
                     ? "N/A"
                     : profile?.languages.map((lang) => (
                         <span key={lang.id} className="language-tag">
-                          {lang.name} ({lang.proficiency})
+                          <ul className="language-text-content">
+                            <li>{lang.name}</li>
+                            <li>{lang.proficiency}</li>
+                          </ul>
                         </span>
                       ))}
                 </div>
