@@ -1,20 +1,53 @@
+// File path__
 import "./LanguageModal.css";
-import { useState } from "react";
+import useUserData from "../../../Hooks/userData";
+
+// From react__
+import { useState, useEffect } from "react";
+
+// Package__
+import Swal from "sweetalert2";
 import { FaLightbulb } from "react-icons/fa";
-import { FiX, FiPlus, FiTrash2 } from "react-icons/fi";
+import { FiPlus, FiTrash2 } from "react-icons/fi";
 
 const LanguageModal = () => {
-  const [languages, setLanguages] = useState([
-    { id: 1, name: "English", proficiency: "Native or bilingual proficiency" },
-    { id: 2, name: "French", proficiency: "Professional working proficiency" },
-  ]);
+  const { profile, updateProfile } = useUserData();
+  const [languages, setLanguages] = useState([]);
   const [newLanguage, setNewLanguage] = useState("");
   const [proficiency, setProficiency] = useState("");
+  const [languageLoading, setLanguageLoading] = useState(false);
+
+  // Initialize languages from profile data__
+  useEffect(() => {
+    if (profile?.languages && Array.isArray(profile.languages)) {
+      const languagesWithIds = profile.languages.map((lang, index) => ({
+        ...lang,
+        id: index + 1,
+      }));
+      setLanguages(languagesWithIds);
+    }
+  }, [profile]);
 
   const handleAddLanguage = () => {
     if (newLanguage && proficiency) {
+      const exists = languages.some(
+        (lang) =>
+          lang.name.toLowerCase().trim() === newLanguage.toLowerCase().trim()
+      );
+      if (exists) {
+        const modal = document.getElementById("language_update_modal");
+        modal.close();
+
+        Swal.fire({
+          title: "Duplicate!",
+          text: `${newLanguage} is already added.`,
+          icon: "warning",
+        }).then(() => modal.showModal());
+        return;
+      }
+
       const newLang = {
-        id: languages.length + 1,
+        id: Date.now(),
         name: newLanguage,
         proficiency,
       };
@@ -28,6 +61,41 @@ const LanguageModal = () => {
     setLanguages(languages.filter((lang) => lang.id !== id));
   };
 
+  const handleSubmit = () => {
+    const languagesForBackend = languages.map(({ ...rest }) => rest);
+
+    // This is the object you can send to your backend
+    const languageData = {
+      languages: languagesForBackend,
+    };
+
+    setLanguageLoading(true);
+    updateProfile(languageData, {
+      onSuccess: () => {
+        document.getElementById("language_update_modal").close();
+
+        Swal.fire({
+          title: "Success!",
+          text: "Language updated successfully.",
+          icon: "success",
+        });
+
+        setLanguageLoading(false);
+      },
+      onError: () => {
+        document.getElementById("language_update_modal").close();
+
+        Swal.fire({
+          title: "Oops!",
+          text: "Something went wrong while updating.",
+          icon: "error",
+        });
+
+        setLanguageLoading(false);
+      },
+    });
+  };
+
   return (
     <>
       <section>
@@ -38,11 +106,6 @@ const LanguageModal = () => {
                 <h1 className="modal_title font-semibold font-[Montserrat] text-3xl text-[#333]">
                   Edit Language Info
                 </h1>
-                <form method="dialog">
-                  <button className="text-gray-500 hover:text-gray-700">
-                    <FiX size={24} />
-                  </button>
-                </form>
               </div>
 
               <div className="mb-8">
@@ -54,7 +117,7 @@ const LanguageModal = () => {
                     <input
                       type="text"
                       placeholder="e.g., Spanish"
-                      className="w-full px-4 py-[15px] border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#3C8F63]"
+                      className="w-full px-4 py-[15px] border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#3C8F63]"
                       value={newLanguage}
                       onChange={(e) => setNewLanguage(e.target.value)}
                     />
@@ -65,7 +128,7 @@ const LanguageModal = () => {
                       Proficiency
                     </label>
                     <select
-                      className="w-full px-4 py-[18px] bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#3C8F63]"
+                      className="w-full px-4 py-[18px] bg-white border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#3C8F63]"
                       value={proficiency}
                       onChange={(e) => setProficiency(e.target.value)}
                     >
@@ -101,13 +164,16 @@ const LanguageModal = () => {
 
                 <div className="bg-green-50 border-2 border-[#3C8F63] p-4 rounded-md mb-6">
                   <div className="flex items-start">
-                    <div className="flex-shrink-0 mt-1 mr-2">
+                    <div className="flex-shrink-0 mt-1">
                       <FaLightbulb className="text-[#3C8F63] text-xl mr-4" />
                     </div>
-                    <p className="text-lg text-[#3C8F63]">
-                      Tip: You can add multiple languages and indicate your
-                      proficiency level for each to showcase your linguistic
-                      skills to potential employers.
+                    <p className="text-base text-[#3C8F63]">
+                      <b>
+                        <i>Tip:</i>
+                      </b>{" "}
+                      You can add multiple languages and indicate your
+                      <b> proficiency</b> level for each to showcase your
+                      linguistic skills to potential employers.
                     </p>
                   </div>
                 </div>
@@ -123,7 +189,7 @@ const LanguageModal = () => {
                     {languages.map((language) => (
                       <div
                         key={language.id}
-                        className="flex justify-between items-start p-4 border border-[#3C8F63] rounded-md"
+                        className="flex justify-between items-start p-4 border-2 border-[#3C8F63] rounded-md"
                       >
                         <div>
                           <h3 className="font-medium text-gray-800">
@@ -151,12 +217,19 @@ const LanguageModal = () => {
 
               <div className="modal-action mt-8 flex justify-end space-x-3">
                 <form method="dialog">
-                  <button className="btn btn-outline px-8 py-3 text-lg border-2 border-gray-300 hover:bg-gray-100 hover:border-gray-400">
+                  <button
+                    disabled={languageLoading}
+                    className="btn btn-outline px-8 py-3 text-lg border-2 border-gray-300 hover:bg-gray-100 hover:border-gray-400"
+                  >
                     Cancel
                   </button>
                 </form>
-                <button className="btn bg-[#3C8F63] border-[#3C8F63] hover:bg-[#337954] hover:border-green-700 px-8 py-3 text-lg text-white">
-                  Save Changes
+                <button
+                  onClick={handleSubmit}
+                  disabled={languageLoading}
+                  className="btn bg-[#3C8F63] border-[#3C8F63] hover:bg-[#337954] hover:border-green-700 px-8 py-3 text-lg text-white"
+                >
+                  {languageLoading ? "Working...." : "Save Changes"}
                 </button>
               </div>
             </div>

@@ -1,6 +1,17 @@
 import "./UserProfile.css";
 import useUserData from "../../../Hooks/userData";
 import placeholderImage from "../../../assets/place_banner.png";
+import ScrollToTop from "../../../Components/ScrollToTop/ScrollToTop";
+import AboutModal from "../../../Components/UpdateModal/AboutModal/AboutModal";
+import SkillModal from "../../../Components/UpdateModal/SkillModal/SkillModal";
+import BannerModal from "../../../Components/UpdateModal/BannerModal/BannerModal";
+import ContactModal from "../../../Components/UpdateModal/ContactModal/ContactModal";
+import ProfileModal from "../../../Components/UpdateModal/ProfileModal/ProfileModal";
+import ProjectModal from "../../../Components/UpdateModal/ProjectModal/ProjectModal";
+import LanguageModal from "../../../Components/UpdateModal/LanguageModal/LanguageModal";
+import EducationModal from "../../../Components/UpdateModal/EducationModal/EducationModal";
+import ExperienceModal from "../../../Components/UpdateModal/ExperienceModal/ExperienceModal";
+import CertificateModal from "../../../Components/UpdateModal/CertificateModal/CertificateModal";
 
 // Package__
 import { FaLinkedin, FaGithub, FaReact } from "react-icons/fa";
@@ -13,20 +24,9 @@ import {
   FiMail,
 } from "react-icons/fi";
 import { SiGraphql } from "react-icons/si";
-import ContactModal from "../../../Components/UpdateModal/ContactModal/ContactModal";
-import LanguageModal from "../../../Components/UpdateModal/LanguageModal/LanguageModal";
-import BannerModal from "../../../Components/UpdateModal/BannerModal/BannerModal";
-import ProfileModal from "../../../Components/UpdateModal/ProfileModal/ProfileModal";
-import AboutModal from "../../../Components/UpdateModal/AboutModal/AboutModal";
-import ExperienceModal from "../../../Components/UpdateModal/ExperienceModal/ExperienceModal";
-import EducationModal from "../../../Components/UpdateModal/EducationModal/EducationModal";
-import SkillModal from "../../../Components/UpdateModal/SkillModal/SkillModal";
-import CertificateModal from "../../../Components/UpdateModal/CertificateModal/CertificateModal";
-import ProjectModal from "../../../Components/UpdateModal/ProjectModal/ProjectModal";
-import ScrollToTop from "../../../Components/ScrollToTop/ScrollToTop";
 
 const UserProfile = () => {
-  const { profile} = useUserData();
+  const { profile } = useUserData();
 
   return (
     <>
@@ -186,8 +186,8 @@ const UserProfile = () => {
                   {profile?.languages.length === 0
                     ? "N/A"
                     : profile?.languages.map((lang) => (
-                        <span key={lang} className="language-tag">
-                          {lang}
+                        <span key={lang.id} className="language-tag">
+                          {lang.name} ({lang.proficiency})
                         </span>
                       ))}
                 </div>
@@ -460,8 +460,8 @@ const UserProfile = () => {
                   {profile?.languages.length === 0
                     ? "N/A"
                     : profile?.languages.map((lang) => (
-                        <span key={lang} className="language-tag">
-                          {lang}
+                        <span key={lang.id} className="language-tag">
+                          {lang.name} ({lang.proficiency})
                         </span>
                       ))}
                 </div>

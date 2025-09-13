@@ -356,6 +356,9 @@ const ContactModal = () => {
                   <FaLightbulb className="text-green-600 text-xl mt-1 mr-4" />
                   <div>
                     <div className="text-[#3C8F63] text-base">
+                      <b>
+                        <i>Tip:</i>
+                      </b>{" "}
                       Keep your <b>phone</b>, <b>location</b>, and professional
                       links <b>(LinkedIn, GitHub, portfolio)</b> up-to-date.
                     </div>
