@@ -2,7 +2,7 @@
 import useUserData from "../../../Hooks/userData";
 
 // From react__
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 // Package__
 import Swal from "sweetalert2";
@@ -12,6 +12,10 @@ const AboutModal = () => {
   const { profile, updateProfile } = useUserData();
   const [aboutUpdateLoading, setAboutUpdateLoading] = useState(false);
   const [headline, setHeadline] = useState(profile?.headline || "");
+
+  useEffect(() => {
+    setHeadline(profile?.headline);
+  }, [profile]);
 
   const handleSave = () => {
     console.log(headline);
@@ -62,7 +66,7 @@ const AboutModal = () => {
                 <textarea
                   className="w-full min-h-72 p-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#3C8F63] focus:border-transparent resize-y"
                   placeholder="Tell us about yourself..."
-                  value={profile?.headline || headline}
+                  value={headline}
                   maxLength={650}
                   onChange={(e) => setHeadline(e.target.value)}
                 ></textarea>
