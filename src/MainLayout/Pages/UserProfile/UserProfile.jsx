@@ -344,7 +344,7 @@ const UserProfile = () => {
                   />
                 </button>
                 <h3 className="card-title-lg">About</h3>
-                <p className="about-text">
+                <p className="about-text whitespace-pre-line">
                   {profile?.headline === ""
                     ? "Tell us about yourself!"
                     : profile?.headline}
@@ -464,10 +464,7 @@ const UserProfile = () => {
                     ? "N/A"
                     : profile?.languages.map((lang) => (
                         <span key={lang.id} className="language-tag">
-                          <ul className="language-text-content">
-                            <li>{lang.name}</li>
-                            <li>{lang.proficiency}</li>
-                          </ul>
+                          {lang.name} {lang.proficiency}
                         </span>
                       ))}
                 </div>

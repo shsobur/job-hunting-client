@@ -1,15 +1,49 @@
-import React, { useState } from "react";
+// File  path__
 import useUserData from "../../../Hooks/userData";
+
+// From react__
+import { useState } from "react";
+
+// Package__
+import Swal from "sweetalert2";
 import { FaLightbulb } from "react-icons/fa";
 
 const AboutModal = () => {
-  const { profile } = useUserData();
-  const [aboutText, setAboutText] = useState(profile?.headline || "");
+  const { profile, updateProfile } = useUserData();
+  const [aboutUpdateLoading, setAboutUpdateLoading] = useState(false);
+  const [headline, setHeadline] = useState(profile?.headline || "");
 
   const handleSave = () => {
-    // Handle save logic here
-    console.log("Saving about text:", aboutText);
-    document.getElementById("about_update_modal").close();
+    console.log(headline);
+    setAboutUpdateLoading(true);
+
+    updateProfile(
+      { headline },
+      {
+        onSuccess: () => {
+          document.getElementById("about_update_modal").close();
+
+          Swal.fire({
+            title: "Success!",
+            text: "About updated successfully.",
+            icon: "success",
+          });
+          setAboutUpdateLoading(false);
+        },
+        onError: (error) => {
+          console.log(error);
+          document.getElementById("about_update_modal").close();
+
+          Swal.fire({
+            title: "Update failed",
+            text: "There might be some issue. Please try again!",
+            icon: "error",
+          });
+
+          setAboutUpdateLoading(false);
+        },
+      }
+    );
   };
 
   return (
@@ -26,11 +60,15 @@ const AboutModal = () => {
 
               <div className="mb-6">
                 <textarea
-                  className="w-full min-h-72 p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3C8F63] focus:border-transparent resize-none"
+                  className="w-full min-h-72 p-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#3C8F63] focus:border-transparent resize-y"
                   placeholder="Tell us about yourself..."
-                  value={aboutText}
-                  onChange={(e) => setAboutText(e.target.value)}
+                  value={profile?.headline || headline}
+                  maxLength={650}
+                  onChange={(e) => setHeadline(e.target.value)}
                 ></textarea>
+                <p className="text-sm text-gray-500 mt-1">
+                  {headline.length}/650 characters
+                </p>
               </div>
 
               <div className="bg-green-50 border-2 border-[#3C8F63] p-4 rounded-lg mb-6">
@@ -50,6 +88,7 @@ const AboutModal = () => {
 
               <div className="flex justify-end space-x-3">
                 <button
+                  disabled={aboutUpdateLoading}
                   className="btn btn-outline px-8 py-3 text-lg border-2 border-gray-300 hover:bg-gray-100 hover:border-gray-400"
                   onClick={() =>
                     document.getElementById("about_update_modal").close()
@@ -58,10 +97,11 @@ const AboutModal = () => {
                   Cancel
                 </button>
                 <button
+                  disabled={aboutUpdateLoading}
                   className="btn bg-[#3C8F63] border-[#3C8F63] hover:bg-[#337954] hover:border-green-700 px-8 py-3 text-lg text-white"
                   onClick={handleSave}
                 >
-                  Save changes
+                  {aboutUpdateLoading ? "Working...." : "Save changes"}
                 </button>
               </div>
             </div>
