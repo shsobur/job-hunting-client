@@ -44,7 +44,7 @@ const EducationModal = () => {
     end: universityData?.endYear || "",
   });
 
-  // Update form fields when profile data changes
+  // Update form fields when profile data changes__
   useEffect(() => {
     if (schoolData) {
       setSchool({
@@ -75,13 +75,13 @@ const EducationModal = () => {
       });
       setUniversityLock(false);
     }
-  }, [profile]);
+  }, [profile, schoolData, collegeData, universityData]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const education = [];
 
-    // School validation and data push
+    // School validation and data push__
     if (!schoolLock) {
       if (!school.name || !school.group || !school.start || !school.end) {
         Swal.fire({
@@ -99,7 +99,7 @@ const EducationModal = () => {
       });
     }
 
-    // College validation and data push
+    // College validation and data push__
     if (!collegeLock) {
       if (!college.name || !college.degree || !college.start || !college.end) {
         Swal.fire({
@@ -117,7 +117,7 @@ const EducationModal = () => {
       });
     }
 
-    // University validation and data push
+    // University validation and data push__
     if (!universityLock) {
       if (
         !university.name ||
@@ -141,7 +141,6 @@ const EducationModal = () => {
     }
 
     const finalData = { education };
-    console.log("Submitting:", finalData);
 
     setEduUpdateLoading(true);
     updateProfile(finalData, {
@@ -170,7 +169,6 @@ const EducationModal = () => {
   // Helper function to handle checkbox changes
   const handleLockChange = (setLock, lockState, sectionData) => {
     if (lockState && sectionData) {
-      // If unlocking and data exists, ask if they want to keep it
       Swal.fire({
         title: "Keep existing data?",
         text: "You already have data for this section. Do you want to keep it?",
@@ -184,7 +182,7 @@ const EducationModal = () => {
         if (result.isConfirmed) {
           setLock(false);
         } else {
-          // Clear the data
+          // Clear the data__
           if (setLock === setSchoolLock) {
             setSchool({ name: "", group: "", start: "", end: "" });
           } else if (setLock === setCollegeLock) {
@@ -196,7 +194,6 @@ const EducationModal = () => {
         }
       });
     } else {
-      // Simple toggle if no data exists or we're locking
       setLock(!lockState);
     }
   };
