@@ -24,6 +24,8 @@ import {
   FiMail,
 } from "react-icons/fi";
 import { SiGraphql } from "react-icons/si";
+import { IoSchool, IoSchoolOutline } from "react-icons/io5";
+import { HiOutlineBuildingOffice2 } from "react-icons/hi2";
 
 const UserProfile = () => {
   const { profile } = useUserData();
@@ -403,19 +405,26 @@ const UserProfile = () => {
                     className="edit-icon"
                   />
                 </button>
-                <h3 className="card-title-lg">Education</h3>
+                <h3 className="card-title-lg border-b-2 pb-2">Education</h3>
                 <div className="education-list">
                   {profile?.education.length === 0
                     ? "N/A"
                     : profile?.education.map((edu) => (
-                        <div key={edu.name} className="education-item">
-                          <h4 className="education-institution">
-                            Stanford University
+                        <div key={edu.level} className="education-item">
+                          <h2 className="flex items-center gap-2 mt-2 mb-5 text-2xl font-semibold">
+                            <IoSchoolOutline size={28} />
+                            {edu?.level}
+                          </h2>
+                          <h4 className="education-institution flex items-center gap-2">
+                            <HiOutlineBuildingOffice2 size={22} />
+                            {edu?.institute}
                           </h4>
                           <p className="education-department">
-                            Department of Computer Science
+                            {edu?.department}
                           </p>
-                          <p className="education-period">2009 - 2013</p>
+                          <p className="education-period">
+                            {edu?.startYear} - {edu?.endYear}
+                          </p>
                         </div>
                       ))}
                 </div>
