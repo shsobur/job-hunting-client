@@ -71,7 +71,7 @@ const AboutModal = () => {
                   onChange={(e) => setHeadline(e.target.value)}
                 ></textarea>
                 <p className="text-sm text-gray-500 mt-1">
-                  {headline.length}/650 characters
+                  {headline?.length}/650 characters
                 </p>
               </div>
 
