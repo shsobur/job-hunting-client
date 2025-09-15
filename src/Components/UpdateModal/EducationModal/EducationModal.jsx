@@ -202,7 +202,7 @@ const EducationModal = () => {
     <>
       <section>
         <dialog id="education_update_modal" className="modal">
-          <div className="modal-box max-w-[1024px] p-5 rounded-md">
+          <div className="modal-box max-w-[1024px] max-h-[95vh] p-5 rounded-md">
             <div className="education_content_container">
               <div className="px-3 py-5">
                 <h1 className="text-2xl lg:text-3xl font-bold font-[Montserrat] text-gray-800">

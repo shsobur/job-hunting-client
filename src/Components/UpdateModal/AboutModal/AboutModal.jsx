@@ -54,7 +54,7 @@ const AboutModal = () => {
     <>
       <section>
         <dialog id="about_update_modal" className="modal">
-          <div className="modal-box max-w-[1024px] rounded-lg shadow-xl">
+          <div className="modal-box max-w-[1024px] max-h-[95vh] rounded-lg shadow-xl">
             <div className="px-2 lg:px-6 pb-2 lg:pb-6">
               <h1 className="text-2xl lg:text-3xl font-semibold font-[Montserrat] text-gray-800 mb-2">
                 Edit about info

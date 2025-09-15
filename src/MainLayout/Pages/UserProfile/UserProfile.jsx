@@ -26,6 +26,7 @@ import {
 import { SiGraphql } from "react-icons/si";
 import { IoSchool, IoSchoolOutline } from "react-icons/io5";
 import { HiOutlineBuildingOffice2 } from "react-icons/hi2";
+import { PiBuildingApartmentBold } from "react-icons/pi";
 
 const UserProfile = () => {
   const { profile } = useUserData();
@@ -366,27 +367,43 @@ const UserProfile = () => {
                   />
                 </button>
 
-                <h3 className="card-title-lg">Experience</h3>
+                <h3 className="card-title-lg border-b-2 pb-2">Experience</h3>
 
                 {profile?.experience.length === 0 ? (
-                  <span className="text-lg text-[#4B5563]">
+                  <span className="mt-2 text-lg text-[#4B5563]">
                     No experience. I am fresher!
                   </span>
                 ) : (
                   profile?.experience.map((exp) => (
-                    <div key={exp.name} className="timeline">
+                    <div key={exp.position} className="mt-10 timeline">
                       <div className="timeline-item">
-                        <div className="timeline-dot"></div>
-                        <p className="timeline-role">
-                          Senior Product Designer at Slack
+                        <div
+                          className={
+                            exp?.isCurrent ? "timeline-dot" : "timeline-dot-two"
+                          }
+                        ></div>
+
+                        <p className="flex items-center gap-2 text-[1.5em] font-semibold">
+                          <PiBuildingApartmentBold size={27} /> {exp?.company}
                         </p>
+                        <p className="timeline-role mb-3">{exp?.position}</p>
                         <p className="timeline-period">
-                          2021 - 2023 • San Francisco, CA
+                          • {exp?.startDate} - {exp?.endDate}
                         </p>
-                        <p className="timeline-description">
-                          I worked on the reactions feature that allows anyone
-                          to send cute emojis.
+                        <p className="timeline-period">• {exp?.location}</p>
+
+                        <p className="timeline-description mb-2 pl-3">
+                          {exp?.description}
                         </p>
+                        {exp?.isCurrent ? (
+                          <p className="inline-block mt-2 px-2 py-1 bg-[#eef5f1] text-[#3C8F63] text-sm rounded">
+                            {exp?.status}
+                          </p>
+                        ) : (
+                          <p className="inline-block mt-2 px-2 py-1 bg-orange-100 text-orange-500 text-sm rounded">
+                            {exp?.status}
+                          </p>
+                        )}
                       </div>
                     </div>
                   ))
