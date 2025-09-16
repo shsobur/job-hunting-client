@@ -24,7 +24,7 @@ import {
   FiMail,
 } from "react-icons/fi";
 import { SiGraphql } from "react-icons/si";
-import { IoSchool, IoSchoolOutline } from "react-icons/io5";
+import { IoSchoolOutline } from "react-icons/io5";
 import { HiOutlineBuildingOffice2 } from "react-icons/hi2";
 import { PiBuildingApartmentBold } from "react-icons/pi";
 
@@ -465,7 +465,7 @@ const UserProfile = () => {
                     ? "N/A"
                     : profile?.skills.map((skill) => (
                         <span key={skill} className="skill-tag">
-                          UI Design
+                          {skill}
                         </span>
                       ))}
                 </div>
