@@ -18,13 +18,15 @@ import { AiOutlineShopping } from "react-icons/ai";
 import { RiContactsBook2Line } from "react-icons/ri";
 import { MdOutlineLogout, MdOutlineSpaceDashboard } from "react-icons/md";
 import { IoChevronDown, IoChevronUp, IoHomeOutline } from "react-icons/io5";
+import useUserData from "../../../Hooks/userData";
 
 const Navbar = () => {
   const menuRef = useRef();
+  const { profile } = useUserData();
+  const { user, logOut } = useContext(AuthContext);
   const [open, setOpen] = useState(false);
   const [isScrollingDown, setIsScrollingDown] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
-  const { user, logOut } = useContext(AuthContext);
 
   // Handle Close Dropdown__
   useEffect(() => {
@@ -153,7 +155,13 @@ const Navbar = () => {
                   id="dropdown_item_parent_container"
                   className={`dropdown_menu ${open ? "open" : ""}`}
                 >
-                  <NavLink to="/user-profile">
+                  <NavLink
+                    to={
+                      profile?.userRole === "Recruiter"
+                        ? "/recruiter-profile"
+                        : "/user-profile"
+                    }
+                  >
                     <span
                       onClick={() => setOpen(!open)}
                       className="dropdown_item"
@@ -172,7 +180,7 @@ const Navbar = () => {
             ) : (
               <Link to="/sign-in">
                 <button className="desktop_signIn_btn btn text-white bg-[#3C8F63]">
-                  Sign Up
+                  Sign In
                 </button>
               </Link>
             )}

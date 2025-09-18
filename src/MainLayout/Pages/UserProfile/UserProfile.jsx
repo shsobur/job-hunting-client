@@ -27,9 +27,14 @@ import { SiGraphql } from "react-icons/si";
 import { IoSchoolOutline } from "react-icons/io5";
 import { HiOutlineBuildingOffice2 } from "react-icons/hi2";
 import { PiBuildingApartmentBold } from "react-icons/pi";
+import LoadingScreen from "../../../Components/LoadingScreen/LoadingScreen";
 
 const UserProfile = () => {
-  const { profile } = useUserData();
+  const { profile, isLoading } = useUserData();
+
+  if (isLoading) {
+    return <LoadingScreen />;
+  }
 
   return (
     <>

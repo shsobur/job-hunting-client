@@ -105,7 +105,7 @@ const SkillModal = () => {
                   Your Skills
                 </h2>
                 <div className="mt-4 flex flex-col gap-3">
-                  {skills.length > 0 ? (
+                  {skills?.length > 0 ? (
                     skills.map((skill, index) => (
                       <div
                         key={index}
