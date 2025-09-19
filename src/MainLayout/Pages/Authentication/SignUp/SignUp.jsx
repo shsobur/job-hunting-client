@@ -76,6 +76,51 @@ const SignUp = () => {
     const firstLetter = "user";
     const number = Math.floor(1000 + Math.random() * 9000);
 
+    const companyData = {
+      hearFrom: selected,
+      userRole: selectedRole,
+      userEmail: email,
+      userName: firstLetter + number,
+      companyName: "",
+      companyLogo: "",
+      companyWebsite: "",
+      industry: "",
+      companySize: {
+        currentEmployees: null,
+        sizeRange: "",
+      },
+      foundedYear: null,
+      headquarters: {
+        country: "",
+        city: "",
+        area: "",
+      },
+      branchLocations: [
+        {
+          country: "",
+          city: "",
+        },
+      ],
+      description: "",
+      mission: "",
+      vision: "",
+      departments: [],
+      companyGallery: [],
+      keyPeople: [
+        {
+          name: "",
+          role: "",
+        },
+      ],
+      activeHire: true,
+      verified: false,
+      social: {
+        linkedIn: "",
+        x: "",
+        others: [],
+      },
+    };
+
     const userData = {
       hearFrom: selected,
       userRole: selectedRole,
@@ -105,7 +150,10 @@ const SignUp = () => {
 
     try {
       await handleCreateUser(email, password);
-      const res = await api.post("/user-api/new-user-data", userData);
+      const res = await api.post(
+        "/user-api/new-user-data",
+        selectedRole === "Job Seeker" ? userData : companyData
+      );
 
       if (res.data.insertedId) {
         navigate("/");
@@ -125,14 +173,16 @@ const SignUp = () => {
           title: "Sign up successfully",
         });
 
-        setTimeout(() => {
-          Swal.fire({
-            title: "Welcome to Job Hunting",
-            text: "Tip: A fully completed profile increases your chances of getting noticed by recruiters. Add your skills, experience, and a professional photo to make the best impression!",
-            icon: "info",
-            confirmButtonText: "Got it!",
-          });
-        }, 5000);
+        if (selectedRole === "Job Seeker") {
+          setTimeout(() => {
+            Swal.fire({
+              title: "Welcome to Job Hunting",
+              text: "Tip: A fully completed profile increases your chances of getting noticed by recruiters. Add your skills, experience, and a professional photo to make the best impression!",
+              icon: "info",
+              confirmButtonText: "Got it!",
+            });
+          }, 5000);
+        }
       }
     } catch (error) {
       console.log(error);
