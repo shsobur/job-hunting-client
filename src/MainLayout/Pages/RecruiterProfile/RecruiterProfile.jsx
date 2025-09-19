@@ -12,16 +12,15 @@ import {
   FaBuilding,
   FaHeadset,
 } from "react-icons/fa";
+import { FiEdit } from "react-icons/fi";
 
 const RecruiterProfile = () => {
   return (
-    <div
-      className="bg-gray-50 min-h-screen"
-    >
+    <div className="bg-gray-50 min-h-screen">
       <div className="max-w-[1536px] mx-auto lg:p-5 p-3">
         <div className="overflow-hidden">
           {/* Header Section */}
-          <div className="">
+          <div>
             <div className="flex flex-col sm:flex-row items-start gap-5">
               <div
                 className="bg-center bg-no-repeat aspect-square bg-cover rounded-lg h-28 w-28 sm:h-32 sm:w-32 flex-shrink-0"
@@ -30,6 +29,7 @@ const RecruiterProfile = () => {
                     'url("https://lh3.googleusercontent.com/aida-public/AB6AXuCuetNezrPUqgcdgRGwjy3PXc535fNMM0UWC6FKfSA4pnIfkUcyUD2zaG0NtN13mZrI2EV2i9iSTRIyLRbx53A3idSkYGQ2s5b7q3pXWScjaclFGWHQFr7wwPcs-JZAycNsDIgPRMNw_VWpf5FbL1MIi44YK9ddTS0NbrbtLT1z9A13575wMXnWBe73Lo_DQd20Yqv4Z3rSGyynb85QTP0ygJEg1VvP2fIl1NzgfAxIN6A9hvwXF7owO3NXpsN1gZN1jrx3CzSak3Gq")',
                 }}
               ></div>
+
               <div className="flex-grow">
                 <h1 className="text-gray-900 text-3xl font-bold leading-tight tracking-[-0.015em]">
                   Tech Innovators Inc.
@@ -48,6 +48,10 @@ const RecruiterProfile = () => {
                   </div>
                 </div>
               </div>
+
+              <button className="btn p-2 bg-gray-200 rounded-full">
+                <FiEdit className="edit-icon" />
+              </button>
             </div>
           </div>
 
@@ -72,15 +76,22 @@ const RecruiterProfile = () => {
           </div>
 
           {/* Main Content */}
-          <div className="p-2">
+          <div className="p-2 mt-2">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               {/* Left Column */}
-              <div className="lg:col-span-2 space-y-8">
+              <div className="lg:col-span-2 space-y-16">
                 {/* About Us Section */}
+
                 <div className="text-gray-600">
-                  <h2 className="text-gray-900 text-2xl font-bold mb-4">
-                    About us
-                  </h2>
+                  <div className="flex items-start justify-between mb-8">
+                    <h2 className="text-gray-900 text-3xl font-bold">
+                      About us
+                    </h2>
+
+                    <button className="btn p-2 bg-gray-200 rounded-full">
+                      <FiEdit className="edit-icon" />
+                    </button>
+                  </div>
                   <p>
                     Tech Innovators Inc. is a leading technology company
                     specializing in innovative software solutions for
@@ -91,7 +102,7 @@ const RecruiterProfile = () => {
                     business software solutions.
                   </p>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-                    <div className="bg-gray-50 p-2 rounded-lg">
+                    <div className="bg-gray-200 p-5 rounded-lg">
                       <h2 className="text-gray-900 text-xl font-bold flex items-center gap-2 mb-2">
                         <FaFlag className="text-green-600" />
                         <span>Mission</span>
@@ -100,7 +111,8 @@ const RecruiterProfile = () => {
                         To empower businesses through cutting-edge technology.
                       </p>
                     </div>
-                    <div className="bg-gray-50 p-2 rounded-lg">
+
+                    <div className="bg-gray-200 p-5 rounded-lg">
                       <h2 className="text-gray-900 text-xl font-bold flex items-center gap-2 mb-2">
                         <FaEye className="text-green-600" />
                         <span>Vision</span>
@@ -114,9 +126,15 @@ const RecruiterProfile = () => {
 
                 {/* Departments Section */}
                 <div>
-                  <h2 className="text-gray-900 text-2xl font-bold mb-4">
-                    Departments
-                  </h2>
+                  <div className="flex items-start justify-between mb-8">
+                    <h2 className="text-gray-900 text-3xl font-bold">
+                      Departments
+                    </h2>
+
+                    <button className="btn p-2 bg-gray-200 rounded-full">
+                      <FiEdit className="edit-icon" />
+                    </button>
+                  </div>
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                     <div className="flex items-center gap-3 rounded-lg border border-gray-200 bg-white p-4">
                       <FaWrench className="text-gray-600" />
@@ -159,9 +177,15 @@ const RecruiterProfile = () => {
 
                 {/* Gallery Section */}
                 <div>
-                  <h2 className="text-gray-900 text-2xl font-bold mb-4">
-                    Current Events / Gallery
-                  </h2>
+                  <div className="flex items-start justify-between mb-8">
+                    <h2 className="text-gray-900 text-3xl font-bold">
+                      Current Events / Gallery
+                    </h2>
+
+                    <button className="btn p-2 bg-gray-200 rounded-full">
+                      <FiEdit className="edit-icon" />
+                    </button>
+                  </div>
                   <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2">
                     <div className="col-span-2 row-span-2">
                       <img
@@ -210,11 +234,16 @@ const RecruiterProfile = () => {
               {/* Right Column */}
               <aside className="space-y-6">
                 {/* Company Details */}
-                <div className="bg-gray-50 rounded-lg p-2">
-                  <h2 className="text-gray-900 text-xl font-bold mb-4">
-                    Company Details
-                  </h2>
-                  <div className="space-y-4 text-sm">
+                <div className="bg-gray-200 rounded-lg p-5">
+                  <div className="flex items-start justify-between mb-5">
+                    <h2 className="text-gray-900 text-2xl font-bold mb-4">
+                      Company Details
+                    </h2>
+                    <button className="btn p-2 bg-white rounded-full">
+                      <FiEdit className="edit-icon" />
+                    </button>
+                  </div>
+                  <div className="space-y-4 text-base">
                     <div className="flex justify-between">
                       <span className="text-gray-500">Website</span>
                       <a
@@ -256,10 +285,16 @@ const RecruiterProfile = () => {
                 </div>
 
                 {/* Key People */}
-                <div className="bg-gray-50 rounded-lg p-2">
-                  <h2 className="text-gray-900 text-xl font-bold mb-4">
-                    Key People
-                  </h2>
+                <div className="bg-gray-200 rounded-lg p-5">
+                  <div className="flex items-start justify-between mb-5">
+                    <h2 className="text-gray-900 text-2xl font-bold mb-4">
+                      Key People
+                    </h2>
+
+                    <button className="btn p-2 bg-white rounded-full">
+                      <FiEdit className="edit-icon" />
+                    </button>
+                  </div>
                   <div className="flex space-x-4 overflow-x-auto pb-2">
                     <div className="text-center flex-shrink-0">
                       <div
@@ -291,10 +326,15 @@ const RecruiterProfile = () => {
                 </div>
 
                 {/* Social Links */}
-                <div className="bg-gray-50 rounded-lg p-2">
-                  <h2 className="text-gray-900 text-xl font-bold mb-4">
-                    Social Links
-                  </h2>
+                <div className="bg-gray-200 rounded-lg p-5">
+                  <div className="flex items-start justify-between mb-5">
+                    <h2 className="text-gray-900 text-2xl font-bold mb-4">
+                      Social Links
+                    </h2>
+                    <button className="btn p-2 bg-white rounded-full">
+                      <FiEdit className="edit-icon" />
+                    </button>
+                  </div>
                   <div className="flex gap-4">
                     <a className="text-gray-500 hover:text-green-600" href="#">
                       <FaLinkedin className="h-6 w-6" />
