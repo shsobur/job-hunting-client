@@ -2,16 +2,16 @@ import "./UserProfile.css";
 import useUserData from "../../../Hooks/userData";
 import placeholderImage from "../../../assets/place_banner.png";
 import ScrollToTop from "../../../Components/ScrollToTop/ScrollToTop";
-import AboutModal from "../../../Components/UpdateModal/AboutModal/AboutModal";
-import SkillModal from "../../../Components/UpdateModal/SkillModal/SkillModal";
-import BannerModal from "../../../Components/UpdateModal/BannerModal/BannerModal";
-import ContactModal from "../../../Components/UpdateModal/ContactModal/ContactModal";
-import ProfileModal from "../../../Components/UpdateModal/ProfileModal/ProfileModal";
-import ProjectModal from "../../../Components/UpdateModal/ProjectModal/ProjectModal";
-import LanguageModal from "../../../Components/UpdateModal/LanguageModal/LanguageModal";
-import EducationModal from "../../../Components/UpdateModal/EducationModal/EducationModal";
-import ExperienceModal from "../../../Components/UpdateModal/ExperienceModal/ExperienceModal";
-import CertificateModal from "../../../Components/UpdateModal/CertificateModal/CertificateModal";
+import AboutModal from "../../../Components/UserUpdateModal/AboutModal/AboutModal";
+import SkillModal from "../../../Components/UserUpdateModal/SkillModal/SkillModal";
+import BannerModal from "../../../Components/UserUpdateModal/BannerModal/BannerModal";
+import ContactModal from "../../../Components/UserUpdateModal/ContactModal/ContactModal";
+import ProfileModal from "../../../Components/UserUpdateModal/ProfileModal/ProfileModal";
+import ProjectModal from "../../../Components/UserUpdateModal/ProjectModal/ProjectModal";
+import LanguageModal from "../../../Components/UserUpdateModal/LanguageModal/LanguageModal";
+import EducationModal from "../../../Components/UserUpdateModal/EducationModal/EducationModal";
+import ExperienceModal from "../../../Components/UserUpdateModal/ExperienceModal/ExperienceModal";
+import CertificateModal from "../../../Components/UserUpdateModal/CertificateModal/CertificateModal";
 
 // Package__
 import { FaLinkedin, FaGithub, FaReact } from "react-icons/fa";
