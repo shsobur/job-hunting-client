@@ -14,12 +14,14 @@ import {
 } from "react-icons/fa";
 import { FiEdit } from "react-icons/fi";
 import AboutModal from "../../../Components/RecUpdateModal/AboutModal/AboutModal";
+import DepartmentModal from "../../../Components/RecUpdateModal/DepartmentModal/DepartmentModal";
 
 const RecruiterProfile = () => {
   return (
     <>
       {/* All update modal component__ */}
       <AboutModal></AboutModal>
+      <DepartmentModal></DepartmentModal>
 
       <div className="bg-gray-50 min-h-screen">
         <div className="max-w-[1536px] mx-auto lg:p-5 p-3">
@@ -96,7 +98,7 @@ const RecruiterProfile = () => {
                       <button
                         onClick={() =>
                           document
-                            .getElementById("res_about_update_modal")
+                            .getElementById("rec_about_update_modal")
                             .showModal()
                         }
                         className="btn p-2 bg-gray-200 rounded-full"
@@ -144,7 +146,14 @@ const RecruiterProfile = () => {
                         Departments
                       </h2>
 
-                      <button className="btn p-2 bg-gray-200 rounded-full">
+                      <button
+                        onClick={() =>
+                          document
+                            .getElementById("rec_department_update_modal")
+                            .showModal()
+                        }
+                        className="btn p-2 bg-gray-200 rounded-full"
+                      >
                         <FiEdit className="edit-icon" />
                       </button>
                     </div>

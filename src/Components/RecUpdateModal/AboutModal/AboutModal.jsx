@@ -33,11 +33,11 @@ const AboutModal = () => {
     setAboutUpdateLoading(true);
     updateProfile(aboutInfo, {
       onSuccess: () => {
-        document.getElementById("res_about_update_modal").close();
+        document.getElementById("rec_about_update_modal").close();
 
         Swal.fire({
           title: "Success!",
-          text: "Language updated successfully.",
+          text: "About us updated successfully.",
           icon: "success",
         });
 
@@ -45,7 +45,7 @@ const AboutModal = () => {
       },
       onError: (err) => {
         console.log(err);
-        document.getElementById("res_about_update_modal").close();
+        document.getElementById("rec_about_update_modal").close();
 
         Swal.fire({
           title: "Oops!",
@@ -61,7 +61,7 @@ const AboutModal = () => {
   return (
     <>
       <section>
-        <dialog id="res_about_update_modal" className="modal">
+        <dialog id="rec_about_update_modal" className="modal">
           <div className="modal-box max-w-[1024px]">
             <form method="dialog" className="mb-5">
               <button className="btn btn-sm btn-circle btn-ghost border border-gray-400 absolute right-2 top-2">
