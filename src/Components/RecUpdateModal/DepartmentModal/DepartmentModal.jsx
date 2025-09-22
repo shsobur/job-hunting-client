@@ -168,7 +168,7 @@ const DepartmentModal = () => {
 
                   {/* Selected departments */}
                   <div className="mt-4">
-                    {selectedDepartments.length > 0 ? (
+                    {selectedDepartments?.length > 0 ? (
                       <div className="flex flex-wrap gap-2">
                         {selectedDepartments.map((department) => (
                           <div
