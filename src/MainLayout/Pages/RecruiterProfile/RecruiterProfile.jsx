@@ -16,6 +16,7 @@ import { FiEdit } from "react-icons/fi";
 import AboutModal from "../../../Components/RecUpdateModal/AboutModal/AboutModal";
 import DepartmentModal from "../../../Components/RecUpdateModal/DepartmentModal/DepartmentModal";
 import CompanyDetailsModal from "../../../Components/RecUpdateModal/CompanyInfo/CompanyInfo";
+import SocialLinksModal from "../../../Components/RecUpdateModal/SocialModal/SocialModal";
 
 const RecruiterProfile = () => {
   return (
@@ -24,6 +25,7 @@ const RecruiterProfile = () => {
       <AboutModal></AboutModal>
       <DepartmentModal></DepartmentModal>
       <CompanyDetailsModal></CompanyDetailsModal>
+      <SocialLinksModal></SocialLinksModal>
 
       <div className="bg-gray-50 min-h-screen">
         <div className="max-w-[1536px] mx-auto lg:p-5 p-3">
@@ -362,7 +364,14 @@ const RecruiterProfile = () => {
                       <h2 className="text-gray-900 text-2xl font-bold mb-4">
                         Social Links
                       </h2>
-                      <button className="btn p-2 bg-white rounded-full">
+                      <button
+                        onClick={() =>
+                          document
+                            .getElementById("res_social_links_modal")
+                            .showModal()
+                        }
+                        className="btn p-2 bg-white rounded-full"
+                      >
                         <FiEdit className="edit-icon" />
                       </button>
                     </div>

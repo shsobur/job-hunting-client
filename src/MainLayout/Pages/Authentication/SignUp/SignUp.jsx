@@ -80,7 +80,7 @@ const SignUp = () => {
       hearFrom: selected,
       userRole: selectedRole,
       userEmail: email,
-      userName: firstLetter + number,
+      userName: "Company" + number,
       companyName: "",
       companyLogo: "",
       companyWebsite: "",
@@ -99,6 +99,7 @@ const SignUp = () => {
         {
           country: "",
           city: "",
+          area: "",
         },
       ],
       description: "",
@@ -108,6 +109,7 @@ const SignUp = () => {
       companyGallery: [],
       keyPeople: [
         {
+          image: "",
           name: "",
           role: "",
         },
