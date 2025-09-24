@@ -1,22 +1,22 @@
-import { useCallback, useState } from "react";
+import { useState, useCallback } from "react";
 import Cropper from "react-easy-crop";
 import { Slider } from "@mui/material";
 import { MdUpload } from "react-icons/md";
 import { FaCheck, FaTimes } from "react-icons/fa";
 import { getCroppedImg } from "../../../utils";
 
-const PPModal = () => {
-  const [imageSrc, setImageSrc] = useState(null);
+const PPModal = ({ onImageCropped }) => {
+  const [imageSrc, setImageSrc] = useState(null); // original image preview
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
-  const [croppedImage, setCroppedImage] = useState(null);
+  const [croppedImage, setCroppedImage] = useState(null); // final cropped preview
 
   const onCropComplete = useCallback((_, croppedAreaPixels) => {
     setCroppedAreaPixels(croppedAreaPixels);
   }, []);
 
-  // When user picks file
+  // when user picks file
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -24,12 +24,14 @@ const PPModal = () => {
     }
   };
 
+  // finalize cropping
   const handleCropSave = async () => {
     try {
       const { file, url } = await getCroppedImg(imageSrc, croppedAreaPixels);
-      setCroppedImage(url); // for preview
-      console.log("Final file ready to upload:", file);
-      // 👉 Later we will send `file` to Cloudinary
+      setCroppedImage(url); // preview
+      if (onImageCropped) {
+        onImageCropped(file, url); // send cropped file and url to parent
+      }
     } catch (err) {
       console.error(err);
     }
@@ -56,7 +58,7 @@ const PPModal = () => {
 
       {/* Cropper */}
       {imageSrc && (
-        <div className="flex flex-col items-center gap-4 w-full">
+        <div className="flex flex-col items-center gap-4 w-full p-5">
           <div className="relative w-[500px] h-[500px] rounded-lg overflow-hidden shadow-md">
             <Cropper
               image={imageSrc}
@@ -101,7 +103,6 @@ const PPModal = () => {
           {/* Cropped preview */}
           {croppedImage && (
             <div className="flex flex-col items-center border-2 border-[#3C8F63] rounded-lg py-5 w-full">
-              {/* <h3 className="mb-2 font-medium text-lg">Preview</h3> */}
               <img
                 src={croppedImage}
                 alt="Cropped"
