@@ -140,6 +140,8 @@ const CompanyDetailsModal = () => {
 
       updateProfile(submissionData, {
         onSuccess: () => {
+          document.getElementById("res_company_details_modal").close();
+
           Swal.fire({
             title: "Success!",
             text: "Company info updated successfully.",
@@ -147,6 +149,8 @@ const CompanyDetailsModal = () => {
           });
         },
         onError: () => {
+          document.getElementById("res_company_details_modal").close();
+
           Swal.fire({
             title: "Oops!",
             text: "Something went wrong while updating.",
@@ -154,11 +158,10 @@ const CompanyDetailsModal = () => {
           });
         },
       });
-
-      // document.getElementById('res_company_details_modal').close();
     } catch (error) {
       console.error("Error updating company details:", error);
     } finally {
+      document.getElementById("res_company_details_modal").close();
       setIsLoading(false);
     }
   };

@@ -117,9 +117,9 @@ const SignUp = () => {
       activeHire: true,
       verified: false,
       social: {
-        linkedIn: "",
+        linkedin: "",
         x: "",
-        others: [],
+        additionalLinks: [],
       },
     };
 

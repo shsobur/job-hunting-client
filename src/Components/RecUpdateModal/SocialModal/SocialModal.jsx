@@ -10,8 +10,11 @@ import { FiYoutube } from "react-icons/fi";
 import { TbBrandDiscord } from "react-icons/tb";
 import { FcDribbble } from "react-icons/fc";
 import { BsReddit } from "react-icons/bs";
+import useUserData from "../../../Hooks/userData";
+import Swal from "sweetalert2";
 
-const SocialLinksModal = ({ profile }) => {
+const SocialLinksModal = () => {
+  const { profile, updateProfile } = useUserData();
   const [socialLinks, setSocialLinks] = useState({
     linkedin: "",
     x: "",
@@ -130,7 +133,7 @@ const SocialLinksModal = ({ profile }) => {
 
     try {
       // Prepare data for submission
-      const submissionData = {
+      const social = {
         linkedin: socialLinks.linkedin,
         x: socialLinks.x,
         additionalLinks: Object.fromEntries(
@@ -140,12 +143,32 @@ const SocialLinksModal = ({ profile }) => {
         ),
       };
 
-      console.log("Submitting social links:", submissionData);
+      console.log("Submitting social links:", social);
 
-      
+      updateProfile({social}, {
+        onSuccess: () => {
+          document.getElementById("res_social_links_modal").close();
+
+          Swal.fire({
+            title: "Success!",
+            text: "Social link updated successfully.",
+            icon: "success",
+          });
+        },
+        onError: () => {
+          document.getElementById("res_social_links_modal").close();
+
+          Swal.fire({
+            title: "Oops!",
+            text: "Something went wrong while updating.",
+            icon: "error",
+          });
+        },
+      });
     } catch (error) {
       console.error("Error updating social links:", error);
     } finally {
+      document.getElementById("res_social_links_modal").close();
       setIsLoading(false);
     }
   };
@@ -326,11 +349,7 @@ const SocialLinksModal = ({ profile }) => {
                     disabled={isLoading}
                     className="btn bg-[#3C8F63] border-[#3C8F63] hover:bg-[#337954] hover:border-green-700 w-full sm:w-auto px-4 sm:px-8 py-3 text-lg text-white"
                   >
-                    {isLoading
-                      ? "Working..."
-                      : profile?.socialLinks
-                      ? "Update Links"
-                      : "Save Links"}
+                    {isLoading ? "Working..." : "Save Changes"}
                   </button>
                 </div>
               </form>
