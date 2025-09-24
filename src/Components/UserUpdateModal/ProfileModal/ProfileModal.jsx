@@ -1,16 +1,35 @@
-import { useState, useEffect } from "react";
-import PPModal from "../PPModal/PPModal";
+import { useState, useEffect, useCallback } from "react";
+import Cropper from "react-easy-crop";
+import { Slider } from "@mui/material";
+import { MdUpload } from "react-icons/md";
+import { FaTimes, FaEye } from "react-icons/fa";
+import { getCroppedImg } from "../../../utils";
 import useUserData from "../../../Hooks/userData";
+import Swal from "sweetalert2";
+import useAxios from "../../../Hooks/Axios";
 
 const ProfileUpdateModal = () => {
-  const { profile } = useUserData();
+  const api = useAxios();
+  const { profile, updateProfile } = useUserData();
+
+  // Profile data state
   const [profileData, setProfileData] = useState({
     profilePhoto: "",
     userName: "",
     bio: "",
     openToWork: false,
   });
+
+  // Image cropping states (previously in PPModal)
+  const [imageSrc, setImageSrc] = useState(null);
+  const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+  const [croppedImage, setCroppedImage] = useState(null);
+  const [croppedFile, setCroppedFile] = useState(null);
+
   const [isLoading, setIsLoading] = useState(false);
+  const [message, setMessage] = useState("");
 
   // Load initial profile data
   useEffect(() => {
@@ -33,38 +52,125 @@ const ProfileUpdateModal = () => {
     }));
   };
 
-  // ✅ This gets called when child cropper returns final image
-  const handleImageCropped = (croppedFile, previewUrl) => {
-    // previewUrl → show in UI
-    // croppedFile → later upload to Cloudinary
-    setProfileData((prev) => ({
-      ...prev,
-      profilePhoto: previewUrl,
-    }));
+  // Image cropping functions (previously in PPModal)
+  const onCropComplete = useCallback((_, croppedAreaPixels) => {
+    setCroppedAreaPixels(croppedAreaPixels);
+  }, []);
 
-    console.log("Got cropped file in parent:", croppedFile);
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImageSrc(URL.createObjectURL(file));
+      setCroppedImage(null); // Reset previous preview
+      setCroppedFile(null); // Reset previous file
+    }
   };
 
-  // Submit form data
+  const handlePreview = async () => {
+    if (!croppedAreaPixels || !imageSrc) return;
+    try {
+      const { file, url } = await getCroppedImg(imageSrc, croppedAreaPixels);
+      setCroppedImage(url);
+      setCroppedFile(file); // Store the cropped file for upload
+      setMessage("Image cropped! Click 'Save Cropped Image' to upload.");
+    } catch (err) {
+      console.error("Preview error:", err);
+      setMessage("Error cropping image. Please try again.");
+    }
+  };
+
+  const handleCancelCrop = () => {
+    setImageSrc(null);
+    setCroppedImage(null);
+    setCroppedFile(null);
+    setCrop({ x: 0, y: 0 });
+    setZoom(1);
+    setMessage("");
+  };
+
+  // Upload cropped file to backend → Cloudinary
+  const handleUploadToBackend = async () => {
+    if (!croppedFile) {
+      setMessage("Please crop an image first.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", croppedFile);
+
+    try {
+      setIsLoading(true);
+      setMessage("Uploading image...");
+
+      const res = await api.post("/upload", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      console.log(res);
+
+      if (res.data?.url) {
+        setProfileData((prev) => ({
+          ...prev,
+          profilePhoto: res.data.url,
+        }));
+        setMessage(
+          "✅ Image uploaded successfully! Now save your profile changes."
+        );
+
+        // Reset cropping state but keep the preview
+        setImageSrc(null);
+        setCrop({ x: 0, y: 0 });
+        setZoom(1);
+      } else {
+        setMessage("❌ Image upload failed! Try again.");
+      }
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      setMessage("❌ Upload failed! Something went wrong.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Final save → send profile data to DB
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
 
-    try {
-      const submissionData = {
-        name: profileData.userName.trim(),
-        bio: profileData.bio.trim(),
-        openToWork: profileData.openToWork,
-        profilePhoto: profileData.profilePhoto, // ✅ include cropped image
-      };
+    const submissionData = {
+      userName: profileData.userName.trim(),
+      bio: profileData.bio.trim(),
+      openToWork: profileData.openToWork,
+      profilePhoto: profileData.profilePhoto,
+    };
 
-      console.log("Submitting profile data:", submissionData);
-      // Later: upload croppedFile → Cloudinary → replace profilePhoto with cloud URL
-    } catch (error) {
-      console.error("Error updating profile:", error);
-    } finally {
-      setIsLoading(false);
-    }
+    console.log("Submitting profile data:", submissionData);
+
+    updateProfile(submissionData, {
+      onSuccess: () => {
+        document.getElementById("profile_update_modal").close();
+
+        Swal.fire({
+          title: "Success!",
+          text: "Profile updated successfully.",
+          icon: "success",
+        });
+
+        setIsLoading(false);
+      },
+      onError: () => {
+        document.getElementById("profile_update_modal").close();
+
+        Swal.fire({
+          title: "Oops!",
+          text: "Something went wrong while updating.",
+          icon: "error",
+        });
+
+        setIsLoading(false);
+        setMessage("❌ Error updating profile. Please try again.");
+      },
+    });
   };
 
   return (
@@ -89,9 +195,129 @@ const ProfileUpdateModal = () => {
               Edit your profile
             </h1>
 
-            {/* Profile Photo Cropper */}
-            <div className="border-2 border-gray-300 rounded-md my-5">
-              <PPModal onImageCropped={handleImageCropped} />
+            {/* Profile Photo Cropper - Now integrated directly */}
+            <div className="border-2 border-gray-300 rounded-md my-5 p-4">
+              <div className="flex flex-col items-center justify-center w-full my-10">
+                {/* Upload Box */}
+                {!imageSrc && (
+                  <label className="w-full max-w-md h-52 flex flex-col items-center justify-center border-2 border-dashed border-gray-400 rounded-2xl cursor-pointer bg-gray-50 hover:bg-gray-100 transition">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleFileChange}
+                      className="hidden"
+                      disabled={isLoading}
+                    />
+                    <MdUpload className="text-5xl text-gray-500 mb-3" />
+                    <p className="text-gray-600 font-medium">
+                      Click to upload or drag & drop
+                    </p>
+                    <p className="text-sm text-gray-400">PNG, JPG (max 5MB)</p>
+                  </label>
+                )}
+
+                {/* Cropper */}
+                {imageSrc && (
+                  <div className="flex flex-col items-center gap-4 w-full p-5">
+                    <div className="relative w-full max-w-[500px] h-[300px] md:h-[500px] rounded-lg overflow-hidden shadow-md">
+                      <Cropper
+                        image={imageSrc}
+                        crop={crop}
+                        zoom={zoom}
+                        aspect={1}
+                        onCropChange={setCrop}
+                        onZoomChange={setZoom}
+                        onCropComplete={onCropComplete}
+                      />
+                    </div>
+
+                    {/* Zoom Control */}
+                    <div className="w-72">
+                      <Slider
+                        value={zoom}
+                        min={1}
+                        max={3}
+                        step={0.1}
+                        onChange={(e, newZoom) => setZoom(newZoom)}
+                        disabled={isLoading}
+                      />
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div className="flex gap-4 flex-wrap justify-center">
+                      {/* Cancel */}
+                      <button
+                        onClick={handleCancelCrop}
+                        disabled={isLoading}
+                        className="flex items-center gap-2 px-6 py-2 border-2 border-gray-300 rounded-lg hover:bg-gray-100 transition"
+                      >
+                        <FaTimes /> Cancel
+                      </button>
+
+                      {/* Preview */}
+                      <button
+                        type="button"
+                        onClick={handlePreview}
+                        disabled={isLoading || !croppedAreaPixels}
+                        className="flex items-center gap-2 px-6 py-2 border-2 border-[#3C8F63] text-[#3C8F63] rounded-lg hover:bg-green-50 transition"
+                      >
+                        <FaEye /> Preview
+                      </button>
+                    </div>
+
+                    {/* Cropped preview */}
+                    {croppedImage && (
+                      <div className="flex flex-col items-center border-2 border-[#3C8F63] rounded-lg py-5 w-full mt-4">
+                        <p className="text-gray-700 font-medium mb-2">
+                          Cropped Preview:
+                        </p>
+                        <img
+                          src={croppedImage}
+                          alt="Cropped"
+                          className="w-80 h-80 p-1 object-cover rounded-full shadow border-2 border-[#3C8F63]"
+                        />
+                        <button
+                          type="button"
+                          onClick={handleUploadToBackend}
+                          disabled={isLoading}
+                          className="btn mt-3 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+                        >
+                          {isLoading ? "Uploading..." : "Save Cropped Image"}
+                        </button>
+                      </div>
+                    )}
+
+                    {/* Message Display */}
+                    {message && (
+                      <div
+                        className={`p-3 rounded-md mb-4 ${
+                          message.includes("✅")
+                            ? "bg-green-100 text-green-800"
+                            : message.includes("❌")
+                            ? "bg-red-100 text-red-800"
+                            : "bg-blue-100 text-blue-800"
+                        }`}
+                      >
+                        {message}
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Current Profile Photo */}
+                {!imageSrc && profileData.profilePhoto && (
+                  <div className="mt-4 text-center">
+                    <p className="text-gray-700 font-medium mb-2">
+                      Current Profile Photo:
+                    </p>
+                    <img
+                      src={profileData.profilePhoto}
+                      alt="Current Profile"
+                      className="w-72 h-72 object-cover rounded-full border-2 border-gray-300 mx-auto"
+                    />
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* Profile Update Form */}
