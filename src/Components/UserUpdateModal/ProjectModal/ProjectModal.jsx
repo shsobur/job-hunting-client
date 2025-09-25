@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
+import { FaEdit, FaTrash, FaPlus } from "react-icons/fa";
 
-const ProjectModal = ({ profile }) => {
+const ProjectUpdateModal = ({ profile }) => {
   const [projects, setProjects] = useState([]);
   const [currentProject, setCurrentProject] = useState({
     title: "",
+    projectLink: "",
     description: "",
     skills: [],
     currentlyWorking: false,
@@ -16,6 +18,7 @@ const ProjectModal = ({ profile }) => {
   const [newSkill, setNewSkill] = useState("");
   const [editingIndex, setEditingIndex] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Months for dropdown
   const months = [
@@ -126,6 +129,7 @@ const ProjectModal = ({ profile }) => {
   const resetForm = () => {
     setCurrentProject({
       title: "",
+      projectLink: "",
       description: "",
       skills: [],
       currentlyWorking: false,
@@ -141,7 +145,7 @@ const ProjectModal = ({ profile }) => {
   // Handle final submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
+    setIsSubmitting(true);
 
     try {
       // Prepare data for submission
@@ -149,6 +153,7 @@ const ProjectModal = ({ profile }) => {
         projects: projects.map((project) => ({
           id: project.id,
           title: project.title.trim(),
+          projectLink: project.projectLink.trim(),
           description: project.description.trim(),
           skills: project.skills,
           currentlyWorking: project.currentlyWorking,
@@ -168,9 +173,13 @@ const ProjectModal = ({ profile }) => {
     } catch (error) {
       console.error("Error updating projects:", error);
     } finally {
-      setIsLoading(false);
+      setIsSubmitting(false);
     }
   };
+
+  // Check if form has required fields for adding project
+  const canAddProject =
+    currentProject.title.trim() && currentProject.description.trim();
 
   return (
     <>
@@ -210,25 +219,39 @@ const ProjectModal = ({ profile }) => {
                           className="border border-gray-300 rounded-lg p-4 bg-gray-50"
                         >
                           <div className="flex justify-between items-start mb-2">
-                            <h3 className="text-xl font-semibold text-gray-800">
-                              {project.title}
-                            </h3>
-                            <div className="flex space-x-2">
+                            <div>
+                              <h3 className="text-xl font-semibold text-gray-800">
+                                {project.title}
+                              </h3>
+                              {project.projectLink && (
+                                <a
+                                  href={project.projectLink}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="text-blue-600 hover:text-blue-800 text-sm"
+                                >
+                                  {project.projectLink}
+                                </a>
+                              )}
+                            </div>
+                            <div className="flex space-x-3">
                               <button
                                 type="button"
                                 onClick={() => handleEditProject(index)}
-                                disabled={isLoading}
-                                className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+                                disabled={isSubmitting}
+                                className="text-[#3C8F63] hover:text-[#337954] p-1 rounded"
+                                title="Edit project"
                               >
-                                Edit
+                                <FaEdit size={16} />
                               </button>
                               <button
                                 type="button"
                                 onClick={() => handleDeleteProject(index)}
-                                disabled={isLoading}
-                                className="text-red-600 hover:text-red-800 text-sm font-medium"
+                                disabled={isSubmitting}
+                                className="text-red-600 hover:text-red-800 p-1 rounded"
+                                title="Delete project"
                               >
-                                Delete
+                                <FaTrash size={16} />
                               </button>
                             </div>
                           </div>
@@ -263,12 +286,12 @@ const ProjectModal = ({ profile }) => {
                       className="block text-xl font-medium mb-2"
                       htmlFor="title"
                     >
-                      Project Title
+                      Project Title *
                     </label>
                     <input
-                      disabled={isLoading}
+                      disabled={isSubmitting}
                       type="text"
-                      className="w-full p-3 md:p-4 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#3C8F63] focus:border-transparent"
+                      className="w-full p-3 md:p-4 border-2 border-gray-300 rounded-md focus:outline-none focus:border-[#3C8F63] transition-colors"
                       id="title"
                       name="title"
                       value={currentProject.title}
@@ -285,13 +308,32 @@ const ProjectModal = ({ profile }) => {
                   <div>
                     <label
                       className="block text-xl font-medium mb-2"
+                      htmlFor="projectLink"
+                    >
+                      Project Link (Optional)
+                    </label>
+                    <input
+                      disabled={isSubmitting}
+                      type="url"
+                      className="w-full p-3 md:p-4 border-2 border-gray-300 rounded-md focus:outline-none focus:border-[#3C8F63] transition-colors"
+                      id="projectLink"
+                      name="projectLink"
+                      value={currentProject.projectLink}
+                      onChange={handleChange}
+                      placeholder="https://example.com/project"
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      className="block text-xl font-medium mb-2"
                       htmlFor="description"
                     >
-                      Project Description
+                      Project Description *
                     </label>
                     <textarea
-                      disabled={isLoading}
-                      className="w-full p-3 md:p-4 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#3C8F63] focus:border-transparent resize-y"
+                      disabled={isSubmitting}
+                      className="w-full p-3 md:p-4 border-2 border-gray-300 rounded-md focus:outline-none focus:border-[#3C8F63] transition-colors resize-y"
                       id="description"
                       name="description"
                       value={currentProject.description}
@@ -323,6 +365,7 @@ const ProjectModal = ({ profile }) => {
                           <button
                             type="button"
                             onClick={() => handleRemoveSkill(index)}
+                            disabled={isSubmitting}
                             className="ml-2 text-white hover:text-gray-200"
                           >
                             ×
@@ -333,9 +376,9 @@ const ProjectModal = ({ profile }) => {
                     {currentProject.skills.length < 6 && (
                       <div className="flex gap-2">
                         <input
-                          disabled={isLoading}
+                          disabled={isSubmitting}
                           type="text"
-                          className="flex-1 p-3 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#3C8F63] focus:border-transparent"
+                          className="flex-1 p-3 border-2 border-gray-300 rounded-md focus:outline-none focus:border-[#3C8F63] transition-colors"
                           value={newSkill}
                           onChange={(e) => setNewSkill(e.target.value)}
                           placeholder="Add a skill (max 6)"
@@ -347,10 +390,10 @@ const ProjectModal = ({ profile }) => {
                         <button
                           type="button"
                           onClick={handleAddSkill}
-                          disabled={isLoading || !newSkill.trim()}
-                          className="btn bg-gray-600 border-gray-600 hover:bg-gray-700 hover:border-gray-700 px-4 py-3 text-white"
+                          disabled={isSubmitting || !newSkill.trim()}
+                          className="btn bg-[#3C8F63] border-[#3C8F63] hover:bg-[#337954] hover:border-green-700 px-4 py-3 text-white disabled:bg-gray-400 disabled:border-gray-400"
                         >
-                          Add Skill
+                          <FaPlus className="inline mr-1" /> Add Skill
                         </button>
                       </div>
                     )}
@@ -369,7 +412,7 @@ const ProjectModal = ({ profile }) => {
                         name="currentlyWorking"
                         checked={currentProject.currentlyWorking}
                         onChange={handleChange}
-                        disabled={isLoading}
+                        disabled={isSubmitting}
                         className="w-4 h-4 text-[#3C8F63] bg-gray-100 border-gray-300 rounded focus:ring-[#3C8F63]"
                       />
                       <label
@@ -387,8 +430,8 @@ const ProjectModal = ({ profile }) => {
                         </label>
                         <div className="grid grid-cols-2 gap-2">
                           <select
-                            disabled={isLoading}
-                            className="p-3 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#3C8F63] focus:border-transparent"
+                            disabled={isSubmitting}
+                            className="p-3 border-2 border-gray-300 rounded-md focus:outline-none focus:border-[#3C8F63] transition-colors"
                             name="startMonth"
                             value={currentProject.startMonth}
                             onChange={handleChange}
@@ -401,8 +444,8 @@ const ProjectModal = ({ profile }) => {
                             ))}
                           </select>
                           <select
-                            disabled={isLoading}
-                            className="p-3 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#3C8F63] focus:border-transparent"
+                            disabled={isSubmitting}
+                            className="p-3 border-2 border-gray-300 rounded-md focus:outline-none focus:border-[#3C8F63] transition-colors"
                             name="startYear"
                             value={currentProject.startYear}
                             onChange={handleChange}
@@ -417,43 +460,50 @@ const ProjectModal = ({ profile }) => {
                         </div>
                       </div>
 
-                      {!currentProject.currentlyWorking && (
-                        <div>
-                          <label className="block text-lg font-medium mb-2">
-                            End Date
-                          </label>
-                          <div className="grid grid-cols-2 gap-2">
-                            <select
-                              disabled={isLoading}
-                              className="p-3 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#3C8F63] focus:border-transparent"
-                              name="endMonth"
-                              value={currentProject.endMonth}
-                              onChange={handleChange}
-                            >
-                              <option value="">Month</option>
-                              {months.map((month) => (
-                                <option key={month} value={month}>
-                                  {month}
-                                </option>
-                              ))}
-                            </select>
-                            <select
-                              disabled={isLoading}
-                              className="p-3 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#3C8F63] focus:border-transparent"
-                              name="endYear"
-                              value={currentProject.endYear}
-                              onChange={handleChange}
-                            >
-                              <option value="">Year</option>
-                              {years.map((year) => (
-                                <option key={year} value={year}>
-                                  {year}
-                                </option>
-                              ))}
-                            </select>
-                          </div>
+                      <div>
+                        <label className="block text-lg font-medium mb-2">
+                          End Date
+                        </label>
+                        <div className="grid grid-cols-2 gap-2">
+                          <select
+                            disabled={
+                              isSubmitting || currentProject.currentlyWorking
+                            }
+                            className="p-3 border-2 border-gray-300 rounded-md focus:outline-none focus:border-[#3C8F63] transition-colors disabled:bg-gray-100 disabled:cursor-not-allowed"
+                            name="endMonth"
+                            value={currentProject.endMonth}
+                            onChange={handleChange}
+                          >
+                            <option value="">Month</option>
+                            {months.map((month) => (
+                              <option key={month} value={month}>
+                                {month}
+                              </option>
+                            ))}
+                          </select>
+                          <select
+                            disabled={
+                              isSubmitting || currentProject.currentlyWorking
+                            }
+                            className="p-3 border-2 border-gray-300 rounded-md focus:outline-none focus:border-[#3C8F63] transition-colors disabled:bg-gray-100 disabled:cursor-not-allowed"
+                            name="endYear"
+                            value={currentProject.endYear}
+                            onChange={handleChange}
+                          >
+                            <option value="">Year</option>
+                            {years.map((year) => (
+                              <option key={year} value={year}>
+                                {year}
+                              </option>
+                            ))}
+                          </select>
                         </div>
-                      )}
+                        {currentProject.currentlyWorking && (
+                          <p className="text-sm text-gray-500 mt-1">
+                            End date is disabled for current projects
+                          </p>
+                        )}
+                      </div>
                     </div>
                   </div>
 
@@ -462,12 +512,8 @@ const ProjectModal = ({ profile }) => {
                     <button
                       type="button"
                       onClick={handleAddProject}
-                      disabled={
-                        isLoading ||
-                        !currentProject.title.trim() ||
-                        !currentProject.description.trim()
-                      }
-                      className="btn bg-[#3C8F63] border-[#3C8F63] hover:bg-[#337954] hover:border-green-700 px-8 py-3 text-lg text-white"
+                      disabled={isSubmitting || !canAddProject}
+                      className="btn bg-[#3C8F63] border-[#3C8F63] hover:bg-[#337954] hover:border-green-700 px-8 py-3 text-lg text-white disabled:bg-gray-400 disabled:border-gray-400"
                     >
                       {editingIndex !== null ? "Update Project" : "Add Project"}
                     </button>
@@ -478,8 +524,8 @@ const ProjectModal = ({ profile }) => {
                 <div className="modal-action mt-8 flex flex-col-reverse sm:flex-row justify-end gap-3">
                   <button
                     type="button"
-                    disabled={isLoading}
-                    className="btn btn-outline w-full sm:w-auto px-4 sm:px-8 py-3 text-lg border-2 border-gray-300 hover:bg-gray-100 hover:border-gray-400"
+                    disabled={isSubmitting}
+                    className="btn btn-outline w-full sm:w-auto px-4 sm:px-8 py-3 text-lg border-2 border-gray-300 hover:bg-gray-100 hover:border-gray-400 disabled:bg-gray-100 disabled:cursor-not-allowed"
                     onClick={() =>
                       document
                         .getElementById("project_update_modal")
@@ -490,10 +536,10 @@ const ProjectModal = ({ profile }) => {
                   </button>
                   <button
                     type="submit"
-                    disabled={isLoading || projects.length === 0}
-                    className="btn bg-[#3C8F63] border-[#3C8F63] hover:bg-[#337954] hover:border-green-700 w-full sm:w-auto px-4 sm:px-8 py-3 text-lg text-white"
+                    disabled={isSubmitting || projects.length === 0}
+                    className="btn bg-[#3C8F63] border-[#3C8F63] hover:bg-[#337954] hover:border-green-700 w-full sm:w-auto px-4 sm:px-8 py-3 text-lg text-white disabled:bg-gray-400 disabled:border-gray-400"
                   >
-                    {isLoading ? "Working..." : "Save Changes"}
+                    {isSubmitting ? "Saving..." : "Save Changes"}
                   </button>
                 </div>
               </form>
@@ -505,4 +551,4 @@ const ProjectModal = ({ profile }) => {
   );
 };
 
-export default ProjectModal;
+export default ProjectUpdateModal;
