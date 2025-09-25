@@ -6,7 +6,7 @@ const useAxios = () => {
     const instance = axios.create({
       baseURL: import.meta.env.VITE_SERVER_API_URL,
       withCredentials: true,
-      // timeout: 10000,
+      timeout: 20000,
     });
 
     // Request interceptor (for logging/debugging)__

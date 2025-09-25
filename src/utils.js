@@ -1,3 +1,4 @@
+// Image crop function__
 export const getCroppedImg = (imageSrc, croppedAreaPixels) => {
   return new Promise((resolve, reject) => {
     const image = new Image();
