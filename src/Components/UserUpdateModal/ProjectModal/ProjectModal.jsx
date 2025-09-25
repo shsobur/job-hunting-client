@@ -1,7 +1,10 @@
 import { useState, useEffect } from "react";
 import { FaEdit, FaTrash, FaPlus } from "react-icons/fa";
+import useUserData from "../../../Hooks/userData";
+import Swal from "sweetalert2";
 
-const ProjectUpdateModal = ({ profile }) => {
+const ProjectUpdateModal = () => {
+  const { profile, updateProfile } = useUserData();
   const [projects, setProjects] = useState([]);
   const [currentProject, setCurrentProject] = useState({
     title: "",
@@ -17,7 +20,6 @@ const ProjectUpdateModal = ({ profile }) => {
 
   const [newSkill, setNewSkill] = useState("");
   const [editingIndex, setEditingIndex] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Months for dropdown
@@ -147,34 +149,52 @@ const ProjectUpdateModal = ({ profile }) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    try {
-      // Prepare data for submission
-      const submissionData = {
-        projects: projects.map((project) => ({
-          id: project.id,
-          title: project.title.trim(),
-          projectLink: project.projectLink.trim(),
-          description: project.description.trim(),
-          skills: project.skills,
-          currentlyWorking: project.currentlyWorking,
-          startDate:
-            project.startYear && project.startMonth
-              ? `${project.startMonth} ${project.startYear}`
-              : "",
-          endDate: project.currentlyWorking
-            ? "Present"
-            : project.endYear && project.endMonth
-            ? `${project.endMonth} ${project.endYear}`
+    // Prepare data for submission
+    const submissionData = {
+      projects: projects.map((project) => ({
+        id: project.id,
+        title: project.title.trim(),
+        projectLink: project.projectLink.trim(),
+        description: project.description.trim(),
+        skills: project.skills,
+        currentlyWorking: project.currentlyWorking,
+        startDate:
+          project.startYear && project.startMonth
+            ? `${project.startMonth} ${project.startYear}`
             : "",
-        })),
-      };
+        endDate: project.currentlyWorking
+          ? "Present"
+          : project.endYear && project.endMonth
+          ? `${project.endMonth} ${project.endYear}`
+          : "",
+      })),
+    };
 
-      console.log("Submitting projects:", submissionData);
-    } catch (error) {
-      console.error("Error updating projects:", error);
-    } finally {
-      setIsSubmitting(false);
-    }
+    updateProfile(submissionData, {
+      onSuccess: () => {
+        document.getElementById("project_update_modal").close();
+
+        Swal.fire({
+          title: "Success!",
+          text: "Project updated successfully.",
+          icon: "success",
+        });
+
+        setIsSubmitting(false);
+      },
+
+      onError: () => {
+        document.getElementById("project_update_modal").close();
+
+        Swal.fire({
+          title: "Oops!",
+          text: "Something went wrong while updating.",
+          icon: "error",
+        });
+
+        setIsSubmitting(false);
+      },
+    });
   };
 
   // Check if form has required fields for adding project
@@ -185,7 +205,7 @@ const ProjectUpdateModal = ({ profile }) => {
     <>
       <section>
         <dialog id="project_update_modal" className="modal">
-          <div className="modal-box max-w-[1024px] max-h-[90vh] overflow-y-auto">
+          <div className="modal-box max-w-[1024px] max-h-[95vh] overflow-y-auto">
             <form method="dialog" className="mb-5">
               <button
                 type="button"
@@ -205,7 +225,7 @@ const ProjectUpdateModal = ({ profile }) => {
             </div>
 
             <div className="mt-6">
-              <form onSubmit={handleSubmit}>
+              <form>
                 {/* Projects List at the Top */}
                 {projects.length > 0 && (
                   <div className="mb-8">
@@ -310,7 +330,7 @@ const ProjectUpdateModal = ({ profile }) => {
                       className="block text-xl font-medium mb-2"
                       htmlFor="projectLink"
                     >
-                      Project Link (Optional)
+                      Project Link
                     </label>
                     <input
                       disabled={isSubmitting}
@@ -340,11 +360,11 @@ const ProjectUpdateModal = ({ profile }) => {
                       onChange={handleChange}
                       placeholder="Describe your project, your role, and key achievements..."
                       rows="4"
-                      maxLength={500}
+                      maxLength={600}
                       required
                     />
                     <p className="text-sm text-gray-500 mt-1">
-                      {currentProject.description.length}/500 characters
+                      {currentProject.description.length}/600 characters
                     </p>
                   </div>
 
@@ -391,9 +411,9 @@ const ProjectUpdateModal = ({ profile }) => {
                           type="button"
                           onClick={handleAddSkill}
                           disabled={isSubmitting || !newSkill.trim()}
-                          className="btn bg-[#3C8F63] border-[#3C8F63] hover:bg-[#337954] hover:border-green-700 px-4 py-3 text-white disabled:bg-gray-400 disabled:border-gray-400"
+                          className="btn bg-[#3C8F63] border-[#3C8F63] hover:bg-[#337954] hover:border-green-700 px-4 py-6 text-white disabled:bg-gray-400 disabled:border-gray-400"
                         >
-                          <FaPlus className="inline mr-1" /> Add Skill
+                          <FaPlus className="inline" /> Add Skill
                         </button>
                       </div>
                     )}
@@ -527,16 +547,15 @@ const ProjectUpdateModal = ({ profile }) => {
                     disabled={isSubmitting}
                     className="btn btn-outline w-full sm:w-auto px-4 sm:px-8 py-3 text-lg border-2 border-gray-300 hover:bg-gray-100 hover:border-gray-400 disabled:bg-gray-100 disabled:cursor-not-allowed"
                     onClick={() =>
-                      document
-                        .getElementById("project_update_modal")
-                        .close()
+                      document.getElementById("project_update_modal").close()
                     }
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    disabled={isSubmitting || projects.length === 0}
+                    disabled={isSubmitting}
+                    onClick={handleSubmit}
                     className="btn bg-[#3C8F63] border-[#3C8F63] hover:bg-[#337954] hover:border-green-700 w-full sm:w-auto px-4 sm:px-8 py-3 text-lg text-white disabled:bg-gray-400 disabled:border-gray-400"
                   >
                     {isSubmitting ? "Saving..." : "Save Changes"}
