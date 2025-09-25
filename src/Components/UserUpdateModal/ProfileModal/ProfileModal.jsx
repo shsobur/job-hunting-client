@@ -1,18 +1,23 @@
+// File path__
+import useAxios from "../../../Hooks/Axios";
+import { getCroppedImg } from "../../../utils";
+import useUserData from "../../../Hooks/userData";
+
+// From react__
 import { useState, useEffect, useCallback } from "react";
+
+// Package__
+import Swal from "sweetalert2";
 import Cropper from "react-easy-crop";
 import { Slider } from "@mui/material";
 import { MdUpload } from "react-icons/md";
 import { FaTimes, FaEye } from "react-icons/fa";
-import { getCroppedImg } from "../../../utils";
-import useUserData from "../../../Hooks/userData";
-import Swal from "sweetalert2";
-import useAxios from "../../../Hooks/Axios";
 
 const ProfileUpdateModal = () => {
   const api = useAxios();
   const { profile, updateProfile } = useUserData();
 
-  // Profile data state
+  // Profile data__
   const [profileData, setProfileData] = useState({
     profilePhoto: "",
     userName: "",
@@ -20,7 +25,7 @@ const ProfileUpdateModal = () => {
     openToWork: false,
   });
 
-  // Image cropping states (previously in PPModal)
+  // Image cropping states__
   const [imageSrc, setImageSrc] = useState(null);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
@@ -30,8 +35,9 @@ const ProfileUpdateModal = () => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
-  // Load initial profile data
+  // Load initial profile data__
   useEffect(() => {
     if (profile) {
       setProfileData({
@@ -43,7 +49,7 @@ const ProfileUpdateModal = () => {
     }
   }, [profile]);
 
-  // Handle text/checkbox change
+  // Handle text/checkbox change__
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setProfileData((prev) => ({
@@ -52,7 +58,7 @@ const ProfileUpdateModal = () => {
     }));
   };
 
-  // Image cropping functions (previously in PPModal)
+  // Image crop__
   const onCropComplete = useCallback((_, croppedAreaPixels) => {
     setCroppedAreaPixels(croppedAreaPixels);
   }, []);
@@ -61,8 +67,8 @@ const ProfileUpdateModal = () => {
     const file = e.target.files[0];
     if (file) {
       setImageSrc(URL.createObjectURL(file));
-      setCroppedImage(null); // Reset previous preview
-      setCroppedFile(null); // Reset previous file
+      setCroppedImage(null);
+      setCroppedFile(null);
     }
   };
 
@@ -71,11 +77,10 @@ const ProfileUpdateModal = () => {
     try {
       const { file, url } = await getCroppedImg(imageSrc, croppedAreaPixels);
       setCroppedImage(url);
-      setCroppedFile(file); // Store the cropped file for upload
-      setMessage("Image cropped! Click 'Save Cropped Image' to upload.");
-    } catch (err) {
-      console.error("Preview error:", err);
-      setMessage("Error cropping image. Please try again.");
+      setCroppedFile(file);
+      setMessage("Image cropped! Click 'Save Cropped Image' to update.");
+    } catch {
+      setErrorMessage("Error cropping image. Please try again later!.");
     }
   };
 
@@ -86,12 +91,13 @@ const ProfileUpdateModal = () => {
     setCrop({ x: 0, y: 0 });
     setZoom(1);
     setMessage("");
+    setErrorMessage("");
   };
 
-  // Upload cropped file to backend → Cloudinary
+  // Upload cropped file to backend Cloudinary__
   const handleUploadToBackend = async () => {
     if (!croppedFile) {
-      setMessage("Please crop an image first.");
+      setErrorMessage("Please crop an image first.");
       return;
     }
 
@@ -100,39 +106,32 @@ const ProfileUpdateModal = () => {
 
     try {
       setIsLoading(true);
-      setMessage("Uploading image...");
 
       const res = await api.post("/upload", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-
-      console.log(res);
 
       if (res.data?.url) {
         setProfileData((prev) => ({
           ...prev,
           profilePhoto: res.data.url,
         }));
-        setMessage(
-          "✅ Image uploaded successfully! Now save your profile changes."
-        );
 
-        // Reset cropping state but keep the preview
+        // Reset cropping state but keep the preview__
         setImageSrc(null);
         setCrop({ x: 0, y: 0 });
         setZoom(1);
       } else {
-        setMessage("❌ Image upload failed! Try again.");
+        setErrorMessage("Image upload failed! Try again.");
       }
-    } catch (error) {
-      console.error("Error uploading image:", error);
-      setMessage("❌ Upload failed! Something went wrong.");
+    } catch {
+      setErrorMessage("Upload failed! Something went wrong.");
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Final save → send profile data to DB
+  // Final save send profile data to DB__
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -143,8 +142,6 @@ const ProfileUpdateModal = () => {
       openToWork: profileData.openToWork,
       profilePhoto: profileData.profilePhoto,
     };
-
-    console.log("Submitting profile data:", submissionData);
 
     updateProfile(submissionData, {
       onSuccess: () => {
@@ -167,8 +164,8 @@ const ProfileUpdateModal = () => {
           icon: "error",
         });
 
+        handleCancelCrop();
         setIsLoading(false);
-        setMessage("❌ Error updating profile. Please try again.");
       },
     });
   };
@@ -280,9 +277,9 @@ const ProfileUpdateModal = () => {
                           type="button"
                           onClick={handleUploadToBackend}
                           disabled={isLoading}
-                          className="btn mt-3 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+                          className="btn mt-3 bg-[#3C8F63] text-white px-4 py-2 rounded-md hover:bg-[#368058]"
                         >
-                          {isLoading ? "Uploading..." : "Save Cropped Image"}
+                          {isLoading ? "Updating..." : "Save Cropped Image"}
                         </button>
                       </div>
                     )}
@@ -290,15 +287,16 @@ const ProfileUpdateModal = () => {
                     {/* Message Display */}
                     {message && (
                       <div
-                        className={`p-3 rounded-md mb-4 ${
-                          message.includes("✅")
-                            ? "bg-green-100 text-green-800"
-                            : message.includes("❌")
-                            ? "bg-red-100 text-red-800"
-                            : "bg-blue-100 text-blue-800"
-                        }`}
+                        className={
+                          "p-3 rounded-md mb-4 bg-green-100 text-green-800"
+                        }
                       >
                         {message}
+                      </div>
+                    )}
+                    {errorMessage && (
+                      <div className="p-3 rounded-md mb-4 bg-red-100 text-red-800">
+                        {errorMessage}
                       </div>
                     )}
                   </div>
