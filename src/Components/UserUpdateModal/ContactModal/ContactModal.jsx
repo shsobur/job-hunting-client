@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 // Package__
 import Swal from "sweetalert2";
 import { FaLightbulb } from "react-icons/fa";
+import { RxCrossCircled } from "react-icons/rx";
 
 const ContactModal = () => {
   const { profile, updateProfile } = useUserData();
@@ -149,8 +150,7 @@ const ContactModal = () => {
 
   // Cancel / reset form
   const handleCancel = () => {
-    const modal = document.getElementById("contact_update_modal");
-    modal.close();
+    handleCloseModal()
 
     if (profile) {
       setSelectedCountry(profile.location?.country || "");
@@ -177,15 +177,23 @@ const ContactModal = () => {
     setIsPhoneValid(false);
   };
 
+  const handleCloseModal = () => {
+    const modal = document.getElementById("contact_update_modal");
+    modal.close();
+  }
+
   return (
     <section>
       <dialog id="contact_update_modal" className="modal">
         <div className="modal-box max-w-[1024px] max-h-[95vh] p-6">
           <div className="contact_update_main_content_container">
             {/* Header */}
-            <div className="mb-8">
-              <h2 className="text-3xl font-semibold text-gray-800 font-[Montserrat]">
+            <div className="mb-6">
+              <h2 className="flex items-center justify-between text-3xl font-semibold text-gray-800 font-[Montserrat] border-b-2 pb-3">
                 Edit contact info
+                <span onClick={handleCloseModal} className="cursor-pointer hover:text-gray-600">
+                  <RxCrossCircled size={30} />
+                </span>
               </h2>
             </div>
 
@@ -367,7 +375,7 @@ const ContactModal = () => {
               </div>
 
               {/* Action Buttons */}
-              <div className="flex justify-end gap-4">
+              <div className="flex justify-end gap-4 border-t-2 pt-6">
                 <button
                   type="button"
                   disabled={updateLoading}

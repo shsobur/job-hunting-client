@@ -553,28 +553,14 @@
   gap: 0.5rem;
 }
 
-/* Blue project tag styles */
-.project-tag-blue {
-  background-color: #dbeafe;
-  color: #1e40af;
-  font-size: 0.75rem;
-  line-height: 1rem;
-  font-weight: 500;
-  padding: 0.125rem 0.5rem;
-  border-radius: 0.25rem;
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-}
-
 /* Purple project tag styles */
 .project-tag-purple {
   background-color: #f3e8ff;
   color: #6b21a8;
-  font-size: 0.75rem;
+  font-size: 14px;
   line-height: 1rem;
   font-weight: 500;
-  padding: 0.125rem 0.5rem;
+  padding: 10px 15px;
   border-radius: 0.25rem;
   display: flex;
   align-items: center;

@@ -513,25 +513,29 @@ const UserProfile = () => {
                     className="edit-icon"
                   />
                 </button>
+
                 <h3 className="card-title-lg">Projects</h3>
+
                 <div className="project-grid">
                   {profile?.projects.length === 0
                     ? "N/A"
                     : profile?.projects.map((project) => (
-                        <div key={project.name} className="project-card mb-3">
-                          <h4 className="project-title">Reactions at Slack</h4>
-                          <p className="project-description">
-                            A feature to express emotions through emojis.
+                        <div key={project.id} className="project-card mb-3">
+                          <h4 className="project-title">{project?.title}</h4>
+
+                          <p className="project-description py-4 whitespace-pre-line">
+                            {project?.description}
                           </p>
+
                           <div className="project-footer">
                             <div className="project-tags">
-                              <span className="project-tag-blue">
-                                <FaReact className="inline-icon" /> React
-                              </span>
-                              <span className="project-tag-purple">
-                                <SiGraphql className="inline-icon" /> GraphQL
-                              </span>
+                              {project?.skills.map((skill) => (
+                                <span className="project-tag-purple">
+                                  <SiGraphql className="inline-icon" /> {skill}
+                                </span>
+                              ))}
                             </div>
+
                             <a className="project-link" href="#">
                               View Project →
                             </a>
