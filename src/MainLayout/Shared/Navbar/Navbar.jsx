@@ -23,7 +23,7 @@ import useUserData from "../../../Hooks/userData";
 const Navbar = () => {
   const menuRef = useRef();
   const { profile } = useUserData();
-  const { user, logOut } = useContext(AuthContext);
+  const { user, logOut, userLoading } = useContext(AuthContext);
   const [open, setOpen] = useState(false);
   const [isScrollingDown, setIsScrollingDown] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -103,10 +103,14 @@ const Navbar = () => {
           className="main_navbar_container"
         >
           <div className="navbar_content_container">
-            <div className="navbar_logo">
-              <img src={logo}></img>
-              <h1>JobHunting</h1>
-            </div>
+            {userLoading ? (
+              <div className="h-10 w-56 bg-gray-200 round-lg"></div>
+            ) : (
+              <div className="navbar_logo">
+                <img src={logo}></img>
+                <h1>JobHunting</h1>
+              </div>
+            )}
 
             <ul className="navbar_routes_container">
               <NavLink
@@ -115,7 +119,11 @@ const Navbar = () => {
                   isActive ? "route_active_style" : "router_none_active_style"
                 }
               >
-                <li>Home</li>
+                {userLoading ? (
+                  <div className="h-8 w-14 bg-gray-200 rounded-lg"></div>
+                ) : (
+                  <li>Home</li>
+                )}
               </NavLink>
 
               <NavLink
@@ -124,7 +132,11 @@ const Navbar = () => {
                   isActive ? "route_active_style" : "router_none_active_style"
                 }
               >
-                <li>Community</li>
+                {userLoading ? (
+                  <div className="h-8 w-14 bg-gray-200 rounded-lg"></div>
+                ) : (
+                  <li>Community</li>
+                )}
               </NavLink>
 
               <NavLink
@@ -133,56 +145,66 @@ const Navbar = () => {
                   isActive ? "route_active_style" : "router_none_active_style"
                 }
               >
-                <li>About Us</li>
+                {userLoading ? (
+                  <div className="h-8 w-14 bg-gray-200 rounded-lg"></div>
+                ) : (
+                  <li>About Us</li>
+                )}
               </NavLink>
             </ul>
 
-            {user ? (
-              <div className="dropdown_wrapper" ref={menuRef}>
-                <button
-                  className="dropdown_button"
-                  onClick={() => setOpen(!open)}
-                >
-                  <HiMiniUserCircle />
-                  {open ? (
-                    <IoChevronUp size={25} />
-                  ) : (
-                    <IoChevronDown size={25} />
-                  )}
-                </button>
-
-                <div
-                  id="dropdown_item_parent_container"
-                  className={`dropdown_menu ${open ? "open" : ""}`}
-                >
-                  <NavLink
-                    to={
-                      profile?.userRole === "Recruiter"
-                        ? "/recruiter-profile"
-                        : "/user-profile"
-                    }
-                  >
-                    <span
-                      onClick={() => setOpen(!open)}
-                      className="dropdown_item"
-                    >
-                      <ImProfile />
-                      Profile
-                    </span>
-                  </NavLink>
-
-                  <span onClick={handleSignOut} className="dropdown_item">
-                    <MdOutlineLogout />
-                    Log Out
-                  </span>
-                </div>
-              </div>
+            {userLoading ? (
+              <span className="h-10 w-10 mr-5 rounded-full bg-gray-200"></span>
             ) : (
-              <Link to="/sign-in">
-                <button className="desktop_signIn_btn btn text-white bg-[#3C8F63]">
-                  Sign In
-                </button>
-              </Link>
+              <>
+                {user ? (
+                  <div className="dropdown_wrapper" ref={menuRef}>
+                    <button
+                      className="dropdown_button"
+                      onClick={() => setOpen(!open)}
+                    >
+                      <HiMiniUserCircle />
+                      {open ? (
+                        <IoChevronUp size={25} />
+                      ) : (
+                        <IoChevronDown size={25} />
+                      )}
+                    </button>
+
+                    <div
+                      id="dropdown_item_parent_container"
+                      className={`dropdown_menu ${open ? "open" : ""}`}
+                    >
+                      <NavLink
+                        to={
+                          profile?.userRole === "Recruiter"
+                            ? "/recruiter-profile"
+                            : "/user-profile"
+                        }
+                      >
+                        <span
+                          onClick={() => setOpen(!open)}
+                          className="dropdown_item"
+                        >
+                          <ImProfile />
+                          Profile
+                        </span>
+                      </NavLink>
+
+                      <span onClick={handleSignOut} className="dropdown_item">
+                        <MdOutlineLogout />
+                        Log Out
+                      </span>
+                    </div>
+                  </div>
+                ) : (
+                  <Link to="/sign-in">
+                    <button className="desktop_signIn_btn btn text-white bg-[#3C8F63]">
+                      Sign In
+                    </button>
+                  </Link>
+                )}
+              </>
             )}
 
             <div className="mobile_menu_container">

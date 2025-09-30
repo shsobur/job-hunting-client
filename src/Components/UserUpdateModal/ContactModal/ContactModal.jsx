@@ -13,7 +13,7 @@ import { RxCrossCircled } from "react-icons/rx";
 const ContactModal = () => {
   const { profile, updateProfile } = useUserData();
   const [updateLoading, setUpdateLoading] = useState(false);
-  // Form state
+  // Form state__
   const [countriesList, setCountriesList] = useState([]);
   const [selectedCountry, setSelectedCountry] = useState("");
   const [citiesList, setCitiesList] = useState([]);
@@ -41,7 +41,7 @@ const ContactModal = () => {
       const countryData = countriesList.find((c) => c.country === country);
       if (countryData) {
         setCitiesList(countryData.cities || []);
-        setSelectedCity(city); // auto-fill city after citiesList is set
+        setSelectedCity(city);
         setPhoneCode(countryData.phone || "");
       } else {
         setCitiesList([]);
@@ -49,7 +49,7 @@ const ContactModal = () => {
         setPhoneCode("");
       }
 
-      // Phone
+      // Phone number__
       if (profile.number) {
         if (profile.number.startsWith("+")) {
           const codeLength = profile.number.length - 10;
@@ -148,9 +148,9 @@ const ContactModal = () => {
     });
   };
 
-  // Cancel / reset form
+  // Cancel / reset form__
   const handleCancel = () => {
-    handleCloseModal()
+    handleCloseModal();
 
     if (profile) {
       setSelectedCountry(profile.location?.country || "");
@@ -180,37 +180,41 @@ const ContactModal = () => {
   const handleCloseModal = () => {
     const modal = document.getElementById("contact_update_modal");
     modal.close();
-  }
+  };
 
   return (
     <section>
       <dialog id="contact_update_modal" className="modal">
-        <div className="modal-box max-w-[1024px] max-h-[95vh] p-6">
+        <div className="modal-box max-w-[1024px] max-h-[95vh] lg:p-0 p-0">
           <div className="contact_update_main_content_container">
             {/* Header */}
-            <div className="mb-6">
-              <h2 className="flex items-center justify-between text-3xl font-semibold text-gray-800 font-[Montserrat] border-b-2 pb-3">
+            <div className="mb-6 p-5 border-b-2 border-gray-200">
+              <h2 className="flex items-center justify-between text-3xl font-semibold text-gray-800 font-[Montserrat]">
                 Edit contact info
-                <span onClick={handleCloseModal} className="cursor-pointer hover:text-gray-600">
+                <span
+                  onClick={handleCloseModal}
+                  className="cursor-pointer hover:text-gray-600"
+                >
                   <RxCrossCircled size={30} />
                 </span>
               </h2>
             </div>
 
             {/* Form */}
-            <form onSubmit={handleContactSubmit} className="space-y-8">
+            <form onSubmit={handleContactSubmit} className="space-y-8 px-5">
               {/* Country & City */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="form-control">
-                  <label className="label p-0 mb-2">
+                  <label className="label mb-2">
                     <span className="label-text text-gray-700 font-medium text-xl">
                       Country
                     </span>
                   </label>
+
                   <select
                     value={selectedCountry}
                     onChange={handleCountryChange}
-                    className="select select-bordered w-full bg-white text-lg h-[51px] py-1 px-4 border-2 border-gray-300 rounded-lg focus:border-[#3C8F63] focus:ring-[#3C8F63] focus:outline-none transition-colors"
+                    className="select select-bordered cursor-pointer w-full text-lg h-[45px] px-4 border-2 border-gray-400 rounded-lg focus:border-[#3C8F63] focus:outline-none transition-colors"
                   >
                     <option value="">Select Country</option>
                     {countriesList.map((c) => (
@@ -227,10 +231,11 @@ const ContactModal = () => {
                       City
                     </span>
                   </label>
+
                   <select
                     value={selectedCity}
                     onChange={(e) => setSelectedCity(e.target.value)}
-                    className="select select-bordered w-full bg-white text-lg h-[51px] py-1 px-4 border-2 border-gray-300 rounded-lg focus:border-[#3C8F63] focus:ring-[#3C8F63] focus:outline-none transition-colors"
+                    className="select select-bordered cursor-pointer w-full text-lg h-[45px] px-4 border-2 border-gray-400 rounded-lg focus:border-[#3C8F63] focus:outline-none transition-colors"
                   >
                     <option value="">Select City</option>
                     {citiesList.map((city) => (
@@ -251,11 +256,12 @@ const ContactModal = () => {
                         Code
                       </span>
                     </label>
+
                     <input
                       type="text"
                       value={phoneCode}
                       onChange={(e) => setPhoneCode(e.target.value)}
-                      className="input input-bordered w-full text-lg py-6 px-4 border-2 border-gray-300 rounded-lg focus:border-[#3C8F63] focus:ring-[#3C8F63] focus:outline-none transition-colors"
+                      className="input input-bordered w-full text-lg h-[45px] px-4 border-2 border-gray-400 rounded-lg focus:border-[#3C8F63] focus:outline-none transition-colors"
                     />
                   </div>
 
@@ -265,12 +271,13 @@ const ContactModal = () => {
                         Mobile number
                       </span>
                     </label>
+
                     <input
                       type="tel"
                       value={phoneNumber}
                       onChange={handlePhoneChange}
                       placeholder="01787548843"
-                      className="input input-bordered w-full bg-white text-lg py-6 px-4 border-2 border-gray-300 rounded-lg focus:border-[#3C8F63] focus:ring-[#3C8F63] focus:outline-none transition-colors"
+                      className="input input-bordered w-full text-lg h-[45px] px-4 border-2 border-gray-400 rounded-lg focus:border-[#3C8F63] focus:outline-none transition-colors"
                     />
                   </div>
                 </div>
@@ -282,10 +289,11 @@ const ContactModal = () => {
                         Verification code
                       </span>
                     </label>
+
                     <input
                       type="text"
                       placeholder="Enter 6-digit code"
-                      className="input input-bordered w-full bg-white text-lg py-6 px-4 border-2 border-gray-300 rounded-lg focus:border-[#3C8F63] focus:ring-[#3C8F63]  focus:outline-none transition-colors"
+                      className="input input-bordered w-full text-lg h-[45px] px-4 border-2 border-gray-400 rounded-lg focus:border-[#3C8F63] focus:outline-none transition-colors"
                     />
                   </div>
 
@@ -293,7 +301,7 @@ const ContactModal = () => {
                     onClick={sendOtp}
                     type="button"
                     disabled={!isPhoneValid}
-                    className={`btn h-[52px] text-lg min-w-[140px] mt-2 md:mt-0 
+                    className={`btn h-[45px] text-lg min-w-[140px] 
                       ${
                         isPhoneValid
                           ? "bg-[#3C8F63] text-white hover:bg-[#337954]"
@@ -310,60 +318,65 @@ const ContactModal = () => {
                 <h3 className="text-2xl font-semibold text-gray-800 mb-6">
                   Social Links
                 </h3>
+
                 <div className="space-y-6">
                   <div className="form-control">
-                    <label className="label p-0 mb-2">
+                    <label className="label mb-2">
                       <span className="label-text text-gray-700 font-medium text-xl">
                         LinkedIn
                       </span>
                     </label>
+
                     <input
                       type="url"
                       name="linkedin"
                       defaultValue={profile?.social?.linkedin || ""}
                       placeholder="https://linkedin.com/in/yourname"
-                      className="input input-bordered w-full bg-white text-lg py-6 px-5 border-2 border-gray-300 rounded-lg focus:border-[#3C8F63] focus:ring-[#3C8F63] focus:outline-none transition-colors"
+                      className="input input-bordered w-full text-lg h-[45px] px-4 border-2 border-gray-400 rounded-lg focus:border-[#3C8F63] focus:outline-none transition-colors"
                     />
                   </div>
 
                   <div className="form-control">
-                    <label className="label p-0 mb-2">
+                    <label className="label mb-2">
                       <span className="label-text text-gray-700 font-medium text-xl">
                         GitHub
                       </span>
                     </label>
+
                     <input
                       type="url"
                       name="github"
                       defaultValue={profile?.social?.github || ""}
                       placeholder="https://github.com/yourname"
-                      className="input input-bordered w-full bg-white text-lg py-6 px-5 border-2 border-gray-300 rounded-lg focus:border-[#3C8F63] focus:ring-[#3C8F63] focus:outline-none transition-colors"
+                      className="input input-bordered w-full text-lg h-[45px] px-4 border-2 border-gray-400 rounded-lg focus:border-[#3C8F63] focus:outline-none transition-colors"
                     />
                   </div>
 
                   <div className="form-control">
-                    <label className="label p-0 mb-2">
+                    <label className="label mb-2">
                       <span className="label-text text-gray-700 font-medium text-xl">
                         Personal Portfolio
                       </span>
                     </label>
+
                     <input
                       type="url"
                       name="portfolio"
                       defaultValue={profile?.social?.portfolio || ""}
                       placeholder="https://yourwebsite.com"
-                      className="input input-bordered w-full bg-white text-lg py-6 px-5 border-2 border-gray-300 rounded-lg focus:border-[#3C8F63] focus:ring-[#3C8F63] focus:outline-none transition-colors"
+                      className="input input-bordered w-full text-lg h-[45px] px-4 border-2 border-gray-400 rounded-lg focus:border-[#3C8F63] focus:outline-none transition-colors"
                     />
                   </div>
                 </div>
               </div>
 
               {/* Tip Box */}
-              <div className="alert bg-green-50 border-2 border-[#3C8F63] mt-8 p-5 rounded-lg">
+              <div className="bg-[#F0FDF4] border border-[#3C8F63] mt-8 p-5 rounded-lg">
                 <div className="flex items-start">
-                  <FaLightbulb className="text-green-600 text-xl mt-1 mr-4" />
+                  <FaLightbulb className="text-green-600 text-xl mr-4" />
+
                   <div>
-                    <div className="text-[#3C8F63] text-base">
+                    <div className="text-[#276043] text-base">
                       <b>
                         <i>Tip:</i>
                       </b>{" "}
@@ -373,27 +386,27 @@ const ContactModal = () => {
                   </div>
                 </div>
               </div>
-
-              {/* Action Buttons */}
-              <div className="flex justify-end gap-4 border-t-2 pt-6">
-                <button
-                  type="button"
-                  disabled={updateLoading}
-                  onClick={handleCancel}
-                  className="btn btn-outline px-8 py-3 text-lg border-2 border-gray-300 hover:bg-gray-100 hover:border-gray-400"
-                >
-                  Cancel
-                </button>
-
-                <button
-                  type="submit"
-                  disabled={updateLoading}
-                  className="btn bg-[#3C8F63] border-[#3C8F63] hover:bg-[#337954] hover:border-green-700 px-8 py-3 text-lg text-white"
-                >
-                  {updateLoading ? "Working...." : "Save Changes"}
-                </button>
-              </div>
             </form>
+
+            {/* Action Buttons */}
+            <div className="flex justify-end gap-4 bg-[#eef1f4] px-5 py-6 mt-6">
+              <button
+                type="button"
+                disabled={updateLoading}
+                onClick={handleCancel}
+                className="btn btn-outline px-8 py-3 text-lg border-2 border-gray-300 hover:bg-gray-100 hover:border-gray-400"
+              >
+                Cancel
+              </button>
+
+              <button
+                type="submit"
+                disabled={updateLoading}
+                className="btn bg-[#3C8F63] border-[#3C8F63] hover:bg-[#337954] hover:border-green-700 px-8 py-3 text-lg text-white"
+              >
+                {updateLoading ? "Working...." : "Save Changes"}
+              </button>
+            </div>
           </div>
         </div>
       </dialog>
