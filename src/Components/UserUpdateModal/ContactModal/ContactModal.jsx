@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 // Package__
 import Swal from "sweetalert2";
 import { FaLightbulb } from "react-icons/fa";
-import { RxCrossCircled } from "react-icons/rx";
+import SeekerModalHeader from "../../../MainLayout/Shared/SeekerModalHeader/SeekerModalHeader";
 
 const ContactModal = () => {
   const { profile, updateProfile } = useUserData();
@@ -188,17 +188,10 @@ const ContactModal = () => {
         <div className="modal-box max-w-[1024px] max-h-[95vh] lg:p-0 p-0">
           <div className="contact_update_main_content_container">
             {/* Header */}
-            <div className="mb-6 p-5 border-b-2 border-gray-200">
-              <h2 className="flex items-center justify-between text-3xl font-semibold text-gray-800 font-[Montserrat]">
-                Edit contact info
-                <span
-                  onClick={handleCloseModal}
-                  className="cursor-pointer hover:text-gray-600"
-                >
-                  <RxCrossCircled size={30} />
-                </span>
-              </h2>
-            </div>
+            <SeekerModalHeader
+              title={"Edit contact info"}
+              handleCloseModal={handleCloseModal}
+            ></SeekerModalHeader>
 
             {/* Form */}
             <form onSubmit={handleContactSubmit} className="space-y-8 px-5">
@@ -214,7 +207,7 @@ const ContactModal = () => {
                   <select
                     value={selectedCountry}
                     onChange={handleCountryChange}
-                    className="select select-bordered cursor-pointer w-full text-lg h-[45px] px-4 border-2 border-gray-400 rounded-lg focus:border-[#3C8F63] focus:outline-none transition-colors"
+                    className="select select-bordered cursor-pointer w-full text-lg h-[45px] px-4 border-2 border-gray-300 rounded-lg focus:border-[#3C8F63] focus:outline-none transition-colors"
                   >
                     <option value="">Select Country</option>
                     {countriesList.map((c) => (
@@ -235,7 +228,7 @@ const ContactModal = () => {
                   <select
                     value={selectedCity}
                     onChange={(e) => setSelectedCity(e.target.value)}
-                    className="select select-bordered cursor-pointer w-full text-lg h-[45px] px-4 border-2 border-gray-400 rounded-lg focus:border-[#3C8F63] focus:outline-none transition-colors"
+                    className="select select-bordered cursor-pointer w-full text-lg h-[45px] px-4 border-2 border-gray-300 rounded-lg focus:border-[#3C8F63] focus:outline-none transition-colors"
                   >
                     <option value="">Select City</option>
                     {citiesList.map((city) => (
@@ -261,7 +254,7 @@ const ContactModal = () => {
                       type="text"
                       value={phoneCode}
                       onChange={(e) => setPhoneCode(e.target.value)}
-                      className="input input-bordered w-full text-lg h-[45px] px-4 border-2 border-gray-400 rounded-lg focus:border-[#3C8F63] focus:outline-none transition-colors"
+                      className="input input-bordered w-full text-lg h-[45px] px-4 border-2 border-gray-300 rounded-lg focus:border-[#3C8F63] focus:outline-none transition-colors"
                     />
                   </div>
 
@@ -277,7 +270,7 @@ const ContactModal = () => {
                       value={phoneNumber}
                       onChange={handlePhoneChange}
                       placeholder="01787548843"
-                      className="input input-bordered w-full text-lg h-[45px] px-4 border-2 border-gray-400 rounded-lg focus:border-[#3C8F63] focus:outline-none transition-colors"
+                      className="input input-bordered w-full text-lg h-[45px] px-4 border-2 border-gray-300 rounded-lg focus:border-[#3C8F63] focus:outline-none transition-colors"
                     />
                   </div>
                 </div>
@@ -293,7 +286,7 @@ const ContactModal = () => {
                     <input
                       type="text"
                       placeholder="Enter 6-digit code"
-                      className="input input-bordered w-full text-lg h-[45px] px-4 border-2 border-gray-400 rounded-lg focus:border-[#3C8F63] focus:outline-none transition-colors"
+                      className="input input-bordered w-full text-lg h-[45px] px-4 border-2 border-gray-300 rounded-lg focus:border-[#3C8F63] focus:outline-none transition-colors"
                     />
                   </div>
 
@@ -332,7 +325,7 @@ const ContactModal = () => {
                       name="linkedin"
                       defaultValue={profile?.social?.linkedin || ""}
                       placeholder="https://linkedin.com/in/yourname"
-                      className="input input-bordered w-full text-lg h-[45px] px-4 border-2 border-gray-400 rounded-lg focus:border-[#3C8F63] focus:outline-none transition-colors"
+                      className="input input-bordered w-full text-lg h-[45px] px-4 border-2 border-gray-300 rounded-lg focus:border-[#3C8F63] focus:outline-none transition-colors"
                     />
                   </div>
 
@@ -348,7 +341,7 @@ const ContactModal = () => {
                       name="github"
                       defaultValue={profile?.social?.github || ""}
                       placeholder="https://github.com/yourname"
-                      className="input input-bordered w-full text-lg h-[45px] px-4 border-2 border-gray-400 rounded-lg focus:border-[#3C8F63] focus:outline-none transition-colors"
+                      className="input input-bordered w-full text-lg h-[45px] px-4 border-2 border-gray-300 rounded-lg focus:border-[#3C8F63] focus:outline-none transition-colors"
                     />
                   </div>
 
@@ -364,7 +357,7 @@ const ContactModal = () => {
                       name="portfolio"
                       defaultValue={profile?.social?.portfolio || ""}
                       placeholder="https://yourwebsite.com"
-                      className="input input-bordered w-full text-lg h-[45px] px-4 border-2 border-gray-400 rounded-lg focus:border-[#3C8F63] focus:outline-none transition-colors"
+                      className="input input-bordered w-full text-lg h-[45px] px-4 border-2 border-gray-300 rounded-lg focus:border-[#3C8F63] focus:outline-none transition-colors"
                     />
                   </div>
                 </div>
@@ -402,7 +395,7 @@ const ContactModal = () => {
               <button
                 type="submit"
                 disabled={updateLoading}
-                className="btn bg-[#3C8F63] border-[#3C8F63] hover:bg-[#337954] hover:border-green-700 px-8 py-3 text-lg text-white"
+                className="btn bg-[#3C8F63] border-[#3C8F63] hover:bg-[#337954] px-8 py-3 text-lg text-white"
               >
                 {updateLoading ? "Working...." : "Save Changes"}
               </button>

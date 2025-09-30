@@ -1,6 +1,7 @@
 import "./Navbar.css";
 import logo from "../../../../public/fab.png";
 import { Link, NavLink } from "react-router-dom";
+import useUserData from "../../../Hooks/userData";
 import { AuthContext } from "../../../Context/AuthContext";
 
 // From react__
@@ -9,16 +10,13 @@ import { useContext, useEffect, useRef, useState } from "react";
 // Package(REACT ICONS, SWEET ALERT)__
 import Swal from "sweetalert2";
 import { RxCross1 } from "react-icons/rx";
-import { PiSignIn, PiSignOut } from "react-icons/pi";
 import { ImProfile } from "react-icons/im";
 import { IoIosMenu } from "react-icons/io";
-import { FiMessageCircle } from "react-icons/fi";
+import { MdOutlineLogout } from "react-icons/md";
 import { HiMiniUserCircle } from "react-icons/hi2";
 import { AiOutlineShopping } from "react-icons/ai";
-import { RiContactsBook2Line } from "react-icons/ri";
-import { MdOutlineLogout, MdOutlineSpaceDashboard } from "react-icons/md";
+import { PiSignIn, PiSignOut } from "react-icons/pi";
 import { IoChevronDown, IoChevronUp, IoHomeOutline } from "react-icons/io5";
-import useUserData from "../../../Hooks/userData";
 
 const Navbar = () => {
   const menuRef = useRef();
