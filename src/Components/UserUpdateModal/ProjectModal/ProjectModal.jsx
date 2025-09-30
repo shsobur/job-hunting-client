@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { FaEdit, FaTrash, FaPlus } from "react-icons/fa";
 import useUserData from "../../../Hooks/userData";
 import Swal from "sweetalert2";
+import SeekerModalHeader from "../../../MainLayout/Shared/SeekerModalHeader/SeekerModalHeader";
 
 const ProjectUpdateModal = () => {
   const { profile, updateProfile } = useUserData();
@@ -21,6 +22,10 @@ const ProjectUpdateModal = () => {
   const [newSkill, setNewSkill] = useState("");
   const [editingIndex, setEditingIndex] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [hasChanges, setHasChanges] = useState(false);
+
+  // Store original data
+  const originalProjectsRef = useRef([]);
 
   // Months for dropdown
   const months = [
@@ -49,8 +54,17 @@ const ProjectUpdateModal = () => {
   useEffect(() => {
     if (profile?.projects) {
       setProjects(profile.projects);
+      originalProjectsRef.current = profile.projects;
+      setHasChanges(false);
     }
   }, [profile]);
+
+  // Check for changes
+  useEffect(() => {
+    const hasProjectsChanged =
+      JSON.stringify(projects) !== JSON.stringify(originalProjectsRef.current);
+    setHasChanges(hasProjectsChanged);
+  }, [projects]);
 
   // Handle form field changes
   const handleChange = (e) => {
@@ -144,6 +158,18 @@ const ProjectUpdateModal = () => {
     setEditingIndex(null);
   };
 
+  const handleCancel = () => {
+    // Reset to original data
+    setProjects(originalProjectsRef.current);
+    resetForm();
+    setHasChanges(false);
+  };
+
+  const handleCloseModal = () => {
+    const modal = document.getElementById("project_update_modal");
+    modal.close();
+  };
+
   // Handle final submission
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -174,6 +200,9 @@ const ProjectUpdateModal = () => {
       onSuccess: () => {
         document.getElementById("project_update_modal").close();
 
+        // Update original data after successful save
+        originalProjectsRef.current = projects;
+
         Swal.fire({
           title: "Success!",
           text: "Project updated successfully.",
@@ -181,6 +210,7 @@ const ProjectUpdateModal = () => {
         });
 
         setIsSubmitting(false);
+        setHasChanges(false);
       },
 
       onError: () => {
@@ -202,371 +232,376 @@ const ProjectUpdateModal = () => {
     currentProject.title.trim() && currentProject.description.trim();
 
   return (
-    <>
-      <section>
-        <dialog id="project_update_modal" className="modal">
-          <div className="modal-box max-w-[1024px] max-h-[95vh] overflow-y-auto">
-            <form method="dialog" className="mb-5">
-              <button
-                type="button"
-                className="btn btn-sm btn-circle btn-ghost border border-gray-400 absolute right-2 top-2"
-                onClick={() =>
-                  document.getElementById("project_update_modal").close()
-                }
-              >
-                <span className="text-2xl font-semibold text-gray-700">×</span>
-              </button>
-            </form>
+    <section>
+      <dialog id="project_update_modal" className="modal">
+        <div className="modal-box max-w-[1024px] max-h-[95vh] lg:p-0 p-0">
+          <div className="project_update_main_content_container">
+            {/* Header - Same as other modals */}
+            <SeekerModalHeader
+              title={
+                profile?.projects?.length ? "Update Projects" : "Add Projects"
+              }
+              handleCloseModal={handleCloseModal}
+            ></SeekerModalHeader>
 
-            <div className="contact_update_main_content_container">
-              <h1 className="modal_title font-semibold font-[Montserrat] text-3xl">
-                {profile?.projects?.length ? "Update Projects" : "Add Projects"}
-              </h1>
-            </div>
-
-            <div className="mt-6">
-              <form>
-                {/* Projects List at the Top */}
-                {projects.length > 0 && (
-                  <div className="mb-8">
-                    <h2 className="text-2xl font-semibold mb-4">
-                      Your Projects ({projects.length})
-                    </h2>
-                    <div className="space-y-4">
-                      {projects.map((project, index) => (
-                        <div
-                          key={project.id}
-                          className="border border-gray-300 rounded-lg p-4 bg-gray-50"
-                        >
-                          <div className="flex justify-between items-start mb-2">
-                            <div>
-                              <h3 className="text-xl font-semibold text-gray-800">
-                                {project.title}
-                              </h3>
-                              {project.projectLink && (
-                                <a
-                                  href={project.projectLink}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="text-blue-600 hover:text-blue-800 text-sm"
-                                >
-                                  {project.projectLink}
-                                </a>
-                              )}
-                            </div>
-                            <div className="flex space-x-3">
-                              <button
-                                type="button"
-                                onClick={() => handleEditProject(index)}
-                                disabled={isSubmitting}
-                                className="text-[#3C8F63] hover:text-[#337954] p-1 rounded"
-                                title="Edit project"
+            {/* Main Content - Same structure as other modals */}
+            <div className="space-y-8 px-5">
+              {/* Projects List at the Top */}
+              {projects.length > 0 && (
+                <div>
+                  <h3 className="text-2xl font-semibold text-gray-800 mb-6">
+                    Your Projects ({projects.length})
+                  </h3>
+                  <div className="space-y-4">
+                    {projects.map((project, index) => (
+                      <div
+                        key={project.id}
+                        className="border-2 border-gray-300 rounded-lg p-6 transition-colors hover:border-gray-400"
+                      >
+                        <div className="flex justify-between items-start mb-4">
+                          <div className="flex-1">
+                            <h3 className="text-xl font-semibold text-gray-800 mb-2">
+                              {project.title}
+                            </h3>
+                            {project.projectLink && (
+                              <a
+                                href={project.projectLink}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-blue-600 hover:text-blue-800 text-lg"
                               >
-                                <FaEdit size={16} />
-                              </button>
-                              <button
-                                type="button"
-                                onClick={() => handleDeleteProject(index)}
-                                disabled={isSubmitting}
-                                className="text-red-600 hover:text-red-800 p-1 rounded"
-                                title="Delete project"
-                              >
-                                <FaTrash size={16} />
-                              </button>
-                            </div>
+                                {project.projectLink}
+                              </a>
+                            )}
                           </div>
-                          <p className="text-gray-600 mb-2">
-                            {project.description}
-                          </p>
-                          {project.skills.length > 0 && (
-                            <div className="flex flex-wrap gap-2 mb-2">
-                              {project.skills.map((skill, skillIndex) => (
-                                <span
-                                  key={skillIndex}
-                                  className="bg-[#3C8F63] text-white px-2 py-1 rounded-full text-sm"
-                                >
-                                  {skill}
-                                </span>
-                              ))}
-                            </div>
-                          )}
-                          <p className="text-sm text-gray-500">
-                            {project.currentlyWorking && " • Currently working"}
-                          </p>
+                          <div className="flex gap-3">
+                            <button
+                              type="button"
+                              onClick={() => handleEditProject(index)}
+                              disabled={isSubmitting}
+                              className="text-[#3C8F63] hover:text-[#337954] transition-colors"
+                              title="Edit project"
+                            >
+                              <FaEdit size={18} />
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => handleDeleteProject(index)}
+                              disabled={isSubmitting}
+                              className="text-red-600 hover:text-red-800 transition-colors"
+                              title="Delete project"
+                            >
+                              <FaTrash size={18} />
+                            </button>
+                          </div>
                         </div>
-                      ))}
-                    </div>
+                        <p className="text-gray-700 text-lg mb-4">
+                          {project.description}
+                        </p>
+                        {project.skills.length > 0 && (
+                          <div className="flex flex-wrap gap-2 mb-3">
+                            {project.skills.map((skill, skillIndex) => (
+                              <span
+                                key={skillIndex}
+                                className="bg-[#3C8F63] text-white px-3 py-1 rounded-full text-sm"
+                              >
+                                {skill}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                        {project.currentlyWorking && (
+                          <span className="inline-block bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">
+                            Currently working
+                          </span>
+                        )}
+                      </div>
+                    ))}
                   </div>
-                )}
+                </div>
+              )}
 
-                {/* Project Form */}
-                <div className="space-y-6">
-                  <div>
-                    <label
-                      className="block text-xl font-medium mb-2"
-                      htmlFor="title"
-                    >
+              {/* Project Form */}
+              <form className="space-y-6">
+                <div className="form-control">
+                  <label className="label mb-2">
+                    <span className="label-text text-gray-700 font-medium text-xl">
                       Project Title *
-                    </label>
-                    <input
-                      disabled={isSubmitting}
-                      type="text"
-                      className="w-full p-3 md:p-4 border-2 border-gray-300 rounded-md focus:outline-none focus:border-[#3C8F63] transition-colors"
-                      id="title"
-                      name="title"
-                      value={currentProject.title}
-                      onChange={handleChange}
-                      placeholder="Enter project title"
-                      maxLength={100}
-                      required
-                    />
-                    <p className="text-sm text-gray-500 mt-1">
-                      {currentProject.title.length}/100 characters
-                    </p>
-                  </div>
+                    </span>
+                  </label>
+                  <input
+                    disabled={isSubmitting}
+                    type="text"
+                    className="input input-bordered w-full text-lg h-[45px] px-4 border-2 border-gray-300 rounded-lg focus:border-[#3C8F63] focus:outline-none transition-colors"
+                    name="title"
+                    value={currentProject.title}
+                    onChange={handleChange}
+                    placeholder="Enter project title"
+                    maxLength={100}
+                  />
+                  <p className="text-sm text-gray-500 mt-2">
+                    {currentProject.title.length}/100 characters
+                  </p>
+                </div>
 
-                  <div>
-                    <label
-                      className="block text-xl font-medium mb-2"
-                      htmlFor="projectLink"
-                    >
+                <div className="form-control">
+                  <label className="label mb-2">
+                    <span className="label-text text-gray-700 font-medium text-xl">
                       Project Link
-                    </label>
-                    <input
-                      disabled={isSubmitting}
-                      type="url"
-                      className="w-full p-3 md:p-4 border-2 border-gray-300 rounded-md focus:outline-none focus:border-[#3C8F63] transition-colors"
-                      id="projectLink"
-                      name="projectLink"
-                      value={currentProject.projectLink}
-                      onChange={handleChange}
-                      placeholder="https://example.com/project"
-                    />
-                  </div>
+                    </span>
+                  </label>
+                  <input
+                    disabled={isSubmitting}
+                    type="url"
+                    className="input input-bordered w-full text-lg h-[45px] px-4 border-2 border-gray-300 rounded-lg focus:border-[#3C8F63] focus:outline-none transition-colors"
+                    name="projectLink"
+                    value={currentProject.projectLink}
+                    onChange={handleChange}
+                    placeholder="https://example.com/project"
+                  />
+                </div>
 
-                  <div>
-                    <label
-                      className="block text-xl font-medium mb-2"
-                      htmlFor="description"
-                    >
+                <div className="form-control">
+                  <label className="label mb-2">
+                    <span className="label-text text-gray-700 font-medium text-xl">
                       Project Description *
-                    </label>
-                    <textarea
-                      disabled={isSubmitting}
-                      className="w-full p-3 md:p-4 border-2 border-gray-300 rounded-md focus:outline-none focus:border-[#3C8F63] transition-colors resize-y"
-                      id="description"
-                      name="description"
-                      value={currentProject.description}
-                      onChange={handleChange}
-                      placeholder="Describe your project, your role, and key achievements..."
-                      rows="4"
-                      maxLength={600}
-                      required
-                    />
-                    <p className="text-sm text-gray-500 mt-1">
-                      {currentProject.description.length}/600 characters
-                    </p>
-                  </div>
+                    </span>
+                  </label>
+                  <textarea
+                    disabled={isSubmitting}
+                    className="textarea textarea-bordered w-full text-lg p-4 border-2 border-gray-300 rounded-lg focus:border-[#3C8F63] focus:outline-none transition-colors resize-y"
+                    name="description"
+                    value={currentProject.description}
+                    onChange={handleChange}
+                    placeholder="Describe your project, your role, and key achievements..."
+                    rows="4"
+                    maxLength={600}
+                  />
+                  <p className="text-sm text-gray-500 mt-2">
+                    {currentProject.description.length}/600 characters
+                  </p>
+                </div>
 
-                  {/* Skills Section */}
-                  <div>
-                    <label className="block text-xl font-medium mb-2">
+                {/* Skills Section */}
+                <div className="form-control">
+                  <label className="label mb-2">
+                    <span className="label-text text-gray-700 font-medium text-xl">
                       Skills Used{" "}
                       {currentProject.skills.length > 0 &&
                         `(${currentProject.skills.length}/6)`}
-                    </label>
-                    <div className="flex flex-wrap gap-2 mb-3">
-                      {currentProject.skills.map((skill, index) => (
-                        <span
-                          key={index}
-                          className="bg-[#3C8F63] text-white px-3 py-1 rounded-full flex items-center"
-                        >
-                          {skill}
-                          <button
-                            type="button"
-                            onClick={() => handleRemoveSkill(index)}
-                            disabled={isSubmitting}
-                            className="ml-2 text-white hover:text-gray-200"
-                          >
-                            ×
-                          </button>
-                        </span>
-                      ))}
-                    </div>
-                    {currentProject.skills.length < 6 && (
-                      <div className="flex gap-2">
-                        <input
-                          disabled={isSubmitting}
-                          type="text"
-                          className="flex-1 p-3 border-2 border-gray-300 rounded-md focus:outline-none focus:border-[#3C8F63] transition-colors"
-                          value={newSkill}
-                          onChange={(e) => setNewSkill(e.target.value)}
-                          placeholder="Add a skill (max 6)"
-                          onKeyPress={(e) =>
-                            e.key === "Enter" &&
-                            (e.preventDefault(), handleAddSkill())
-                          }
-                        />
+                    </span>
+                  </label>
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {currentProject.skills.map((skill, index) => (
+                      <span
+                        key={index}
+                        className="bg-[#3C8F63] text-white px-3 py-2 rounded-full flex items-center text-sm"
+                      >
+                        {skill}
                         <button
                           type="button"
-                          onClick={handleAddSkill}
-                          disabled={isSubmitting || !newSkill.trim()}
-                          className="btn bg-[#3C8F63] border-[#3C8F63] hover:bg-[#337954] hover:border-green-700 px-4 py-6 text-white disabled:bg-gray-400 disabled:border-gray-400"
+                          onClick={() => handleRemoveSkill(index)}
+                          disabled={isSubmitting}
+                          className="ml-2 text-white hover:text-gray-200 text-lg"
                         >
-                          <FaPlus className="inline" /> Add Skill
+                          ×
                         </button>
-                      </div>
-                    )}
+                      </span>
+                    ))}
                   </div>
-
-                  {/* Additional Details */}
-                  <div className="border-t pt-6">
-                    <h3 className="text-xl font-medium mb-4">
-                      Additional Details
-                    </h3>
-
-                    <div className="flex items-center mb-4">
+                  {currentProject.skills.length < 6 && (
+                    <div className="flex gap-4">
                       <input
-                        type="checkbox"
-                        id="currentlyWorking"
-                        name="currentlyWorking"
-                        checked={currentProject.currentlyWorking}
-                        onChange={handleChange}
                         disabled={isSubmitting}
-                        className="w-4 h-4 text-[#3C8F63] bg-gray-100 border-gray-300 rounded focus:ring-[#3C8F63]"
+                        type="text"
+                        className="input input-bordered flex-1 text-lg h-[45px] px-4 border-2 border-gray-300 rounded-lg focus:border-[#3C8F63] focus:outline-none transition-colors"
+                        value={newSkill}
+                        onChange={(e) => setNewSkill(e.target.value)}
+                        placeholder="Add a skill (max 6)"
+                        onKeyPress={(e) =>
+                          e.key === "Enter" &&
+                          (e.preventDefault(), handleAddSkill())
+                        }
                       />
-                      <label
-                        htmlFor="currentlyWorking"
-                        className="ml-2 text-lg font-medium"
+                      <button
+                        type="button"
+                        onClick={handleAddSkill}
+                        disabled={isSubmitting || !newSkill.trim()}
+                        className={`btn h-[45px] text-lg px-6 ${
+                          newSkill.trim()
+                            ? "bg-[#3C8F63] text-white hover:bg-[#337954]"
+                            : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                        }`}
                       >
-                        I am currently working on this project
-                      </label>
+                        <FaPlus className="mr-2" /> Add Skill
+                      </button>
                     </div>
+                  )}
+                </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-lg font-medium mb-2">
-                          Start Date
-                        </label>
-                        <div className="grid grid-cols-2 gap-2">
-                          <select
-                            disabled={isSubmitting}
-                            className="p-3 border-2 border-gray-300 rounded-md focus:outline-none focus:border-[#3C8F63] transition-colors"
-                            name="startMonth"
-                            value={currentProject.startMonth}
-                            onChange={handleChange}
-                          >
-                            <option value="">Month</option>
-                            {months.map((month) => (
-                              <option key={month} value={month}>
-                                {month}
-                              </option>
-                            ))}
-                          </select>
-                          <select
-                            disabled={isSubmitting}
-                            className="p-3 border-2 border-gray-300 rounded-md focus:outline-none focus:border-[#3C8F63] transition-colors"
-                            name="startYear"
-                            value={currentProject.startYear}
-                            onChange={handleChange}
-                          >
-                            <option value="">Year</option>
-                            {years.map((year) => (
-                              <option key={year} value={year}>
-                                {year}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
-                      </div>
+                {/* Additional Details */}
+                <div className="border-t-2 border-gray-300 pt-6">
+                  <h3 className="text-2xl font-semibold text-gray-800 mb-6">
+                    Additional Details
+                  </h3>
 
-                      <div>
-                        <label className="block text-lg font-medium mb-2">
-                          End Date
-                        </label>
-                        <div className="grid grid-cols-2 gap-2">
-                          <select
-                            disabled={
-                              isSubmitting || currentProject.currentlyWorking
-                            }
-                            className="p-3 border-2 border-gray-300 rounded-md focus:outline-none focus:border-[#3C8F63] transition-colors disabled:bg-gray-100 disabled:cursor-not-allowed"
-                            name="endMonth"
-                            value={currentProject.endMonth}
-                            onChange={handleChange}
-                          >
-                            <option value="">Month</option>
-                            {months.map((month) => (
-                              <option key={month} value={month}>
-                                {month}
-                              </option>
-                            ))}
-                          </select>
-                          <select
-                            disabled={
-                              isSubmitting || currentProject.currentlyWorking
-                            }
-                            className="p-3 border-2 border-gray-300 rounded-md focus:outline-none focus:border-[#3C8F63] transition-colors disabled:bg-gray-100 disabled:cursor-not-allowed"
-                            name="endYear"
-                            value={currentProject.endYear}
-                            onChange={handleChange}
-                          >
-                            <option value="">Year</option>
-                            {years.map((year) => (
-                              <option key={year} value={year}>
-                                {year}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
-                        {currentProject.currentlyWorking && (
-                          <p className="text-sm text-gray-500 mt-1">
-                            End date is disabled for current projects
-                          </p>
-                        )}
-                      </div>
-                    </div>
+                  <div className="flex items-center mb-6">
+                    <input
+                      type="checkbox"
+                      id="currentlyWorking"
+                      name="currentlyWorking"
+                      checked={currentProject.currentlyWorking}
+                      onChange={handleChange}
+                      disabled={isSubmitting}
+                      className="h-5 w-5 cursor-pointer rounded border-2 border-gray-300 text-[#3C8F63] focus:ring-[#3C8F63]"
+                    />
+                    <label
+                      htmlFor="currentlyWorking"
+                      className="ml-3 text-lg font-medium text-gray-700"
+                    >
+                      I am currently working on this project
+                    </label>
                   </div>
 
-                  {/* Add/Update Project Button */}
-                  <div className="flex justify-center">
-                    <button
-                      type="button"
-                      onClick={handleAddProject}
-                      disabled={isSubmitting || !canAddProject}
-                      className="btn bg-[#3C8F63] border-[#3C8F63] hover:bg-[#337954] hover:border-green-700 px-8 py-3 text-lg text-white disabled:bg-gray-400 disabled:border-gray-400"
-                    >
-                      {editingIndex !== null ? "Update Project" : "Add Project"}
-                    </button>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="form-control">
+                      <label className="label mb-2">
+                        <span className="label-text text-gray-700 font-medium text-xl">
+                          Start Date
+                        </span>
+                      </label>
+                      <div className="grid grid-cols-2 gap-4">
+                        <select
+                          required
+                          disabled={isSubmitting}
+                          className="select select-bordered text-lg h-[45px] border-2 border-gray-300 rounded-lg focus:border-[#3C8F63] focus:outline-none transition-colors"
+                          name="startMonth"
+                          value={currentProject.startMonth}
+                          onChange={handleChange}
+                        >
+                          <option value="">Month</option>
+                          {months.map((month) => (
+                            <option key={month} value={month}>
+                              {month}
+                            </option>
+                          ))}
+                        </select>
+                        <select
+                          required
+                          disabled={isSubmitting}
+                          className="select select-bordered text-lg h-[45px] border-2 border-gray-300 rounded-lg focus:border-[#3C8F63] focus:outline-none transition-colors"
+                          name="startYear"
+                          value={currentProject.startYear}
+                          onChange={handleChange}
+                        >
+                          <option value="">Year</option>
+                          {years.map((year) => (
+                            <option key={year} value={year}>
+                              {year}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+
+                    <div className="form-control">
+                      <label className="label mb-2">
+                        <span className="label-text text-gray-700 font-medium text-xl">
+                          End Date
+                        </span>
+                      </label>
+                      <div className="grid grid-cols-2 gap-4">
+                        <select
+                          disabled={
+                            isSubmitting || currentProject.currentlyWorking
+                          }
+                          className="select select-bordered text-lg h-[45px] border-2 border-gray-300 rounded-lg focus:border-[#3C8F63] focus:outline-none transition-colors disabled:bg-gray-100"
+                          name="endMonth"
+                          value={currentProject.endMonth}
+                          onChange={handleChange}
+                        >
+                          <option value="">Month</option>
+                          {months.map((month) => (
+                            <option key={month} value={month}>
+                              {month}
+                            </option>
+                          ))}
+                        </select>
+                        <select
+                          disabled={
+                            isSubmitting || currentProject.currentlyWorking
+                          }
+                          className="select select-bordered text-lg h-[45px] border-2 border-gray-300 rounded-lg focus:border-[#3C8F63] focus:outline-none transition-colors disabled:bg-gray-100"
+                          name="endYear"
+                          value={currentProject.endYear}
+                          onChange={handleChange}
+                        >
+                          <option value="">Year</option>
+                          {years.map((year) => (
+                            <option key={year} value={year}>
+                              {year}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      {currentProject.currentlyWorking && (
+                        <p className="text-sm text-gray-500 mt-2">
+                          End date is disabled for current projects
+                        </p>
+                      )}
+                    </div>
                   </div>
                 </div>
 
-                {/* Final Save Changes Button */}
-                <div className="modal-action mt-8 flex flex-col-reverse sm:flex-row justify-end gap-3">
+                {/* Add/Update Project Button */}
+                <div className="flex justify-center">
                   <button
                     type="button"
-                    disabled={isSubmitting}
-                    className="btn btn-outline w-full sm:w-auto px-4 sm:px-8 py-3 text-lg border-2 border-gray-300 hover:bg-gray-100 hover:border-gray-400 disabled:bg-gray-100 disabled:cursor-not-allowed"
-                    onClick={() =>
-                      document.getElementById("project_update_modal").close()
-                    }
+                    onClick={handleAddProject}
+                    disabled={isSubmitting || !canAddProject}
+                    className={`btn px-8 py-3 text-lg ${
+                      canAddProject
+                        ? "bg-[#3C8F63] text-white hover:bg-[#337954]"
+                        : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                    }`}
                   >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    onClick={handleSubmit}
-                    className="btn bg-[#3C8F63] border-[#3C8F63] hover:bg-[#337954] hover:border-green-700 w-full sm:w-auto px-4 sm:px-8 py-3 text-lg text-white disabled:bg-gray-400 disabled:border-gray-400"
-                  >
-                    {isSubmitting ? "Saving..." : "Save Changes"}
+                    {editingIndex !== null ? "Update Project" : "Add Project"}
                   </button>
                 </div>
               </form>
             </div>
+
+            {/* Action Buttons - Same as other modals */}
+            <div className="flex justify-end gap-4 bg-[#eef1f4] px-5 py-6 mt-6">
+              <button
+                type="button"
+                disabled={isSubmitting || !hasChanges}
+                onClick={handleCancel}
+                className={`btn btn-outline px-8 py-3 text-lg border-2 ${
+                  isSubmitting || !hasChanges
+                    ? "border-gray-200 text-gray-400 cursor-not-allowed"
+                    : "border-gray-300 hover:bg-gray-100 hover:border-gray-400"
+                }`}
+              >
+                Cancel
+              </button>
+
+              <button
+                onClick={handleSubmit}
+                disabled={isSubmitting || !hasChanges}
+                className={`btn px-8 py-3 text-lg ${
+                  isSubmitting || !hasChanges
+                    ? "bg-gray-300 border-gray-300 text-gray-500 cursor-not-allowed"
+                    : "bg-[#3C8F63] border-[#3C8F63] hover:bg-[#337954] text-white"
+                }`}
+              >
+                {isSubmitting ? "Working...." : "Save Changes"}
+              </button>
+            </div>
           </div>
-        </dialog>
-      </section>
-    </>
+        </div>
+      </dialog>
+    </section>
   );
 };
 

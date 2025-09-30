@@ -1,9 +1,14 @@
-import { useEffect, useState, useRef } from "react";
+// File path__
 import useUserData from "../../../Hooks/userData";
+import SeekerModalHeader from "../../../MainLayout/Shared/SeekerModalHeader/SeekerModalHeader";
+
+// From react__
+import { useEffect, useState, useRef } from "react";
+
+// Package__
+import Swal from "sweetalert2";
 import { FiTrash2 } from "react-icons/fi";
 import { FaLightbulb } from "react-icons/fa";
-import Swal from "sweetalert2";
-import SeekerModalHeader from "../../../MainLayout/Shared/SeekerModalHeader/SeekerModalHeader";
 
 const SkillModal = () => {
   const { profile, updateProfile } = useUserData();
