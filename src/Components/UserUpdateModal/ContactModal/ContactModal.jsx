@@ -1,18 +1,19 @@
 // File path__
 import "./ContactModal.css";
 import useUserData from "../../../Hooks/userData";
+import SeekerModalHeader from "../../../MainLayout/Shared/SeekerModalHeader/SeekerModalHeader";
 
 // From react__
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 // Package__
 import Swal from "sweetalert2";
 import { FaLightbulb } from "react-icons/fa";
-import SeekerModalHeader from "../../../MainLayout/Shared/SeekerModalHeader/SeekerModalHeader";
 
 const ContactModal = () => {
   const { profile, updateProfile } = useUserData();
   const [updateLoading, setUpdateLoading] = useState(false);
+  const [hasChanges, setHasChanges] = useState(false);
   // Form state__
   const [countriesList, setCountriesList] = useState([]);
   const [selectedCountry, setSelectedCountry] = useState("");
@@ -21,6 +22,12 @@ const ContactModal = () => {
   const [phoneCode, setPhoneCode] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [isPhoneValid, setIsPhoneValid] = useState(false);
+  const [linkedin, setLinkedin] = useState("");
+  const [github, setGithub] = useState("");
+  const [portfolio, setPortfolio] = useState("");
+
+  // Store original data__
+  const originalDataRef = useRef({});
 
   // Load countries.json__
   useEffect(() => {
@@ -30,7 +37,7 @@ const ContactModal = () => {
       .catch((err) => console.error("Error loading countries.json:", err));
   }, []);
 
-  // Pre-fill form with profile data__
+  // Pre-fill form with profile data and store original values__
   useEffect(() => {
     if (profile && countriesList.length) {
       const country = profile.location?.country || "";
@@ -50,18 +57,68 @@ const ContactModal = () => {
       }
 
       // Phone number__
+      let currentPhoneCode = phoneCode;
+      let currentPhoneNumber = "";
+
       if (profile.number) {
         if (profile.number.startsWith("+")) {
           const codeLength = profile.number.length - 10;
-          setPhoneCode(profile.number.slice(0, codeLength));
-          setPhoneNumber(profile.number.slice(codeLength));
+          currentPhoneCode = profile.number.slice(0, codeLength);
+          currentPhoneNumber = profile.number.slice(codeLength);
         } else {
-          setPhoneCode("");
-          setPhoneNumber(profile.number);
+          currentPhoneCode = "";
+          currentPhoneNumber = profile.number;
         }
       }
+
+      setPhoneCode(currentPhoneCode);
+      setPhoneNumber(currentPhoneNumber || "");
+      setLinkedin(profile.social?.linkedin || "");
+      setGithub(profile.social?.github || "");
+      setPortfolio(profile.social?.portfolio || "");
+
+      // Store original data for comparison__
+      originalDataRef.current = {
+        country,
+        city,
+        phoneCode: currentPhoneCode,
+        phoneNumber: currentPhoneNumber || "",
+        linkedin: profile.social?.linkedin || "",
+        github: profile.social?.github || "",
+        portfolio: profile.social?.portfolio || "",
+      };
+
+      setHasChanges(false);
     }
-  }, [profile, countriesList]);
+  }, [profile, countriesList, phoneCode]);
+
+  // Check if form has changes__
+  const checkForChanges = () => {
+    const original = originalDataRef.current;
+
+    return (
+      selectedCountry !== original.country ||
+      selectedCity !== original.city ||
+      phoneCode !== original.phoneCode ||
+      phoneNumber !== original.phoneNumber ||
+      linkedin !== original.linkedin ||
+      github !== original.github ||
+      portfolio !== original.portfolio
+    );
+  };
+
+  // Update hasChanges when any field changes__
+  useEffect(() => {
+    setHasChanges(checkForChanges());
+  }, [
+    selectedCountry,
+    selectedCity,
+    phoneCode,
+    phoneNumber,
+    linkedin,
+    github,
+    portfolio,
+  ]);
 
   // Handle country change__
   const handleCountryChange = (e) => {
@@ -80,11 +137,17 @@ const ContactModal = () => {
     }
   };
 
-  // Phone number validation__
-  const handlePhoneChange = (e) => {
-    const value = e.target.value.replace(/\D/g, "");
-    setPhoneNumber(value);
-    setIsPhoneValid(/^[0-9]{7,15}$/.test(value));
+  // Handle social links change
+  const handleLinkedinChange = (e) => {
+    setLinkedin(e.target.value);
+  };
+
+  const handleGithubChange = (e) => {
+    setGithub(e.target.value);
+  };
+
+  const handlePortfolioChange = (e) => {
+    setPortfolio(e.target.value);
   };
 
   const getFullPhoneNumber = () => {
@@ -117,32 +180,46 @@ const ContactModal = () => {
         country: selectedCountry || profile.location?.country,
       },
       social: {
-        linkedin: e.target.linkedin?.value || profile.social?.linkedin,
-        github: e.target.github?.value || profile.social?.github,
-        portfolio: e.target.portfolio?.value || profile.social?.portfolio,
+        linkedin: linkedin || profile.social?.linkedin,
+        github: github || profile.social?.github,
+        portfolio: portfolio || profile.social?.portfolio,
       },
     };
 
     setUpdateLoading(true);
     updateProfile(data, {
       onSuccess: () => {
+        handleCloseModal();
+
         Swal.fire({
           title: "Success!",
           text: "Contacts updated successfully.",
           icon: "success",
         });
 
-        handleCancel();
+        // Update original data after successful save
+        originalDataRef.current = {
+          country: selectedCountry,
+          city: selectedCity,
+          phoneCode: phoneCode,
+          phoneNumber: phoneNumber,
+          linkedin: linkedin,
+          github: github,
+          portfolio: portfolio,
+        };
+
+        setHasChanges(false);
         setUpdateLoading(false);
       },
       onError: () => {
+        handleCloseModal();
+
         Swal.fire({
           title: "Oops!",
           text: "Something went wrong while updating.",
           icon: "error",
         });
 
-        handleCancel();
         setUpdateLoading(false);
       },
     });
@@ -152,29 +229,18 @@ const ContactModal = () => {
   const handleCancel = () => {
     handleCloseModal();
 
-    if (profile) {
-      setSelectedCountry(profile.location?.country || "");
-      setSelectedCity(profile.location?.city || "");
-      if (profile.number) {
-        if (profile.number.startsWith("+")) {
-          const codeLength = profile.number.length - 10;
-          setPhoneCode(profile.number.slice(0, codeLength));
-          setPhoneNumber(profile.number.slice(codeLength));
-        } else {
-          setPhoneCode("");
-          setPhoneNumber(profile.number);
-        }
-      } else {
-        setPhoneCode("");
-        setPhoneNumber("");
-      }
-    } else {
-      setSelectedCountry("");
-      setSelectedCity("");
-      setPhoneCode("");
-      setPhoneNumber("");
-    }
+    const original = originalDataRef.current;
+
+    setSelectedCountry(original.country);
+    setSelectedCity(original.city);
+    setPhoneCode(original.phoneCode);
+    setPhoneNumber(original.phoneNumber);
+    setLinkedin(original.linkedin);
+    setGithub(original.github);
+    setPortfolio(original.portfolio);
+
     setIsPhoneValid(false);
+    setHasChanges(false);
   };
 
   const handleCloseModal = () => {
@@ -268,7 +334,7 @@ const ContactModal = () => {
                     <input
                       type="tel"
                       value={phoneNumber}
-                      onChange={handlePhoneChange}
+                      onChange={(e) => setPhoneNumber(e.target.value)}
                       placeholder="01787548843"
                       className="input input-bordered w-full text-lg h-[45px] px-4 border-2 border-gray-300 rounded-lg focus:border-[#3C8F63] focus:outline-none transition-colors"
                     />
@@ -322,8 +388,8 @@ const ContactModal = () => {
 
                     <input
                       type="url"
-                      name="linkedin"
-                      defaultValue={profile?.social?.linkedin || ""}
+                      value={linkedin}
+                      onChange={handleLinkedinChange}
                       placeholder="https://linkedin.com/in/yourname"
                       className="input input-bordered w-full text-lg h-[45px] px-4 border-2 border-gray-300 rounded-lg focus:border-[#3C8F63] focus:outline-none transition-colors"
                     />
@@ -338,8 +404,8 @@ const ContactModal = () => {
 
                     <input
                       type="url"
-                      name="github"
-                      defaultValue={profile?.social?.github || ""}
+                      value={github}
+                      onChange={handleGithubChange}
                       placeholder="https://github.com/yourname"
                       className="input input-bordered w-full text-lg h-[45px] px-4 border-2 border-gray-300 rounded-lg focus:border-[#3C8F63] focus:outline-none transition-colors"
                     />
@@ -354,8 +420,8 @@ const ContactModal = () => {
 
                     <input
                       type="url"
-                      name="portfolio"
-                      defaultValue={profile?.social?.portfolio || ""}
+                      value={portfolio}
+                      onChange={handlePortfolioChange}
                       placeholder="https://yourwebsite.com"
                       className="input input-bordered w-full text-lg h-[45px] px-4 border-2 border-gray-300 rounded-lg focus:border-[#3C8F63] focus:outline-none transition-colors"
                     />
@@ -379,27 +445,35 @@ const ContactModal = () => {
                   </div>
                 </div>
               </div>
+
+              {/* Action Buttons - Now with enable/disable feature */}
+              <div className="flex justify-end gap-4 bg-[#eef1f4] px-5 py-6 mt-6">
+                <button
+                  type="button"
+                  disabled={updateLoading || !hasChanges}
+                  onClick={handleCancel}
+                  className={`btn btn-outline px-8 py-3 text-lg border-2 ${
+                    updateLoading || !hasChanges
+                      ? "border-gray-200 text-gray-400 cursor-not-allowed"
+                      : "border-gray-300 hover:bg-gray-100 hover:border-gray-400"
+                  }`}
+                >
+                  Cancel
+                </button>
+
+                <button
+                  type="submit"
+                  disabled={updateLoading || !hasChanges}
+                  className={`btn px-8 py-3 text-lg ${
+                    updateLoading || !hasChanges
+                      ? "bg-gray-300 border-gray-300 text-gray-500 cursor-not-allowed"
+                      : "bg-[#3C8F63] border-[#3C8F63] hover:bg-[#337954] text-white"
+                  }`}
+                >
+                  {updateLoading ? "Working...." : "Save Changes"}
+                </button>
+              </div>
             </form>
-
-            {/* Action Buttons */}
-            <div className="flex justify-end gap-4 bg-[#eef1f4] px-5 py-6 mt-6">
-              <button
-                type="button"
-                disabled={updateLoading}
-                onClick={handleCancel}
-                className="btn btn-outline px-8 py-3 text-lg border-2 border-gray-300 hover:bg-gray-100 hover:border-gray-400"
-              >
-                Cancel
-              </button>
-
-              <button
-                type="submit"
-                disabled={updateLoading}
-                className="btn bg-[#3C8F63] border-[#3C8F63] hover:bg-[#337954] px-8 py-3 text-lg text-white"
-              >
-                {updateLoading ? "Working...." : "Save Changes"}
-              </button>
-            </div>
           </div>
         </div>
       </dialog>
