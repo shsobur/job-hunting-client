@@ -1,18 +1,34 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import useUserData from "../../../Hooks/userData";
 import { FiTrash2 } from "react-icons/fi";
 import { FaLightbulb } from "react-icons/fa";
 import Swal from "sweetalert2";
+import SeekerModalHeader from "../../../MainLayout/Shared/SeekerModalHeader/SeekerModalHeader";
 
 const SkillModal = () => {
   const { profile, updateProfile } = useUserData();
-  const [skills, setSkills] = useState(profile?.skills || []);
+  const [skills, setSkills] = useState([]);
   const [newSkill, setNewSkill] = useState("");
   const [skillUpdateLoading, setSkillUpdateLoading] = useState(false);
+  const [hasChanges, setHasChanges] = useState(false);
+
+  // Store original data__
+  const originalSkillsRef = useRef([]);
 
   useEffect(() => {
-    setSkills(profile?.skills);
+    if (profile?.skills) {
+      setSkills(profile.skills || []);
+      originalSkillsRef.current = profile.skills || [];
+      setHasChanges(false);
+    }
   }, [profile]);
+
+  // Check for changes__
+  useEffect(() => {
+    const hasSkillsChanged =
+      JSON.stringify(skills) !== JSON.stringify(originalSkillsRef.current);
+    setHasChanges(hasSkillsChanged);
+  }, [skills]);
 
   const handleAddSkill = () => {
     if (newSkill.trim() && !skills.includes(newSkill.trim())) {
@@ -25,16 +41,23 @@ const SkillModal = () => {
     setSkills(skills.filter((skill) => skill !== skillToRemove));
   };
 
-  const handleSaveChanges = () => {
-    // Here you would typically save the skills to your backend
-    console.log("Skills to save:", skills);
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleAddSkill();
+    }
+  };
 
+  const handleSaveChanges = () => {
     setSkillUpdateLoading(true);
     updateProfile(
       { skills },
       {
         onSuccess: () => {
-          document.getElementById("skill_update_modal").close();
+          handleCloseModal()
+
+          // Update original data after successful save__
+          originalSkillsRef.current = skills;
 
           Swal.fire({
             title: "Success!",
@@ -43,9 +66,10 @@ const SkillModal = () => {
           });
 
           setSkillUpdateLoading(false);
+          setHasChanges(false);
         },
         onError: () => {
-          document.getElementById("skill_update_modal").close();
+          handleCloseModal()
 
           Swal.fire({
             title: "Oops!",
@@ -57,120 +81,148 @@ const SkillModal = () => {
         },
       }
     );
+  };
 
-    document.getElementById("skill_update_modal").close();
+  const handleCancel = () => {
+    handleCloseModal();
+
+    // Reset to original data__
+    setSkills(originalSkillsRef.current);
+    setNewSkill("");
+    setHasChanges(false);
+  };
+
+  const handleCloseModal = () => {
+    const modal = document.getElementById("skill_update_modal");
+    modal.close();
   };
 
   return (
-    <>
-      <section>
-        <dialog id="skill_update_modal" className="modal">
-          <div className="modal-box max-w-[1024px] max-h-[95vh] p-6">
-            <div className="contact_update_main_content_container">
-              <h1 className="modal_title font-semibold font-[Montserrat] text-3xl text-slate-900 mb-8">
-                Edit Your Skills
-              </h1>
-            </div>
+    <section>
+      <dialog id="skill_update_modal" className="modal">
+        <div className="modal-box max-w-[1024px] max-h-[95vh] lg:p-0 p-0">
+          <div className="skill_update_main_content_container">
+            {/* Header - Same as other modals */}
+            <SeekerModalHeader
+              title={"Edit Your Skills"}
+              handleCloseModal={handleCloseModal}
+            ></SeekerModalHeader>
 
-            <div className="">
-              <div className="max-w-2xl">
-                <label
-                  className="block text-lg font-medium text-slate-700 mb-2"
-                  htmlFor="skill-input"
-                >
-                  Skill name
+            {/* Main Content - Same structure as other modals */}
+            <div className="space-y-8 px-5">
+              {/* Add Skill Section */}
+              <div className="form-control">
+                <label className="label mb-2">
+                  <span className="label-text text-gray-700 font-medium text-xl">
+                    Skill name
+                  </span>
                 </label>
-                <div className="flex items-center gap-4">
+                <div className="flex gap-4">
                   <input
                     disabled={skillUpdateLoading}
-                    className="flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-md text-slate-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#3C8F63] border border-slate-300 bg-white h-12 placeholder:text-slate-400 px-3 text-sm font-normal leading-normal"
-                    id="skill-input"
+                    className="input input-bordered flex-1 w-full text-lg h-[45px] px-4 border-2 border-gray-300 rounded-lg focus:border-[#3C8F63] focus:outline-none transition-colors"
                     placeholder="e.g., Project Management"
                     value={newSkill}
                     onChange={(e) => setNewSkill(e.target.value)}
+                    onKeyPress={handleKeyPress}
                   />
                   <button
                     type="button"
-                    disabled={skillUpdateLoading}
+                    disabled={skillUpdateLoading || !newSkill.trim()}
                     onClick={handleAddSkill}
-                    className="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-md h-12 px-4 bg-[#3C8F63] text-white text-sm font-semibold leading-normal tracking-wide hover:bg-[#327a55] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#3C8F63]"
+                    className={`btn h-[45px] text-lg px-6 min-w-[120px] ${
+                      newSkill.trim()
+                        ? "bg-[#3C8F63] text-white hover:bg-[#337954]"
+                        : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                    }`}
                   >
-                    <span className="truncate">Add Skill</span>
+                    Add Skill
                   </button>
                 </div>
               </div>
 
-              <div className="mt-8">
-                <h2 className="text-2xl font-semibold leading-tight text-slate-900">
+              {/* Your Skills Section */}
+              <div>
+                <h3 className="text-2xl font-semibold text-gray-800 mb-6">
                   Your Skills
-                </h2>
-                <div className="mt-4 flex flex-col gap-3">
+                </h3>
+                <div className="space-y-4">
                   {skills?.length > 0 ? (
                     skills.map((skill, index) => (
                       <div
                         key={index}
-                        className="flex h-14 w-full items-center justify-between rounded-md bg-slate-100 px-3 text-slate-700"
+                        className="flex justify-between items-center p-4 border-2 border-gray-300 rounded-lg transition-colors hover:border-gray-400"
                       >
-                        <p className="text-xl font-semibold">{skill}</p>
+                        <p className="text-lg font-medium text-gray-800">
+                          {skill}
+                        </p>
                         <button
                           disabled={skillUpdateLoading}
                           type="button"
                           onClick={() => handleRemoveSkill(skill)}
-                          className="material-symbols-outlined !text-base !leading-none"
+                          className="text-gray-400 hover:text-red-500 transition-colors"
                         >
-                          <FiTrash2 size={20} color="red"></FiTrash2>
+                          <FiTrash2 size={20} />
                         </button>
                       </div>
                     ))
                   ) : (
-                    <p className="text-base text-slate-500 py-2">
+                    <p className="text-gray-500 text-center py-8 text-lg">
                       No skills added yet
                     </p>
                   )}
                 </div>
               </div>
 
-              <div className="mt-10 p-4 rounded-lg bg-[#F0FDF4] border-2 border-[#3C8F63]">
-                <div className="flex">
-                  <div className="flex-shrink-0">
-                    <span className="material-symbols-outlined text-[#3C8F63]">
-                      <FaLightbulb className="text-[#3C8F63] text-xl" />
-                    </span>
-                  </div>
-                  <div className="ml-3">
-                    <div className="text-base text-[#386a51]">
-                      <p>
-                        Adding at least <b>5 relevant skills</b> can
-                        significantly increase your visibility to recruiters and
-                        potential collaborators.
-                      </p>
+              {/* Tip Box - Same as other modals */}
+              <div className="bg-[#F0FDF4] border border-[#3C8F63] p-5 rounded-lg">
+                <div className="flex items-start">
+                  <FaLightbulb className="text-green-600 text-xl mr-4" />
+                  <div>
+                    <div className="text-[#276043] text-base">
+                      <b>
+                        <i>Tip:</i>
+                      </b>{" "}
+                      Adding at least <b>5 relevant skills</b> can significantly
+                      increase your visibility to recruiters and potential
+                      collaborators.
                     </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="modal-action mt-8 flex justify-end space-x-3">
-              <form method="dialog">
-                <button
-                  disabled={skillUpdateLoading}
-                  className="btn btn-outline px-8 py-3 text-lg border-2 border-gray-300 hover:bg-gray-100 hover:border-gray-400"
-                >
-                  Cancel
-                </button>
-              </form>
+            {/* Action Buttons - Same as other modals */}
+            <div className="flex justify-end gap-4 bg-[#eef1f4] px-5 py-6 mt-6">
               <button
-                disabled={skillUpdateLoading}
+                type="button"
+                disabled={skillUpdateLoading || !hasChanges}
+                onClick={handleCancel}
+                className={`btn btn-outline px-8 py-3 text-lg border-2 ${
+                  skillUpdateLoading || !hasChanges
+                    ? "border-gray-200 text-gray-400 cursor-not-allowed"
+                    : "border-gray-300 hover:bg-gray-100 hover:border-gray-400"
+                }`}
+              >
+                Cancel
+              </button>
+
+              <button
+                disabled={skillUpdateLoading || !hasChanges}
                 onClick={handleSaveChanges}
-                className="btn bg-[#3C8F63] border-[#3C8F63] hover:bg-[#337954] hover:border-green-700 px-8 py-3 text-lg text-white"
+                className={`btn px-8 py-3 text-lg ${
+                  skillUpdateLoading || !hasChanges
+                    ? "bg-gray-300 border-gray-300 text-gray-500 cursor-not-allowed"
+                    : "bg-[#3C8F63] border-[#3C8F63] hover:bg-[#337954] text-white"
+                }`}
               >
                 {skillUpdateLoading ? "Working...." : "Save Changes"}
               </button>
             </div>
           </div>
-        </dialog>
-      </section>
-    </>
+        </div>
+      </dialog>
+    </section>
   );
 };
 
