@@ -197,7 +197,7 @@ const ProfileUpdateModal = () => {
               <div className="flex flex-col items-center justify-center w-full my-10">
                 {/* Upload Box */}
                 {!imageSrc && (
-                  <label className="w-full max-w-md h-52 flex flex-col items-center justify-center border-2 border-dashed border-gray-400 rounded-2xl cursor-pointer bg-gray-50 hover:bg-gray-100 transition">
+                  <label className="w-full h-52 flex flex-col items-center justify-center border-2 border-dashed border-gray-400 rounded-2xl cursor-pointer bg-gray-50 hover:bg-gray-100 transition">
                     <input
                       type="file"
                       accept="image/*"
@@ -206,9 +206,7 @@ const ProfileUpdateModal = () => {
                       disabled={isLoading}
                     />
                     <MdUpload className="text-5xl text-gray-500 mb-3" />
-                    <p className="text-gray-600 font-medium">
-                      Click to upload or drag & drop
-                    </p>
+                    <p className="text-gray-600 font-medium">Click to upload</p>
                     <p className="text-sm text-gray-400">PNG, JPG (max 5MB)</p>
                   </label>
                 )}
@@ -304,8 +302,8 @@ const ProfileUpdateModal = () => {
 
                 {/* Current Profile Photo */}
                 {!imageSrc && profileData.profilePhoto && (
-                  <div className="mt-4 text-center">
-                    <p className="text-gray-700 font-medium mb-2">
+                  <div className="mt-5 text-center">
+                    <p className="text-gray-700 font-semibold text-lg mb-2">
                       Current Profile Photo:
                     </p>
                     <img
@@ -313,6 +311,15 @@ const ProfileUpdateModal = () => {
                       alt="Current Profile"
                       className="w-72 h-72 object-cover rounded-full border-2 border-gray-300 mx-auto"
                     />
+                    {profileData?.profilePhoto !== profile?.profilePhoto && (
+                      <p className="mt-5 p-3 rounded-md bg-green-100 text-green-800">
+                        <b>"Save changes"</b> to update your banner, or changes
+                        will be{" "}
+                        <span className="text-orange-700 font-semibold">
+                          lost.
+                        </span>
+                      </p>
+                    )}
                   </div>
                 )}
               </div>

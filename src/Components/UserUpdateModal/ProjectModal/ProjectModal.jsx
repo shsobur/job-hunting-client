@@ -1,8 +1,13 @@
-import { useState, useEffect, useRef } from "react";
-import { FaEdit, FaTrash, FaPlus } from "react-icons/fa";
+// File path__
 import useUserData from "../../../Hooks/userData";
-import Swal from "sweetalert2";
 import SeekerModalHeader from "../../../MainLayout/Shared/SeekerModalHeader/SeekerModalHeader";
+
+// From react__
+import { useState, useEffect, useRef } from "react";
+
+// Package__
+import Swal from "sweetalert2";
+import { FaEdit, FaTrash, FaPlus } from "react-icons/fa";
 
 const ProjectUpdateModal = () => {
   const { profile, updateProfile } = useUserData();
