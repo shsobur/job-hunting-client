@@ -24,10 +24,10 @@ const ProjectUpdateModal = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
 
-  // Store original data
+  // Store original data__
   const originalProjectsRef = useRef([]);
 
-  // Months for dropdown
+  // Months for dropdown__
   const months = [
     "January",
     "February",
@@ -43,14 +43,14 @@ const ProjectUpdateModal = () => {
     "December",
   ];
 
-  // Years for dropdown (2001 to current year)
+  // Years for dropdown (2001 to current year)__
   const currentYear = new Date().getFullYear();
   const years = Array.from(
     { length: currentYear - 2000 },
     (_, i) => currentYear - i
   );
 
-  // Initialize with profile data
+  // Initialize with profile data__
   useEffect(() => {
     if (profile?.projects) {
       setProjects(profile.projects);
@@ -59,7 +59,7 @@ const ProjectUpdateModal = () => {
     }
   }, [profile]);
 
-  // Check for changes
+  // Check for changes__
   useEffect(() => {
     const hasProjectsChanged =
       JSON.stringify(projects) !== JSON.stringify(originalProjectsRef.current);
@@ -75,7 +75,7 @@ const ProjectUpdateModal = () => {
     }));
   };
 
-  // Add new skill
+  // Add new skill__
   const handleAddSkill = () => {
     if (newSkill.trim() && currentProject.skills.length < 6) {
       setCurrentProject((prev) => ({
@@ -86,7 +86,7 @@ const ProjectUpdateModal = () => {
     }
   };
 
-  // Remove skill
+  // Remove skill__
   const handleRemoveSkill = (index) => {
     setCurrentProject((prev) => ({
       ...prev,
@@ -94,7 +94,7 @@ const ProjectUpdateModal = () => {
     }));
   };
 
-  // Add or update project
+  // Add or update project__
   const handleAddProject = () => {
     if (!currentProject.title.trim() || !currentProject.description.trim()) {
       alert("Please fill in title and description");
@@ -110,12 +110,12 @@ const ProjectUpdateModal = () => {
     };
 
     if (editingIndex !== null) {
-      // Update existing project
+      // Update existing project__
       const updatedProjects = [...projects];
       updatedProjects[editingIndex] = projectData;
       setProjects(updatedProjects);
     } else {
-      // Add new project at the top
+      // Add new project at the top__
       setProjects((prev) => [projectData, ...prev]);
     }
 
@@ -123,14 +123,14 @@ const ProjectUpdateModal = () => {
     resetForm();
   };
 
-  // Edit project
+  // Edit project__
   const handleEditProject = (index) => {
     const projectToEdit = projects[index];
     setCurrentProject(projectToEdit);
     setEditingIndex(index);
   };
 
-  // Delete project
+  // Delete project__
   const handleDeleteProject = (index) => {
     if (window.confirm("Are you sure you want to delete this project?")) {
       const updatedProjects = projects.filter((_, i) => i !== index);
@@ -141,7 +141,7 @@ const ProjectUpdateModal = () => {
     }
   };
 
-  // Reset form
+  // Reset form__
   const resetForm = () => {
     setCurrentProject({
       title: "",
@@ -158,24 +158,12 @@ const ProjectUpdateModal = () => {
     setEditingIndex(null);
   };
 
-  const handleCancel = () => {
-    // Reset to original data
-    setProjects(originalProjectsRef.current);
-    resetForm();
-    setHasChanges(false);
-  };
-
-  const handleCloseModal = () => {
-    const modal = document.getElementById("project_update_modal");
-    modal.close();
-  };
-
-  // Handle final submission
+  // Handle final submission__
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Prepare data for submission
+    // Prepare data for submission__
     const submissionData = {
       projects: projects.map((project) => ({
         id: project.id,
@@ -198,9 +186,9 @@ const ProjectUpdateModal = () => {
 
     updateProfile(submissionData, {
       onSuccess: () => {
-        document.getElementById("project_update_modal").close();
+        handleCloseModal();
 
-        // Update original data after successful save
+        // Update original data after successful save__
         originalProjectsRef.current = projects;
 
         Swal.fire({
@@ -214,7 +202,7 @@ const ProjectUpdateModal = () => {
       },
 
       onError: () => {
-        document.getElementById("project_update_modal").close();
+        handleCloseModal();
 
         Swal.fire({
           title: "Oops!",
@@ -227,9 +215,23 @@ const ProjectUpdateModal = () => {
     });
   };
 
-  // Check if form has required fields for adding project
+  // Check if form has required fields for adding project__
   const canAddProject =
     currentProject.title.trim() && currentProject.description.trim();
+
+  const handleCancel = () => {
+    handleCloseModal();
+
+    // Reset to original data__
+    setProjects(originalProjectsRef.current);
+    resetForm();
+    setHasChanges(false);
+  };
+
+  const handleCloseModal = () => {
+    const modal = document.getElementById("project_update_modal");
+    modal.close();
+  };
 
   return (
     <section>
@@ -313,6 +315,11 @@ const ProjectUpdateModal = () => {
                         {project.currentlyWorking && (
                           <span className="inline-block bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">
                             Currently working
+                          </span>
+                        )}
+                        {!project?.currentlyWorking && (
+                          <span className="text-gray-600 bg-gray-200 px-4 py-1 rounded-xl">
+                            {project?.startDate} - {project?.endDate}
                           </span>
                         )}
                       </div>
