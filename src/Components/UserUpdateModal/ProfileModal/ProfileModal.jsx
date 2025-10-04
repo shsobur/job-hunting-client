@@ -173,7 +173,7 @@ const ProfileUpdateModal = () => {
   return (
     <section>
       <dialog id="profile_update_modal" className="modal">
-        <div className="modal-box max-w-[1024px]">
+        <div className="modal-box max-w-[1024px] max-h-[95vh]">
           {/* Close Button */}
           <form method="dialog" className="mb-5">
             <button

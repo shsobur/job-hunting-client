@@ -4,7 +4,7 @@ import { getCroppedImg } from "../../../utils";
 import SeekerModalHeader from "../../../MainLayout/Shared/SeekerModalHeader/SeekerModalHeader";
 
 // From react__
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 
 // Package__
 import Swal from "sweetalert2";
@@ -17,6 +17,7 @@ import useUserData from "../../../Hooks/userData";
 const BannerModal = () => {
   const api = useAxios();
   const { profile, updateProfile } = useUserData();
+
   // States__
   const [bannerUrl, setBannerUrl] = useState(profile?.profileBanner || "");
   const [imageSrc, setImageSrc] = useState(null);
@@ -28,6 +29,25 @@ const BannerModal = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [hasChanges, setHasChanges] = useState(false);
+
+  // Store original data
+  const originalBannerUrlRef = useRef("");
+
+  // Initialize data
+  useEffect(() => {
+    if (profile) {
+      const currentBanner = profile?.profileBanner || "";
+      setBannerUrl(currentBanner);
+      originalBannerUrlRef.current = currentBanner;
+      setHasChanges(false);
+    }
+  }, [profile]);
+
+  // Check for changes
+  useEffect(() => {
+    setHasChanges(bannerUrl !== originalBannerUrlRef.current);
+  }, [bannerUrl]);
 
   // Crop complete__
   const onCropComplete = useCallback((_, croppedAreaPixels) => {
@@ -109,6 +129,9 @@ const BannerModal = () => {
     setIsLoading(true);
     updateProfile(submissionData, {
       onSuccess: () => {
+        // Update original data after successful save
+        originalBannerUrlRef.current = bannerUrl;
+
         handleCloseModal();
 
         Swal.fire({
@@ -118,6 +141,7 @@ const BannerModal = () => {
         });
 
         setIsLoading(false);
+        setHasChanges(false);
       },
       onError: () => {
         handleCloseModal();
@@ -131,6 +155,19 @@ const BannerModal = () => {
         setIsLoading(false);
       },
     });
+  };
+
+  const handleCancel = () => {
+    // Reset to original data
+    setBannerUrl(originalBannerUrlRef.current);
+    setImageSrc(null);
+    setCroppedImage(null);
+    setCroppedFile(null);
+    setCrop({ x: 0, y: 0 });
+    setZoom(1);
+    setMessage("");
+    setErrorMessage("");
+    setHasChanges(false);
   };
 
   const handleCloseModal = () => {
@@ -161,14 +198,15 @@ const BannerModal = () => {
                     alt="Current Banner"
                     className="w-full max-h-[250px] object-cover rounded-lg border"
                   />
-                  {
-                    bannerUrl !== profile?.profileBanner &&
-                  <p className="mt-5 p-3 rounded-md bg-green-100 text-green-800">
-                    <b>"Save changes"</b> to update your banner, or changes will
-                    be{" "}
-                    <span className="text-orange-700 font-semibold">lost.</span>
-                  </p>
-                  }
+                  {bannerUrl !== profile?.profileBanner && (
+                    <p className="mt-5 p-3 rounded-md bg-green-100 text-green-800">
+                      <b>"Save changes"</b> to update your banner, or changes
+                      will be{" "}
+                      <span className="text-orange-700 font-semibold">
+                        lost.
+                      </span>
+                    </p>
+                  )}
                 </div>
               )}
 
@@ -277,16 +315,24 @@ const BannerModal = () => {
             <div className="flex justify-end gap-4 bg-[#eef1f4] px-5 py-6 mt-6">
               <button
                 type="button"
-                disabled={isLoading}
-                onClick={handleCloseModal}
-                className="btn btn-outline px-8 py-3 text-lg border-2 border-gray-300 hover:bg-gray-100 hover:border-gray-400"
+                disabled={isLoading || !hasChanges}
+                onClick={handleCancel}
+                className={`btn btn-outline px-8 py-3 text-lg border-2 ${
+                  isLoading || !hasChanges
+                    ? "border-gray-200 text-gray-400 cursor-not-allowed"
+                    : "border-gray-300 hover:bg-gray-100 hover:border-gray-400"
+                }`}
               >
                 Cancel
               </button>
               <button
                 onClick={handleSaveChanges}
-                disabled={isLoading}
-                className="btn bg-[#3C8F63] border-[#3C8F63] hover:bg-[#337954] px-8 py-3 text-lg text-white"
+                disabled={isLoading || !hasChanges}
+                className={`btn px-8 py-3 text-lg ${
+                  isLoading || !hasChanges
+                    ? "bg-gray-300 border-gray-300 text-gray-500 cursor-not-allowed"
+                    : "bg-[#3C8F63] border-[#3C8F63] hover:bg-[#337954] text-white"
+                }`}
               >
                 {isLoading ? "Working..." : "Save Changes"}
               </button>
@@ -297,5 +343,4 @@ const BannerModal = () => {
     </section>
   );
 };
-
 export default BannerModal;
