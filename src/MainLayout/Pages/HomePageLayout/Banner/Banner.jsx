@@ -1,7 +1,12 @@
+// File path__
 import "./Banner.css";
 import bannerImage from "../../../../assets/bannerImage.webp";
-import Swal from "sweetalert2";
+
+// From react__
 import { useEffect, useState } from "react";
+
+// Package__
+import Swal from "sweetalert2";
 
 const Banner = () => {
   const [screenSize, setScreenSize] = useState({
@@ -71,7 +76,7 @@ const Banner = () => {
                     <span className="btn_icon">→</span>
                   </button>
                   <button className="cta_btn secondary">
-                    <span className="btn_text">How It Works</span>
+                    <span className="btn_text">News Feed</span>
                   </button>
                 </div>
 

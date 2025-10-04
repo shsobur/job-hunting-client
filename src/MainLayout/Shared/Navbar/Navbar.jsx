@@ -105,7 +105,7 @@ const Navbar = () => {
               <div className="h-10 w-56 bg-gray-200 round-lg"></div>
             ) : (
               <div className="navbar_logo">
-                <img src={logo}></img>
+                <img src={logo} alt="JobHunting Logo" />
                 <h1>JobHunting</h1>
               </div>
             )}
@@ -161,11 +161,26 @@ const Navbar = () => {
                       className="dropdown_button"
                       onClick={() => setOpen(!open)}
                     >
-                      <HiMiniUserCircle />
+                      <div className="user_info">
+                        {profile?.profilePhoto ? (
+                          <img
+                            src={profile.profilePhoto}
+                            alt="Profile"
+                            className="user_avatar"
+                          />
+                        ) : (
+                          <div className="user_avatar_default">
+                            <HiMiniUserCircle />
+                          </div>
+                        )}
+                        <span className="user_name">
+                          {profile?.userName || "User"}
+                        </span>
+                      </div>
                       {open ? (
-                        <IoChevronUp size={25} />
+                        <IoChevronUp size={18} />
                       ) : (
-                        <IoChevronDown size={25} />
+                        <IoChevronDown size={18} />
                       )}
                     </button>
 
@@ -173,6 +188,31 @@ const Navbar = () => {
                       id="dropdown_item_parent_container"
                       className={`dropdown_menu ${open ? "open" : ""}`}
                     >
+                      {/* User Info Section */}
+                      <div className="user_profile_section">
+                        {profile?.profilePhoto ? (
+                          <img
+                            src={profile.profilePhoto}
+                            alt="Profile"
+                            className="profile_image"
+                          />
+                        ) : (
+                          <div className="profile_image_default">
+                            <HiMiniUserCircle />
+                          </div>
+                        )}
+                        <div className="profile_info">
+                          <div className="profile_name">
+                            {profile?.userName || "Welcome User"}
+                          </div>
+                          <div className="profile_email">
+                            {user?.email || "User"}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="dropdown_divider"></div>
+
                       <NavLink
                         to={
                           profile?.userRole === "Recruiter"
@@ -185,21 +225,22 @@ const Navbar = () => {
                           className="dropdown_item"
                         >
                           <ImProfile />
-                          Profile
+                          My Profile
                         </span>
                       </NavLink>
 
-                      <span onClick={handleSignOut} className="dropdown_item">
+                      <span
+                        onClick={handleSignOut}
+                        className="dropdown_item logout_item"
+                      >
                         <MdOutlineLogout />
-                        Log Out
+                        Sign Out
                       </span>
                     </div>
                   </div>
                 ) : (
                   <Link to="/sign-in">
-                    <button className="desktop_signIn_btn btn text-white bg-[#3C8F63]">
-                      Sign In
-                    </button>
+                    <button className="desktop_signIn_btn">Sign In</button>
                   </Link>
                 )}
               </>
@@ -244,31 +285,52 @@ const Navbar = () => {
                     <AiOutlineShopping /> Community
                   </NavLink>
                 </li>
+
+                <li onClick={() => setMenuOpen(!menuOpen)}>
+                  <NavLink
+                    to="/about"
+                    className={({ isActive }) =>
+                      isActive
+                        ? "mobile_menu_active_style"
+                        : "mobile_menu_non_active_style"
+                    }
+                  >
+                    <ImProfile /> About Us
+                  </NavLink>
+                </li>
               </ul>
 
               <div className="others_routes_container">
                 <ul>
-                  <li className="mt-3" onClick={() => setMenuOpen(!menuOpen)}>
-                    <NavLink
-                      to="/user-profile"
-                      className={({ isActive }) =>
-                        isActive
-                          ? "mobile_menu_active_style"
-                          : "mobile_menu_non_active_style"
-                      }
-                    >
-                      <ImProfile /> Profile
-                    </NavLink>
-                  </li>
-
                   {user ? (
-                    <li
-                      onClick={handleSignOut}
-                      className="flex items-center gap-2 ml-3"
-                    >
-                      <PiSignOut />
-                      Sign Out
-                    </li>
+                    <>
+                      <li
+                        className="mt-3"
+                        onClick={() => setMenuOpen(!menuOpen)}
+                      >
+                        <NavLink
+                          to={
+                            profile?.userRole === "Recruiter"
+                              ? "/recruiter-profile"
+                              : "/user-profile"
+                          }
+                          className={({ isActive }) =>
+                            isActive
+                              ? "mobile_menu_active_style"
+                              : "mobile_menu_non_active_style"
+                          }
+                        >
+                          <ImProfile /> Profile
+                        </NavLink>
+                      </li>
+                      <li
+                        onClick={handleSignOut}
+                        className="mobile_menu_non_active_style"
+                      >
+                        <PiSignOut />
+                        Sign Out
+                      </li>
+                    </>
                   ) : (
                     <li onClick={() => setMenuOpen(!menuOpen)}>
                       <NavLink

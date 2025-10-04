@@ -59,20 +59,26 @@ const UserProfile = () => {
             {/* Sidebar - hidden on mobile, visible on large screens */}
             <aside className="profile-sidebar">
               {/* Quick Stats section without edit button */}
-              <div className="profile-card">
-                <h3 className="profile-card-title">Quick Stats</h3>
+              <div className="profile-card desktop-view-only">
+                <h3 className="profile-card-title section-title">
+                  Quick Stats
+                </h3>
                 <div className="stats-container">
                   <div className="stat-item">
-                    <p className="stat-number">{profile?.projects.length}</p>
+                    <p className="stat-number">
+                      {profile?.projects?.length || 0}
+                    </p>
                     <p className="stat-label">Projects</p>
                   </div>
                   <div className="stat-item">
-                    <p className="stat-number">{profile?.skills.length}</p>
+                    <p className="stat-number">
+                      {profile?.skills?.length || 0}
+                    </p>
                     <p className="stat-label">Skills</p>
                   </div>
                   <div className="stat-item">
                     <p className="stat-number">
-                      {profile?.certifications.length}
+                      {profile?.certifications?.length || 0}
                     </p>
                     <p className="stat-label">Certifications</p>
                   </div>
@@ -80,18 +86,27 @@ const UserProfile = () => {
               </div>
 
               {/* Open to Work status badge */}
-              <div className="profile-card">
-                {profile?.openToWork === true ? (
-                  <span className="status-badge">Open to Work</span>
-                ) : (
-                  "No"
-                )}
-                <div className="status-container"></div>
+              <div className="profile-card tab-view-only">
+                <div className="status-section">
+                  <h3 className="profile-card-title section-title">
+                    Availability
+                  </h3>
+                  {profile?.openToWork === true ? (
+                    <span className="status-badge open-status">
+                      <span className="status-dot"></span>
+                      Open to Work
+                    </span>
+                  ) : (
+                    <span className="status-badge closed-status">
+                      <span className="status-dot closed"></span>
+                      Not Available
+                    </span>
+                  )}
+                </div>
               </div>
 
               {/* Contact information with edit button */}
-
-              <div className="profile-card">
+              <div className="profile-card desktop-view-only">
                 <button
                   onClick={() =>
                     document.getElementById("contact_update_modal").showModal()
@@ -100,107 +115,101 @@ const UserProfile = () => {
                 >
                   <FiEdit className="edit-icon" />
                 </button>
-                <h3 className="profile-card-title">Contact Info</h3>
+                <h3 className="profile-card-title section-title">
+                  Contact Info
+                </h3>
                 <div className="contact-info">
                   <div className="contact-item">
                     <FiMapPin className="contact-icon" />
                     <span className="contact-text">
-                      {profile?.location.city === "" &&
-                      profile?.location.country === ""
-                        ? "N/A"
-                        : `${profile?.location.city}, ${profile?.location.country}`}
+                      {!profile?.location?.city && !profile?.location?.country
+                        ? "Location not set"
+                        : `${profile?.location?.city || ""}${
+                            profile?.location?.city &&
+                            profile?.location?.country
+                              ? ", "
+                              : ""
+                          }${profile?.location?.country || ""}`}
                     </span>
                   </div>
                   <div className="contact-item">
                     <FiMail className="contact-icon" />
-                    <a className="contact-link" href={profile?.userEmail}>
-                      {profile?.userEmail}
+                    <a
+                      className="contact-link"
+                      href={`mailto:${profile?.userEmail}`}
+                    >
+                      {profile?.userEmail || "Email not set"}
                     </a>
                   </div>
                   <div className="contact-item">
                     <FiPhone className="contact-icon" />
-                    <a className="contact-link" href="tel:+442079460958">
-                      {profile?.number === "" ? "N/A" : profile?.number}
-                    </a>
+                    <span className="contact-text">
+                      {profile?.number || "Phone not set"}
+                    </span>
                   </div>
                 </div>
 
                 {/* Social media links */}
                 <div className="social-links">
-                  {profile?.social?.linkedin === "" ? (
-                    <FaLinkedin
-                      title="No link"
-                      style={{ opacity: 0.08 }}
-                      size={25}
-                    ></FaLinkedin>
-                  ) : (
-                    <a
-                      className="social-link"
-                      href={profile?.social?.linkedin}
-                      target="main"
-                    >
-                      <FaLinkedin size={30} className="social-icon" />
-                    </a>
-                  )}
+                  <a
+                    className={`social-link ${
+                      !profile?.social?.linkedin ? "disabled" : ""
+                    }`}
+                    href={profile?.social?.linkedin || "#"}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <FaLinkedin size={24} className="social-icon" />
+                  </a>
 
-                  {profile?.social?.github === "" ? (
-                    <FaGithub
-                      title="No link"
-                      style={{ opacity: 0.08 }}
-                      size={25}
-                    ></FaGithub>
-                  ) : (
-                    <a
-                      className="social-link"
-                      href={profile?.social?.github}
-                      target="main"
-                    >
-                      <FaGithub size={30} className="social-icon" />
-                    </a>
-                  )}
+                  <a
+                    className={`social-link ${
+                      !profile?.social?.github ? "disabled" : ""
+                    }`}
+                    href={profile?.social?.github || "#"}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <FaGithub size={24} className="social-icon" />
+                  </a>
 
-                  {profile?.social?.portfolio == "" ? (
-                    <FiLink
-                      title="No link"
-                      style={{ opacity: 0.08 }}
-                      size={25}
-                    ></FiLink>
-                  ) : (
-                    <a
-                      className="social-link"
-                      href={profile?.social?.portfolio}
-                      target="main"
-                    >
-                      <FiLink size={30} className="social-icon" />
-                    </a>
-                  )}
+                  <a
+                    className={`social-link ${
+                      !profile?.social?.portfolio ? "disabled" : ""
+                    }`}
+                    href={profile?.social?.portfolio || "#"}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <FiLink size={24} className="social-icon" />
+                  </a>
                 </div>
               </div>
 
               {/* Languages section with edit button */}
-              <div className="profile-card">
-                <button className="card-edit-button">
-                  <FiEdit
-                    onClick={() =>
-                      document
-                        .getElementById("language_update_modal")
-                        .showModal()
-                    }
-                    className="edit-icon"
-                  />
+              <div className="profile-card desktop-view-only">
+                <button
+                  className="card-edit-button"
+                  onClick={() =>
+                    document.getElementById("language_update_modal").showModal()
+                  }
+                >
+                  <FiEdit className="edit-icon" />
                 </button>
-                <h3 className="profile-card-title">Languages</h3>
+                <h3 className="profile-card-title section-title">Languages</h3>
                 <div className="language-tags">
-                  {profile?.languages.length === 0
-                    ? "N/A"
-                    : profile?.languages.map((lang) => (
-                        <span key={lang.id} className="language-tag">
-                          <ul className="language-text-content">
-                            <li>{lang.name}</li>
-                            <li>{lang.proficiency}</li>
-                          </ul>
+                  {!profile?.languages || profile.languages.length === 0 ? (
+                    <span className="no-data-text">No languages added</span>
+                  ) : (
+                    profile.languages.map((lang) => (
+                      <div key={lang.id} className="language-item">
+                        <span className="language-name">{lang.name}</span>
+                        <span className="language-proficiency">
+                          {lang.proficiency}
                         </span>
-                      ))}
+                      </div>
+                    ))
+                  )}
                 </div>
               </div>
             </aside>
@@ -209,13 +218,13 @@ const UserProfile = () => {
             <main className="profile-main">
               {/* Profile header with banner and avatar */}
               <div className="profile-header-card">
-                <button className="header-edit-button">
-                  <FiEdit
-                    onClick={() =>
-                      document.getElementById("banner_update_modal").showModal()
-                    }
-                    className="edit-icon"
-                  />
+                <button
+                  className="header-edit-button"
+                  onClick={() =>
+                    document.getElementById("banner_update_modal").showModal()
+                  }
+                >
+                  <FiEdit className="edit-icon" />
                 </button>
                 <div
                   className="header-banner"
@@ -228,17 +237,17 @@ const UserProfile = () => {
                   }}
                 ></div>
                 <div className="header-content">
-                  <button className="header-edit-button-secondary">
-                    <FiEdit
+                  <div className="profile-info-container">
+                    <button
+                      className="mt-[60px] card-edit-button"
                       onClick={() =>
                         document
                           .getElementById("profile_update_modal")
                           .showModal()
                       }
-                      className="edit-icon"
-                    />
-                  </button>
-                  <div className="profile-info-container">
+                    >
+                      <FiEdit className="edit-icon" />
+                    </button>
                     <div className="profile-avatar-container">
                       <div
                         className="profile-avatar"
@@ -255,10 +264,24 @@ const UserProfile = () => {
                     <div className="profile-details">
                       <div className="profile-details-content">
                         <div className="mobile-status-container">
-                          <span className="status-badge">Open to Work</span>
+                          {profile?.openToWork === true ? (
+                            <span className="status-badge open-status">
+                              <span className="status-dot"></span>
+                              Open to Work
+                            </span>
+                          ) : (
+                            <span className="status-badge closed-status">
+                              <span className="status-dot closed"></span>
+                              Not Available
+                            </span>
+                          )}
                         </div>
-                        <h2 className="profile-name">{profile?.userName}</h2>
-                        <p className="profile-title">{profile?.bio}</p>
+                        <h2 className="profile-name">
+                          {profile?.userName || "Your Name"}
+                        </h2>
+                        <p className="profile-title">
+                          {profile?.bio || "Your professional bio"}
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -267,180 +290,207 @@ const UserProfile = () => {
 
               {/* Mobile contact info (visible only on small screens) */}
               <div className="profile-card mobile-contact-info">
-                <button className="card-edit-button">
-                  <FiEdit
-                    onClick={() =>
-                      document
-                        .getElementById("contact_update_modal")
-                        .showModal()
-                    }
-                    className="edit-icon"
-                  />
+                <button
+                  className="card-edit-button"
+                  onClick={() =>
+                    document.getElementById("contact_update_modal").showModal()
+                  }
+                >
+                  <FiEdit className="edit-icon" />
                 </button>
                 <h3 className="card-title-lg">Contact Info</h3>
                 <div className="contact-info">
                   <div className="contact-item">
                     <FiMapPin className="contact-icon" />
                     <span className="contact-text">
-                      {profile?.location.city === "" &&
-                      profile?.location.country === ""
-                        ? "N/A"
-                        : `${profile?.location.city}, ${profile?.location.country}`}
+                      {!profile?.location?.city && !profile?.location?.country
+                        ? "Location not set"
+                        : `${profile?.location?.city || ""}${
+                            profile?.location?.city &&
+                            profile?.location?.country
+                              ? ", "
+                              : ""
+                          }${profile?.location?.country || ""}`}
                     </span>
                   </div>
                   <div className="contact-item">
                     <FiMail className="contact-icon" />
-                    <a className="contact-link" href={profile?.userEmail}>
-                      {profile?.userEmail}
+                    <a
+                      className="contact-link"
+                      href={`mailto:${profile?.userEmail}`}
+                    >
+                      {profile?.userEmail || "Email not set"}
                     </a>
                   </div>
                   <div className="contact-item">
                     <FiPhone className="contact-icon" />
-                    <a className="contact-link">
-                      {profile?.number === "" ? "N/A" : profile?.number}
-                    </a>
+                    <span className="contact-text">
+                      {profile?.number || "Phone not set"}
+                    </span>
                   </div>
                 </div>
 
                 <div className="social-links">
-                  {profile?.social?.linkedin === "" ? (
-                    <FaLinkedin
-                      title="No link"
-                      style={{ opacity: 0.08 }}
-                      size={25}
-                    ></FaLinkedin>
-                  ) : (
-                    <a className="social-link" href="#">
-                      <FaLinkedin size={30} className="social-icon" />
-                    </a>
-                  )}
+                  <a
+                    className={`social-link ${
+                      !profile?.social?.linkedin ? "disabled" : ""
+                    }`}
+                    href={profile?.social?.linkedin || "#"}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <FaLinkedin size={24} className="social-icon" />
+                  </a>
 
-                  {profile?.social?.github === "" ? (
-                    <FaGithub
-                      title="No link"
-                      style={{ opacity: 0.08 }}
-                      size={25}
-                    ></FaGithub>
-                  ) : (
-                    <a className="social-link" href="#">
-                      <FaGithub size={30} className="social-icon" />
-                    </a>
-                  )}
+                  <a
+                    className={`social-link ${
+                      !profile?.social?.github ? "disabled" : ""
+                    }`}
+                    href={profile?.social?.github || "#"}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <FaGithub size={24} className="social-icon" />
+                  </a>
 
-                  {profile?.social?.portfolio == "" ? (
-                    <FiLink
-                      title="No link"
-                      style={{ opacity: 0.08 }}
-                      size={25}
-                    ></FiLink>
-                  ) : (
-                    <a className="social-link" href="#">
-                      <FiLink size={30} className="social-icon" />
-                    </a>
-                  )}
+                  <a
+                    className={`social-link ${
+                      !profile?.social?.portfolio ? "disabled" : ""
+                    }`}
+                    href={profile?.social?.portfolio || "#"}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <FiLink size={24} className="social-icon" />
+                  </a>
                 </div>
               </div>
 
               {/* About section */}
               <div className="profile-card">
-                <button className="card-edit-button">
-                  <FiEdit
-                    onClick={() =>
-                      document.getElementById("about_update_modal").showModal()
-                    }
-                    className="edit-icon"
-                  />
+                <button
+                  className="card-edit-button"
+                  onClick={() =>
+                    document.getElementById("about_update_modal").showModal()
+                  }
+                >
+                  <FiEdit className="edit-icon" />
                 </button>
-                <h3 className="card-title-lg">About</h3>
-                <p className="about-text whitespace-pre-line">
-                  {profile?.headline === ""
-                    ? "Tell us about yourself!"
-                    : profile?.headline}
+                <h3 className="card-title-lg  section-title">About</h3>
+                <p className="about-text">
+                  {profile?.headline ||
+                    "Tell us about yourself! Share your professional journey, passions, and what drives you in your career."}
                 </p>
               </div>
 
               {/* Experience section with timeline */}
               <div className="profile-card">
-                <button className="card-edit-button">
-                  <FiEdit
-                    onClick={() =>
-                      document
-                        .getElementById("experience_update_modal")
-                        .showModal()
-                    }
-                    className="edit-icon"
-                  />
+                <button
+                  className="card-edit-button"
+                  onClick={() =>
+                    document
+                      .getElementById("experience_update_modal")
+                      .showModal()
+                  }
+                >
+                  <FiEdit className="edit-icon" />
                 </button>
 
-                <h3 className="card-title-lg border-b-2 pb-2">Experience</h3>
+                <h3 className="card-title-lg section-title">Experience</h3>
 
-                {profile?.experience.length === 0 ? (
-                  <span className="mt-2 text-lg text-[#4B5563]">
-                    No experience. I am fresher!
-                  </span>
+                {!profile?.experience || profile.experience.length === 0 ? (
+                  <div className="empty-state">
+                    <HiOutlineBuildingOffice2
+                      size={48}
+                      className="empty-icon"
+                    />
+                    <p className="empty-text">No experience added yet</p>
+                    <p className="empty-subtext">
+                      Share your professional journey to showcase your expertise
+                    </p>
+                  </div>
                 ) : (
-                  profile?.experience.map((exp) => (
-                    <div key={exp.position} className="mt-10 timeline">
-                      <div className="timeline-item">
+                  <div className="timeline">
+                    {profile.experience.map((exp, index) => (
+                      <div key={index} className="timeline-item">
                         <div
                           className={
-                            exp?.isCurrent ? "timeline-dot" : "timeline-dot-two"
+                            exp?.isCurrent
+                              ? "timeline-dot current"
+                              : "timeline-dot past"
                           }
                         ></div>
-
-                        <p className="flex items-center gap-2 text-[1.5em] font-semibold">
-                          <PiBuildingApartmentBold size={27} /> {exp?.company}
-                        </p>
-                        <p className="timeline-role mb-3">{exp?.position}</p>
-                        <p className="timeline-period">
-                          • {exp?.startDate} - {exp?.endDate}
-                        </p>
-                        <p className="timeline-period">• {exp?.location}</p>
-
-                        <p className="timeline-description mb-2 pl-3">
-                          {exp?.description}
-                        </p>
-                        {exp?.isCurrent ? (
-                          <p className="inline-block mt-2 px-2 py-1 bg-[#eef5f1] text-[#3C8F63] text-sm rounded">
-                            {exp?.status}
-                          </p>
-                        ) : (
-                          <p className="inline-block mt-2 px-2 py-1 bg-orange-100 text-orange-500 text-sm rounded">
-                            {exp?.status}
-                          </p>
-                        )}
+                        <div className="timeline-content">
+                          <div className="timeline-header">
+                            <h4 className="timeline-company">
+                              <PiBuildingApartmentBold className="inline-icon" />
+                              {exp?.company}
+                            </h4>
+                            <span
+                              className={`timeline-status ${
+                                exp?.isCurrent ? "current" : "past"
+                              }`}
+                            >
+                              {exp?.status}
+                            </span>
+                          </div>
+                          <p className="timeline-role">{exp?.position}</p>
+                          <div className="timeline-meta">
+                            <span className="timeline-period">
+                              {exp?.startDate} - {exp?.endDate}
+                            </span>
+                            <span className="timeline-location">
+                              {exp?.location}
+                            </span>
+                          </div>
+                          {exp?.description && (
+                            <p className="timeline-description">
+                              {exp?.description}
+                            </p>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  ))
+                    ))}
+                  </div>
                 )}
               </div>
 
               {/* Education section */}
               <div className="profile-card">
-                <button className="card-edit-button">
-                  <FiEdit
-                    onClick={() =>
-                      document
-                        .getElementById("education_update_modal")
-                        .showModal()
-                    }
-                    className="edit-icon"
-                  />
+                <button
+                  className="card-edit-button"
+                  onClick={() =>
+                    document
+                      .getElementById("education_update_modal")
+                      .showModal()
+                  }
+                >
+                  <FiEdit className="edit-icon" />
                 </button>
-                <h3 className="card-title-lg border-b-2 pb-2">Education</h3>
+                <h3 className="card-title-lg section-title">Education</h3>
                 <div className="education-list">
-                  {profile?.education.length === 0
-                    ? "N/A"
-                    : profile?.education.map((edu) => (
-                        <div key={edu.level} className="education-item">
-                          <h2 className="flex items-center gap-2 mt-2 mb-5 text-2xl font-semibold">
-                            <IoSchoolOutline size={28} />
-                            {edu?.level}
-                          </h2>
-                          <h4 className="education-institution flex items-center gap-2">
-                            <HiOutlineBuildingOffice2 size={22} />
-                            {edu?.institute}
-                          </h4>
+                  {!profile?.education || profile.education.length === 0 ? (
+                    <div className="empty-state">
+                      <IoSchoolOutline size={48} className="empty-icon" />
+                      <p className="empty-text">No education added yet</p>
+                      <p className="empty-subtext">
+                        Add your educational background
+                      </p>
+                    </div>
+                  ) : (
+                    profile.education.map((edu, index) => (
+                      <div key={index} className="education-item">
+                        <div className="education-header">
+                          <IoSchoolOutline className="education-icon" />
+                          <div>
+                            <h4 className="education-level">{edu?.level}</h4>
+                            <p className="education-institution">
+                              <HiOutlineBuildingOffice2 className="inline-icon" />
+                              {edu?.institute}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="education-details">
                           <p className="education-department">
                             {edu?.department}
                           </p>
@@ -448,133 +498,149 @@ const UserProfile = () => {
                             {edu?.startYear} - {edu?.endYear}
                           </p>
                         </div>
-                      ))}
+                      </div>
+                    ))
+                  )}
                 </div>
               </div>
 
               {/* Skills section */}
               <div className="profile-card">
-                <button className="card-edit-button">
-                  <FiEdit
-                    onClick={() =>
-                      document.getElementById("skill_update_modal").showModal()
-                    }
-                    className="edit-icon"
-                  />
+                <button
+                  className="card-edit-button"
+                  onClick={() =>
+                    document.getElementById("skill_update_modal").showModal()
+                  }
+                >
+                  <FiEdit className="edit-icon" />
                 </button>
 
-                <h3 className="card-title-lg">Skills</h3>
+                <h3 className="card-title-lg section-title">Skills</h3>
 
                 <div className="skill-tags">
-                  {profile?.skills.length === 0
-                    ? "N/A"
-                    : profile?.skills.map((skill) => (
-                        <span key={skill} className="skill-tag">
-                          {skill}
-                        </span>
-                      ))}
+                  {!profile?.skills || profile.skills.length === 0 ? (
+                    <span className="no-data-text">No skills added yet</span>
+                  ) : (
+                    profile.skills.map((skill, index) => (
+                      <span key={index} className="skill-tag">
+                        {skill}
+                      </span>
+                    ))
+                  )}
                 </div>
               </div>
 
               {/* Mobile languages section (visible only on small screens) */}
               <div className="profile-card mobile-languages">
-                <button className="card-edit-button">
-                  <FiEdit
-                    onClick={() =>
-                      document
-                        .getElementById("language_update_modal")
-                        .showModal()
-                    }
-                    className="edit-icon"
-                  />
+                <button
+                  className="card-edit-button"
+                  onClick={() =>
+                    document.getElementById("language_update_modal").showModal()
+                  }
+                >
+                  <FiEdit className="edit-icon" />
                 </button>
-                <h3 className="card-title-lg">Languages</h3>
+                <h3 className="card-title-lg section-title">Languages</h3>
 
                 <div className="language-tags">
-                  {profile?.languages.length === 0
-                    ? "N/A"
-                    : profile?.languages.map((lang) => (
-                        <span key={lang.id} className="language-tag">
-                          {lang.name} {lang.proficiency}
+                  {!profile?.languages || profile.languages.length === 0 ? (
+                    <span className="no-data-text">No languages added</span>
+                  ) : (
+                    profile.languages.map((lang) => (
+                      <div key={lang.id} className="language-item">
+                        <span className="language-name">{lang.name}</span>
+                        <span className="language-proficiency">
+                          {lang.proficiency}
                         </span>
-                      ))}
+                      </div>
+                    ))
+                  )}
                 </div>
               </div>
 
               {/* Projects section */}
               <div className="profile-card">
-                <button className="card-edit-button">
-                  <FiEdit
-                    onClick={() =>
-                      document
-                        .getElementById("project_update_modal")
-                        .showModal()
-                    }
-                    className="edit-icon"
-                  />
+                <button
+                  className="card-edit-button"
+                  onClick={() =>
+                    document.getElementById("project_update_modal").showModal()
+                  }
+                >
+                  <FiEdit className="edit-icon" />
                 </button>
 
-                <h3 className="card-title-lg">Projects</h3>
+                <h3 className="card-title-lg section-title">Projects</h3>
 
                 <div className="project-grid">
-                  {profile?.projects.length === 0
-                    ? "N/A"
-                    : profile?.projects.map((project) => (
-                        <div key={project.id} className="project-card mb-3">
-                          <h4 className="project-title">{project?.title}</h4>
-
-                          <p className="project-description py-4 whitespace-pre-line">
-                            {project?.description}
-                          </p>
-
-                          <div className="project-footer">
-                            <div className="project-tags">
-                              {project?.skills.map((skill) => (
-                                <span className="project-tag-purple">
-                                  <SiGraphql className="inline-icon" /> {skill}
-                                </span>
-                              ))}
-                            </div>
-
-                            <a className="project-link" href="#">
-                              View Project →
-                            </a>
+                  {!profile?.projects || profile.projects.length === 0 ? (
+                    <div className="empty-state">
+                      <FaReact size={48} className="empty-icon" />
+                      <p className="empty-text">No projects added yet</p>
+                      <p className="empty-subtext">
+                        Showcase your work and achievements
+                      </p>
+                    </div>
+                  ) : (
+                    profile.projects.map((project, index) => (
+                      <div key={index} className="project-card">
+                        <h4 className="project-title">{project?.title}</h4>
+                        <p className="project-description">
+                          {project?.description}
+                        </p>
+                        <div className="project-footer">
+                          <div className="project-tags">
+                            {project?.skills?.map((skill, skillIndex) => (
+                              <span key={skillIndex} className="project-tag">
+                                <SiGraphql className="inline-icon" />
+                                {skill}
+                              </span>
+                            ))}
                           </div>
+                          <a className="project-link" href="#">
+                            View Project →
+                          </a>
                         </div>
-                      ))}
+                      </div>
+                    ))
+                  )}
                 </div>
               </div>
 
               {/* Certifications section */}
               <div className="profile-card">
-                <button className="card-edit-button">
-                  <FiEdit
-                    onClick={() =>
-                      document
-                        .getElementById("certificate_update_modal")
-                        .showModal()
-                    }
-                    className="edit-icon"
-                  />
+                <button
+                  className="card-edit-button"
+                  onClick={() =>
+                    document
+                      .getElementById("certificate_update_modal")
+                      .showModal()
+                  }
+                >
+                  <FiEdit className="edit-icon" />
                 </button>
-                <h3 className="card-title-lg">Certifications</h3>
-                <ul className="certification-list">
-                  {profile?.certifications.length === 0
-                    ? "N/A"
-                    : profile?.certifications.map((cert) => (
-                        <li key={cert.name} className="certification-item">
-                          <FiAward className="certification-icon" />
-                          <div>
-                            <p className="certification-name">
-                              Certified UX Designer
-                            </p>
-                            <p className="certification-issuer">
-                              Nielsen Norman Group
-                            </p>
-                          </div>
-                        </li>
-                      ))}
-                </ul>
+                <h3 className="card-title-lg section-title">Certifications</h3>
+                <div className="certification-list">
+                  {!profile?.certifications ||
+                  profile.certifications.length === 0 ? (
+                    <div className="empty-state">
+                      <FiAward size={48} className="empty-icon" />
+                      <p className="empty-text">No certifications added yet</p>
+                      <p className="empty-subtext">
+                        Add your professional certifications
+                      </p>
+                    </div>
+                  ) : (
+                    profile.certifications.map((cert, index) => (
+                      <div key={index} className="certification-item">
+                        <FiAward className="certification-icon" />
+                        <div className="certification-details">
+                          <p className="certification-name">{cert.name}</p>
+                          <p className="certification-issuer">{cert.issuer}</p>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
               </div>
             </main>
           </div>
