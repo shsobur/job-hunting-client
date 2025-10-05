@@ -15,6 +15,7 @@ import {
   createUserWithEmailAndPassword,
 } from "firebase/auth";
 import Swal from "sweetalert2";
+import { jhError, jhToastSuccess, jhWarning } from "../utils";
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -37,16 +38,14 @@ const AuthProvider = ({ children }) => {
       return result;
     } catch (error) {
       if (error.code === "auth/email-already-in-use") {
-        Swal.fire({
+        jhError({
           title: "Invalid email address",
           text: "Email already in exist. Use another email to sign up!",
-          icon: "error",
         });
       } else {
-        Swal.fire({
+        jhError({
           title: "Sign Up Failed",
           text: "There might be some issue, Please try again!",
-          icon: "error",
         });
       }
 
@@ -61,38 +60,19 @@ const AuthProvider = ({ children }) => {
     try {
       const result = await signInWithPopup(auth, googleProvider);
 
-      Swal.mixin({
-        toast: true,
-        position: "bottom",
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-        didOpen: (toast) => {
-          toast.onmouseenter = Swal.stopTimer;
-          toast.onmouseleave = Swal.resumeTimer;
-        },
-      }).fire({
-        icon: "success",
-        title: "Signed in successfully",
-      });
+      jhToastSuccess("Sign In successfully");
 
-      return result
-
-      // optional: handle result.user here (save to DB, etc.)
+      return result;
     } catch (error) {
-      console.log(error.code, error.message);
-
       if (error.code === "auth/popup-closed-by-user") {
-        Swal.fire({
+        jhWarning({
           title: "Google Sign-In Cancelled",
           text: "You closed the sign-in popup. If you don’t want to use Google, try creating an account with email instead.",
-          icon: "warning",
         });
       } else {
-        Swal.fire({
+        jhError({
           title: "Google Sign-In Failed",
           text: "There was an issue signing in. Please try again.",
-          icon: "error",
         });
       }
     }
