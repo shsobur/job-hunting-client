@@ -7,19 +7,14 @@ import { Outlet, useLocation } from "react-router-dom";
 import ProgressBar from "../Components/ProgressBar/ProgressBar";
 
 const Main = () => {
-  // eslint-disable-next-line no-unused-vars
   const path = useLocation();
 
   return (
     <>
       <ProgressBar></ProgressBar>
-      {/* {
-        path.pathname !== "/sign-up" && <Navbar></Navbar>
-      } */}
       <Navbar></Navbar>
-      
       <Outlet></Outlet>
-      <Footer></Footer>
+      {path?.pathname !== "/user-profile" && path?.pathname !== "/recruiter-profile" && <Footer></Footer>}
     </>
   );
 };

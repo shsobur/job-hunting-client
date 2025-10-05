@@ -8,8 +8,14 @@ import { jhError, jhInfo, jhToastSuccess } from "../../../../utils";
 import { useContext, useState } from "react";
 
 // Package(REACT ICONS, SWEET ALERT)__
-import Swal from "sweetalert2";
 import { FcGoogle } from "react-icons/fc";
+import {
+  FaEye,
+  FaEyeSlash,
+  FaLock,
+  FaEnvelope,
+  FaUserShield,
+} from "react-icons/fa";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
 import { sendPasswordResetEmail } from "firebase/auth";
@@ -34,7 +40,6 @@ const SignIn = () => {
 
     await handleLoginUser(email, password).then(() => {
       navigate("/");
-
       jhToastSuccess("Sign In successfully");
     });
   };
@@ -44,7 +49,6 @@ const SignIn = () => {
 
     try {
       await sendPasswordResetEmail(auth, recoverEmail);
-
       jhInfo({
         title: "Check Your Email",
         text: "We sent a reset link to your email inbox. If you don't find it on inbox then check you spam folder",
@@ -62,7 +66,6 @@ const SignIn = () => {
 
   const handleGoogleLogin = async () => {
     setGoogleBtnOff(true);
-
     await handleGoogleSignIn()
       .then((res) => {
         if (res) {
@@ -77,137 +80,188 @@ const SignIn = () => {
 
   return (
     <section id="main_signIn_container">
-      <form
-        className="signIn_inner_container"
-        onSubmit={handleSubmit(onSubmit)}
-      >
-        <div className="signIn_content">
-          <h1>Sign In with</h1>
+      <div className="signIn_background">
+        <form
+          className="signIn_form_container"
+          onSubmit={handleSubmit(onSubmit)}
+        >
+          {/* Header Section */}
+          <div className="form_header">
+            <div className="form_logo">
+              <h1 className="form_title">Welcome Back</h1>
+            </div>
+            <p className="form_subtitle">Sign in to your JobHunting account</p>
+          </div>
 
+          {/* Google Sign In */}
           <button
             type="button"
             disabled={googleBtnOff}
             onClick={handleGoogleLogin}
             className="google_signIn_btn"
           >
-            <FcGoogle />
-            Sign In With Google
+            <FcGoogle className="google_icon" />
+            <span className="google_text">
+              {googleBtnOff ? "Signing in..." : "Continue with Google"}
+            </span>
           </button>
 
-          <ul className="signIn_input_container">
-            <li>
-              <input
-                id="input-1"
-                type="email"
-                placeholder="Enter your email"
-                {...register("email", { required: true })}
-              />
+          {/* Divider */}
+          <div className="form_divider">
+            <span className="divider_text">or continue with email</span>
+          </div>
+
+          {/* Form Inputs */}
+          <div className="form_inputs_container">
+            {/* Email Input */}
+            <div className="input_group">
+              <div className="input_container">
+                <FaEnvelope className="input_icon" />
+                <input
+                  id="email-input"
+                  type="email"
+                  placeholder="Enter your email address"
+                  className="form_input"
+                  {...register("email", {
+                    required: "Email is required",
+                    pattern: {
+                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                      message: "Invalid email address",
+                    },
+                  })}
+                />
+              </div>
               {errors.email && (
-                <p className="text-red-500 text-sm mt-3">Email is required</p>
+                <p className="error_message">{errors.email.message}</p>
               )}
-            </li>
+            </div>
 
-            <li>
-              <input
-                id="input-2"
-                type={showPassword ? "text" : "password"}
-                placeholder="Enter your password"
-                {...register("password", { required: true })}
-              />
+            {/* Password Input */}
+            <div className="input_group">
+              <div className="input_container">
+                <FaLock className="input_icon" />
+                <input
+                  id="password-input"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Enter your password"
+                  className="form_input"
+                  {...register("password", {
+                    required: "Password is required",
+                    minLength: {
+                      value: 6,
+                      message: "Password must be at least 6 characters",
+                    },
+                  })}
+                />
+                <button
+                  type="button"
+                  className="password_toggle"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                </button>
+              </div>
               {errors.password && (
-                <p className="text-red-500 text-sm">Password is required</p>
+                <p className="error_message">{errors.password.message}</p>
               )}
-              <span
-                className="show_password_content cursor-pointer"
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                {showPassword ? "Hide " : "Show"}
-              </span>
-            </li>
+            </div>
 
-            <li className="signIn_options">
+            {/* Options Row */}
+            <div className="form_options">
               <label className="remember_me">
-                <input type="checkbox" {...register("remember")} />
+                <input
+                  type="checkbox"
+                  {...register("remember")}
+                  className="checkbox_input"
+                />
+                <span className="checkbox_custom"></span>
                 Remember me
               </label>
-              <a
+              <button
+                type="button"
                 onClick={() =>
-                  document.getElementById("my_modal_1").showModal()
+                  document.getElementById("forgot_password_modal").showModal()
                 }
-                href="#"
                 className="forgot_password"
               >
                 Forgot password?
-              </a>
-            </li>
+              </button>
+            </div>
 
-            {/* Forgot password modal__ST */}
-
-            <dialog id="my_modal_1" className="modal">
-              <div className="modal-box min-w-[310px] max-w-[500px]">
-                <h3 className="font-bold text-2xl mb-4">
-                  Don’t worry, we’ll help you recover your password!
-                </h3>
-
-                <div className="space-y-4">
-                  <p className="text-gray-600">
-                    Enter the email you used to create your account
-                  </p>
-                  <input
-                    type="email"
-                    name="email"
-                    placeholder="Enter your email"
-                    value={recoverEmail}
-                    onChange={(e) => setRecoverEmail(e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3C8F63]"
-                  />
-                  <button
-                    type="button"
-                    disabled={passwordLoading}
-                    onClick={handleForgotPassword}
-                    className="w-full bg-[#3C8F63] text-white py-2 rounded-lg hover:bg-[rgb(53,127,88)] transition"
-                  >
-                    {passwordLoading ? "Sending...." : "Send recover email"}
-                  </button>
-                </div>
-
-                <div className="modal-action">
-                  <form method="dialog">
-                    <button
-                      id="forget_pass_modal_close"
-                      className="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300"
-                    >
-                      Close
-                    </button>
-                  </form>
-                </div>
-              </div>
-            </dialog>
-
-            {/* Forgot password modal__END */}
-
+            {/* Submit Button */}
             <button
               className="signIn_button"
               type="submit"
               disabled={firebaseLoading}
             >
-              {firebaseLoading ? "Working...." : "Sign In"}
+              {firebaseLoading ? (
+                <div className="loading_spinner"></div>
+              ) : (
+                "Sign In"
+              )}
             </button>
 
-            <li className="mt-5">
-              <p>
-                You don't have account?{" "}
-                <Link to="/sign-up">
-                  <span className="text-blue-600 cursor-pointer">
-                    <u>Sign Up</u>
-                  </span>
-                </Link>{" "}
-                for free now
+            {/* Sign Up Link */}
+            <div className="signup_link_container">
+              <p className="signup_text">
+                Don't have an account?{" "}
+                <Link to="/sign-up" className="signup_link">
+                  Sign up for free
+                </Link>
               </p>
-            </li>
-          </ul>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      {/* Forgot Password Modal */}
+      <dialog id="forgot_password_modal" className="jh_modal">
+        <div className="modal_content">
+          <div className="modal_header">
+            <FaUserShield className="modal_icon" />
+            <h3 className="modal_title">Recover Your Password</h3>
+          </div>
+
+          <div className="modal_body">
+            <p className="modal_description">
+              Enter the email address associated with your account and we'll
+              send you a link to reset your password.
+            </p>
+
+            <div className="modal_input_group">
+              <div className="modal_input_container">
+                <FaEnvelope className="modal_input_icon" />
+                <input
+                  type="email"
+                  placeholder="Enter your email address"
+                  value={recoverEmail}
+                  onChange={(e) => setRecoverEmail(e.target.value)}
+                  className="modal_input"
+                />
+              </div>
+            </div>
+
+            <button
+              type="button"
+              disabled={passwordLoading}
+              onClick={handleForgotPassword}
+              className="modal_submit_btn"
+            >
+              {passwordLoading ? (
+                <div className="loading_spinner small"></div>
+              ) : (
+                "Send Recovery Email"
+              )}
+            </button>
+          </div>
+
+          <div className="modal_actions">
+            <button id="forget_pass_modal_close" className="modal_cancel_btn">
+              Cancel
+            </button>
+          </div>
         </div>
-      </form>
+      </dialog>
     </section>
   );
 };

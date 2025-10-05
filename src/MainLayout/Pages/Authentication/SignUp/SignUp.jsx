@@ -3,18 +3,25 @@ import "./SignUp.css";
 import useAxios from "../../../../Hooks/Axios";
 import logo from "../../../../assets/companyLogo.png";
 import { AuthContext } from "../../../../Context/AuthContext";
+import { jhError, jhInfo, jhToastSuccess } from "../../../../utils";
 
 // From react__
 import { useContext, useState } from "react";
 
 // Package(REACT ICONS, REACT HOOK FROM, GOOGLE RECAPTCHA, SWEET ALERT)__
-import Swal from "sweetalert2";
 import { useForm } from "react-hook-form";
 import { FcGoogle } from "react-icons/fc";
 import { useNavigate } from "react-router";
 import { FcCheckmark } from "react-icons/fc";
 import ReCAPTCHA from "react-google-recaptcha";
 import { HiOutlineInformationCircle } from "react-icons/hi";
+import {
+  FaUserTie,
+  FaBuilding,
+  FaArrowRight,
+  FaArrowLeft,
+  FaCheckCircle,
+} from "react-icons/fa";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -41,10 +48,12 @@ const SignUp = () => {
     {
       name: "Job Seeker",
       tip: "Create your profile, apply for jobs, and track your applications.",
+      icon: FaUserTie,
     },
     {
       name: "Recruiter",
       tip: "Post job listings, review applications, and find top talent.",
+      icon: FaBuilding,
     },
   ];
 
@@ -54,6 +63,7 @@ const SignUp = () => {
   // Google recaptcha__
   const handleCaptcha = (value) => {
     setCaptchaValue(value);
+    setRobotError("");
   };
 
   // React hook form state__
@@ -66,7 +76,7 @@ const SignUp = () => {
 
   const onSubmit = async (data) => {
     if (!captchaValue) {
-      setRobotError("Confirm you are not robot");
+      setRobotError("Please confirm you're not a robot");
       return;
     }
 
@@ -159,39 +169,21 @@ const SignUp = () => {
 
       if (res.data.insertedId) {
         navigate("/");
-
-        Swal.mixin({
-          toast: true,
-          position: "bottom",
-          showConfirmButton: false,
-          timer: 3000,
-          timerProgressBar: true,
-          didOpen: (toast) => {
-            toast.onmouseenter = Swal.stopTimer;
-            toast.onmouseleave = Swal.resumeTimer;
-          },
-        }).fire({
-          icon: "success",
-          title: "Sign up successfully",
-        });
+        jhToastSuccess("Sign up successfully");
 
         if (selectedRole === "Job Seeker") {
           setTimeout(() => {
-            Swal.fire({
+            jhInfo({
               title: "Welcome to Job Hunting",
               text: "Tip: A fully completed profile increases your chances of getting noticed by recruiters. Add your skills, experience, and a professional photo to make the best impression!",
-              icon: "info",
-              confirmButtonText: "Got it!",
             });
           }, 5000);
         }
       }
-    } catch (error) {
-      console.log(error);
-      Swal.fire({
+    } catch {
+      jhError({
         title: "Sign Up Failed",
         text: "There was an issue creating your account. Please try again!",
-        icon: "error",
       });
     }
 
@@ -200,7 +192,6 @@ const SignUp = () => {
 
   const handleGoogleLogin = async () => {
     setGoogleBtnOff(true);
-
     await handleGoogleSignIn()
       .then((res) => {
         if (res) {
@@ -216,216 +207,351 @@ const SignUp = () => {
   return (
     <>
       <section id="main_signUp_container">
-        <div className="signUp_inner_container">
-          <div className="signUp_parent_content_container">
-            <div className="signUp_content">
+        <div className="signUp_container">
+          {/* Progress Bar - Compact Version */}
+          <div className="progress_container">
+            <div className="step_indicators">
+              {[1, 2, 3, 4].map((stepNum) => (
+                <div key={stepNum} className="step_indicator_wrapper">
+                  <div
+                    className={`step_indicator ${
+                      step >= stepNum ? "active" : ""
+                    }`}
+                  >
+                    {step >= stepNum && (
+                      <FaCheckCircle className="step_check_icon" />
+                    )}
+                  </div>
+                  {stepNum < 4 && (
+                    <div
+                      className={`step_connector ${
+                        step > stepNum ? "active" : ""
+                      }`}
+                    ></div>
+                  )}
+                </div>
+              ))}
+            </div>
+            <div className="step_labels">
+              <span className={step >= 1 ? "active" : ""}>Method</span>
+              <span className={step >= 2 ? "active" : ""}>Discovery</span>
+              <span className={step >= 3 ? "active" : ""}>Role</span>
+              <span className={step >= 4 ? "active" : ""}>Account</span>
+            </div>
+          </div>
+
+          <div className="signUp_content_wrapper">
+            <div className="signUp_form_section">
               <div
-                className="slider"
-                style={{
-                  transform: `translateX(-${(step - 1) * (100 / 4)}%)`,
-                }}
+                className="form_slider"
+                style={{ transform: `translateX(-${(step - 1) * 100}%)` }}
               >
-                <div className="step">
-                  <div className="step_one_content">
-                    <h1>How would you like to sign up?</h1>
-                    <button disabled={googleBtnOff} onClick={handleGoogleLogin}>
-                      <FcGoogle /> Sign In With Google
-                    </button>
-                    <p>
-                      <HiOutlineInformationCircle size={22} />{" "}
-                      <i>
-                        Sign up as a <b>user</b>(Job Seeker)
-                      </i>
-                    </p>
-                    <button onClick={handleNext}>
-                      Sign In With Email <p>(Recommended)</p>→
-                    </button>
-                    <p>
-                      <HiOutlineInformationCircle size={22} />{" "}
-                      <i>
-                        If you want to be a <b>recruiter</b>, <br /> sign up
-                        with email and choose your role
-                      </i>
-                    </p>
+                {/* Step 1: Sign Up Method */}
+                <div className="form_step">
+                  <div className="step_content_centered">
+                    <h1>Join JobHunting</h1>
+                    <p>Choose your preferred sign up method</p>
+
+                    <div className="signup_methods_compact">
+                      <button
+                        type="button"
+                        disabled={googleBtnOff}
+                        onClick={handleGoogleLogin}
+                        className="method_btn_compact google_btn"
+                      >
+                        <FcGoogle className="method_icon" />
+                        <span>Continue with Google</span>
+                        {googleBtnOff && (
+                          <div className="loading_spinner small"></div>
+                        )}
+                      </button>
+
+                      <div className="divider_compact">
+                        <span>or</span>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={handleNext}
+                        className="method_btn_compact email_btn"
+                      >
+                        <span>Continue with Email</span>
+                        <FaArrowRight className="arrow_icon" />
+                      </button>
+                    </div>
+
+                    <div className="step_tips_compact">
+                      <div className="tip_item">
+                        <HiOutlineInformationCircle className="tip_icon" />
+                        <span>
+                          <strong>Job Seekers:</strong> Sign up to apply for
+                          jobs and track applications
+                        </span>
+                      </div>
+                      <div className="tip_item">
+                        <HiOutlineInformationCircle className="tip_icon" />
+                        <span>
+                          <strong>Recruiters:</strong> Choose recruiter role
+                          when signing up with email
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
-                <div className="step">
-                  <div className="step_two_content">
-                    <h1>How do you hear about us?</h1>
-                    <div className="hear_options">
+                {/* Step 2: How did you hear about us */}
+                <div className="form_step">
+                  <div className="step_content_centered">
+                    <h1>How did you find us?</h1>
+                    <p>Tell us how you discovered JobHunting</p>
+
+                    <div className="options_grid_compact">
                       {options.map((option) => (
-                        <div
+                        <button
                           key={option}
-                          className={`option ${
+                          type="button"
+                          className={`option_btn ${
                             selected === option ? "selected" : ""
                           }`}
                           onClick={() => setSelected(option)}
                         >
-                          <p>{option}</p>
+                          <span>{option}</span>
                           {selected === option && (
                             <FcCheckmark className="check_icon" />
                           )}
-                        </div>
+                        </button>
                       ))}
                     </div>
                   </div>
                 </div>
 
-                <div className="step">
-                  <div className="step_three_content">
-                    <h1>Choose your role</h1>
-                    <div className="user_role_container">
-                      {roles.map((role) => (
-                        <div key={role.name} className="role_item">
+                {/* Step 3: Choose Role */}
+                <div className="form_step">
+                  <div className="step_content_centered">
+                    <h1>Choose Your Role</h1>
+                    <p>Select how you'll be using JobHunting</p>
+
+                    <div className="role_selection_compact">
+                      {roles.map((role) => {
+                        const RoleIcon = role.icon;
+                        return (
                           <button
-                            className={
+                            key={role.name}
+                            type="button"
+                            className={`role_btn ${
                               selectedRole === role.name ? "selected" : ""
-                            }
+                            }`}
                             onClick={() => setSelectedRole(role.name)}
                           >
-                            {role.name}
-                            {selectedRole === role.name && (
-                              <FcCheckmark style={{ marginLeft: "8px" }} />
-                            )}
+                            <div className="role_btn_content">
+                              <RoleIcon className="role_btn_icon" />
+                              <div className="role_btn_text">
+                                <strong>{role.name}</strong>
+                                <span>{role.tip}</span>
+                              </div>
+                              {selectedRole === role.name && (
+                                <FcCheckmark className="role_check_icon" />
+                              )}
+                            </div>
                           </button>
-                          <p>
-                            <HiOutlineInformationCircle size={20} />{" "}
-                            <i>{role.tip}</i>
-                          </p>
-                        </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   </div>
                 </div>
 
-                <div className="step">
-                  <form onSubmit={handleSubmit(onSubmit)}>
-                    <div className="step_four_content">
-                      <h1>Enter Your Email and Password</h1>
+                {/* Step 4: Email & Password */}
+                <div className="form_step">
+                  <div className="step_content_centered">
+                    <form
+                      onSubmit={handleSubmit(onSubmit)}
+                      className="final_form_compact"
+                    >
+                      <h1>Create Your Account</h1>
+                      <p>Enter your email and secure password</p>
 
-                      <div className="sign_up_input_container">
-                        <input
-                          type="email"
-                          name="email"
-                          placeholder="Enter you email"
-                          {...register("email", { required: true })}
-                        />
-                        {errors.email && (
-                          <span className="text-red-500 text-sm">
-                            This field is required
-                          </span>
-                        )}
-                        <input
-                          type="password"
-                          name="password"
-                          placeholder="Enter you password"
-                          {...register("password", {
-                            required: true,
-                            minLength: 6,
-                            pattern: /^(?=.*[a-z])(?=.*[A-Z]).*$/,
-                          })}
-                        />
-
-                        {/* handling password field error__ST */}
-                        <div>
-                          {errors.password?.type === "required" && (
-                            <span className="text-sm text-red-400">
-                              Password is required
+                      <div className="form_inputs_compact">
+                        <div className="input_group">
+                          <input
+                            type="email"
+                            placeholder="Enter your email address"
+                            className="form_input"
+                            {...register("email", {
+                              required: "Email is required",
+                              pattern: {
+                                value:
+                                  /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                                message: "Invalid email address",
+                              },
+                            })}
+                          />
+                          {errors.email && (
+                            <span className="error_message">
+                              {errors.email.message}
                             </span>
                           )}
                         </div>
 
-                        <div>
-                          {errors.password?.type === "minLength" && (
-                            <span className="text-sm text-red-400">
-                              Password should be at least 6 characters
+                        <div className="input_group">
+                          <input
+                            type="password"
+                            placeholder="Create a strong password"
+                            className="form_input"
+                            {...register("password", {
+                              required: "Password is required",
+                              minLength: {
+                                value: 6,
+                                message:
+                                  "Password must be at least 6 characters",
+                              },
+                              pattern: {
+                                value: /^(?=.*[a-z])(?=.*[A-Z]).*$/,
+                                message:
+                                  "Include at least one uppercase and lowercase letter",
+                              },
+                            })}
+                          />
+                          {errors.password && (
+                            <span className="error_message">
+                              {errors.password.message}
                             </span>
                           )}
                         </div>
 
-                        <div>
-                          {errors.password?.type === "pattern" && (
-                            <span className="text-sm text-red-400">
-                              Use at least one uppercase(A-Z) and lowercase(a-z)
-                              character
-                            </span>
-                          )}
-                        </div>
-                        {/* handling password field error__END */}
-                        <input
-                          type="password"
-                          name="confirmPassword"
-                          placeholder="Confirm password"
-                          {...register("confirmPassword", {
-                            required: true,
-                            validate: (value) => {
-                              if (watch("password") !== value) {
-                                return "Password do not match";
-                              }
-                            },
-                          })}
-                        />
-                        <div>
+                        <div className="input_group">
+                          <input
+                            type="password"
+                            placeholder="Confirm your password"
+                            className="form_input"
+                            {...register("confirmPassword", {
+                              required: "Please confirm your password",
+                              validate: (value) => {
+                                if (watch("password") !== value) {
+                                  return "Passwords do not match";
+                                }
+                              },
+                            })}
+                          />
                           {errors.confirmPassword && (
-                            <span className="text-sm text-red-400">
-                              Password don't match!
+                            <span className="error_message">
+                              {errors.confirmPassword.message}
                             </span>
                           )}
                         </div>
 
-                        <div className="not_robot_container">
+                        <div className="captcha_container">
                           <ReCAPTCHA
                             sitekey={import.meta.env.VITE_SITE_KEY}
                             onChange={handleCaptcha}
                           />
-                          <span className="text-sm text-red-400">
-                            {robotError}
-                          </span>
+                          {robotError && (
+                            <span className="error_message">{robotError}</span>
+                          )}
                         </div>
 
-                        <div className="check_box">
-                          <label className="checkbox_label">
+                        <div className="terms_container">
+                          <label className="terms_checkbox">
                             <input
-                              name="terms"
                               type="checkbox"
-                              {...register("terms", { required: true })}
+                              {...register("terms", {
+                                required:
+                                  "You must accept the terms and conditions",
+                              })}
+                              className="checkbox_input"
                             />
-                            <span className="custom_checkbox"></span>I agree to
-                            the <a href="#">Terms & Conditions</a>
+                            <span className="custom_checkbox"></span>
+                            <span className="terms_text">
+                              I agree to the{" "}
+                              <a href="#" className="terms_link">
+                                Terms & Conditions
+                              </a>
+                            </span>
                           </label>
                           {errors.terms && (
-                            <span className="text-sm text-red-400">
-                              Accept our terms &conditions.
+                            <span className="error_message">
+                              {errors.terms.message}
                             </span>
                           )}
                         </div>
 
                         <button
                           type="submit"
-                          className="min-w-[70%] text-lg btn bg-[#3C8F63] text-white mt-5"
+                          disabled={firebaseLoading}
+                          className="submit_btn"
                         >
-                          {firebaseLoading ? "Working...." : "Submit"}
+                          {firebaseLoading ? (
+                            <>
+                              <div className="loading_spinner"></div>
+                              Creating Account...
+                            </>
+                          ) : (
+                            "Create Account"
+                          )}
                         </button>
                       </div>
-                    </div>
-                  </form>
+                    </form>
+                  </div>
                 </div>
               </div>
             </div>
 
-            <div className="company_logo">
-              <img src={logo} alt="Company Logo" />
+            {/* Redesigned Sidebar */}
+            <div className="signUp_sidebar">
+              <div className="sidebar_content_centered">
+                <div className="sidebar_header">
+                  <img src={logo} alt="JobHunting" className="sidebar_logo" />
+                  <h3>Start Your Journey Today</h3>
+                </div>
+                <div className="sidebar_features">
+                  <div className="feature_item">
+                    <FaCheckCircle className="feature_icon" />
+                    <div className="feature_content">
+                      <strong>Smart Job Matching</strong>
+                      <span>Find opportunities that match your skills</span>
+                    </div>
+                  </div>
+                  <div className="feature_item">
+                    <FaCheckCircle className="feature_icon" />
+                    <div className="feature_content">
+                      <strong>Secure Platform</strong>
+                      <span>Your data is protected and private</span>
+                    </div>
+                  </div>
+                  <div className="feature_item">
+                    <FaCheckCircle className="feature_icon" />
+                    <div className="feature_content">
+                      <strong>Instant Updates</strong>
+                      <span>Get notified about relevant opportunities</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="sidebar_stats">
+                  <div className="stat_item">
+                    <strong>10K+</strong>
+                    <span>Jobs Posted</span>
+                  </div>
+                  <div className="stat_item">
+                    <strong>5K+</strong>
+                    <span>Companies</span>
+                  </div>
+                  <div className="stat_item">
+                    <strong>50K+</strong>
+                    <span>Professionals</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
-          <div className="signUp_process_button  mt-3">
+          {/* Navigation Buttons */}
+          <div className="navigation_buttons">
             <button
               type="button"
               disabled={step === 1}
               onClick={handleBack}
-              className="btn bg-[#3C8F63] text-white"
+              className="nav_btn back_btn"
             >
+              <FaArrowLeft className="nav_icon" />
               Previous
             </button>
 
@@ -433,16 +559,14 @@ const SignUp = () => {
               <button
                 type="button"
                 disabled={
-                  step === 2 && selected === ""
-                    ? true
-                    : step === 3 && selectedRole === ""
-                    ? true
-                    : false
+                  (step === 2 && selected === "") ||
+                  (step === 3 && selectedRole === "")
                 }
                 onClick={handleNext}
-                className="btn bg-[#3C8F63] text-white"
+                className="nav_btn next_btn"
               >
                 Next
+                <FaArrowRight className="nav_icon" />
               </button>
             )}
           </div>

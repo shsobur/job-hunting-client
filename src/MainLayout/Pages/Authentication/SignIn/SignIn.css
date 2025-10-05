@@ -1,174 +1,626 @@
+/* Sign In JH Theme Design */
 #main_signIn_container {
-  height: 100vh;
-  background-color: #f3f3f330;
-  /* ------ */
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 20px;
 }
 
-.signIn_inner_container {
-  min-width: 520px;
-  min-height: 550px;
-  padding: 40px;
-  border-radius: 8px;
-  background-color: #ffffff;
-  background: linear-gradient(#ffffffeb, #ffffffeb),
-    url("../../../../../public/fab.png");
-  background-size: contain;
-  background-position: center;
-  background-repeat: no-repeat;
-  box-shadow: #00000030 0px 10px 20px, #0000003b 0px 6px 6px;
+.signIn_background {
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  justify-content: center;
 }
 
-.signIn_content h1 {
+/* Form Container */
+.signIn_form_container {
+  background: #ffffff;
+  border-radius: 24px;
+  box-shadow: 0 20px 60px #00000026;
+  padding: 30px;
+  width: 100%;
+  border: 1px solid #3c8f631a;
+  backdrop-filter: blur(10px);
+}
+
+/* Header Section */
+.form_header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.logo_icon {
+  font-size: 3rem;
+  color: #3c8f63;
+  background: #3c8f631a;
+  padding: 20px;
+  border-radius: 20px;
+}
+
+.form_title {
   font-size: 2rem;
-  font-weight: 600;
-  font-family: "Montserrat", sans-serif;
+  font-weight: 800;
+  color: #1f2937;
+  margin: 0;
+  background: linear-gradient(135deg, #3c8f63 0%, #2a6b4a 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
+.form_subtitle {
+  color: #6b7280;
+  font-size: 1.0625rem;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Google Sign In Button */
 .google_signIn_btn {
   width: 100%;
-  margin-top: 50px;
-  padding: 10px 20px;
-  font-size: 20px;
-  border-radius: 8px;
+  padding: 16px 24px;
+  background: #ffffff;
+  border: 2px solid #e5e7eb;
+  border-radius: 16px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #374151;
   cursor: pointer;
-  background-color: #06060631;
-  /* ------ */
-  gap: 10px;
+  transition: all 0.3s ease;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-.google_signIn_btn:hover {
-  transition: 0.2s ease-in;
-  background-color: #0606063a;
+  gap: 12px;
+  margin-bottom: 24px;
 }
 
-/* Sign in inputs__ */
-
-.signIn_input_container {
-  width: 100%;
-  margin-top: 20px;
+.google_signIn_btn:hover:not(:disabled) {
+  border-color: #3c8f63;
+  background: rgba(60, 143, 99, 0.02);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
 }
 
-.signIn_input_container li input {
-  width: 100%;
-  margin-top: 20px;
-  padding: 15px 20px;
-  font-size: 18px;
-  outline: none;
-  border-radius: 8px;
-  border-bottom: 2px solid transparent;
-  box-shadow: #88a5bfc6 6px 2px 16px 0px, #ffffffd5 -6px -2px 16px 0px;
+.google_signIn_btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
-.signIn_input_container li input:focus {
-  transition: 0.3s ease-in-out;
-  border-bottom: 2px solid #3c8f63;
+.google_icon {
+  font-size: 1.5rem;
 }
 
-.signIn_input_container li:nth-child(2) {
-  position: relative;
-}
-
-#input-2 {
-  margin-bottom: 10px;
-}
-
-.show_password_content {
-  top: 38px;
-  right: 10px;
+.google_text {
   font-weight: 600;
-  position: absolute;
 }
 
-/* Forget password & Remember__ */
+/* Divider */
+.form_divider {
+  position: relative;
+  text-align: center;
+  margin: 24px 0;
+}
 
-.signIn_options {
+.form_divider::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: #e5e7eb;
+}
+
+.divider_text {
+  background: #ffffff;
+  padding: 0 16px;
+  color: #6b7280;
+  font-size: 0.875rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* Form Inputs */
+.form_inputs_container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.input_group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.input_container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input_icon {
+  position: absolute;
+  left: 16px;
+  font-size: 1.125rem;
+  color: #6b7280;
+  z-index: 2;
+}
+
+.form_input {
+  width: 100%;
+  padding: 16px 16px 16px 48px;
+  font-size: 1rem;
+  background: #ffffff;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  color: #1f2937;
+  font-weight: 500;
+}
+
+.form_input:focus {
+  outline: none;
+  border-color: #3c8f63;
+  box-shadow: 0 0 0 3px rgba(60, 143, 99, 0.1);
+  background: #ffffff;
+}
+
+.form_input::placeholder {
+  color: #9ca3af;
+}
+
+.password_toggle {
+  position: absolute;
+  right: 16px;
+  background: none;
+  border: none;
+  color: #6b7280;
+  font-size: 1.125rem;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.password_toggle:hover {
+  color: #3c8f63;
+  background: rgba(60, 143, 99, 0.1);
+}
+
+/* Error Messages */
+.error_message {
+  color: #ef4444;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin: 4px 0 0 4px;
+}
+
+/* Form Options */
+.form_options {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 10px;
-  font-size: 14px;
+  margin: 8px 0;
 }
 
 .remember_me {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
+  color: #374151;
+  font-size: 0.875rem;
+  font-weight: 500;
   cursor: pointer;
   user-select: none;
-  font-weight: 500;
-  color: #333;
 }
 
-.remember_me input[type="checkbox"] {
-  width: 16px;
-  height: 16px;
-  margin: 0;
-  vertical-align: middle;
-  accent-color: #007bff; /* blue checkbox */
+.checkbox_input {
+  display: none;
+}
+
+.checkbox_custom {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #d1d5db;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  background: #ffffff;
+}
+
+.checkbox_input:checked + .checkbox_custom {
+  background: #3c8f63;
+  border-color: #3c8f63;
+}
+
+.checkbox_input:checked + .checkbox_custom::after {
+  content: "✓";
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: bold;
 }
 
 .forgot_password {
-  color: #007bff;
+  background: none;
+  border: none;
+  color: #3c8f63;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
   text-decoration: none;
-  font-weight: 500;
+  transition: color 0.3s ease;
 }
 
 .forgot_password:hover {
+  color: #2a6b4a;
   text-decoration: underline;
 }
 
+/* Sign In Button */
 .signIn_button {
   width: 100%;
-  margin-top: 40px;
+  padding: 16px 24px;
+  background: linear-gradient(135deg, #3c8f63 0%, #2a6b4a 100%);
+  border: none;
+  border-radius: 16px;
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 600;
   cursor: pointer;
-  outline: none;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 8px;
+  box-shadow: 0 4px 15px rgba(60, 143, 99, 0.3);
+}
+
+.signIn_button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(60, 143, 99, 0.4);
+}
+
+.signIn_button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.loading_spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid transparent;
+  border-top: 2px solid #ffffff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.loading_spinner.small {
+  width: 16px;
+  height: 16px;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Sign Up Link */
+.signup_link_container {
+  text-align: center;
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.signup_text {
+  color: #6b7280;
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.signup_link {
+  color: #3c8f63;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.signup_link:hover {
+  color: #2a6b4a;
+  text-decoration: underline;
+}
+
+/* Modal Styles */
+.jh_modal {
+  border: none;
+  border-radius: 24px;
+  padding: 0;
+  background: transparent;
+  max-width: 440px;
+  width: 90vw;
+}
+
+.jh_modal::backdrop {
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+}
+
+.modal_content {
+  background: #ffffff;
+  border-radius: 24px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(60, 143, 99, 0.1);
+  overflow: hidden;
+}
+
+.modal_header {
+  background: linear-gradient(135deg, #3c8f63 0%, #2a6b4a 100%);
+  padding: 32px;
   text-align: center;
   color: #ffffff;
-  font-size: 18px;
-  border-radius: 8px;
-  padding: 10px 10px;
-  background-color: #3c8f63;
 }
 
-.signIn_button:hover {
-  transition: 0.2s ease-in;
-  background-color: rgb(55, 131, 91);
+.modal_icon {
+  font-size: 2.5rem;
+  margin-bottom: 16px;
 }
 
-/* Responsive style__ */
+.modal_title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+  color: #ffffff;
+}
 
+.modal_body {
+  padding: 32px;
+}
+
+.modal_description {
+  color: #6b7280;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.modal_input_group {
+  margin-bottom: 24px;
+}
+
+.modal_input_container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.modal_input_icon {
+  position: absolute;
+  left: 16px;
+  font-size: 1.125rem;
+  color: #6b7280;
+  z-index: 2;
+}
+
+.modal_input {
+  width: 100%;
+  padding: 16px 16px 16px 48px;
+  font-size: 1rem;
+  background: #ffffff;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  color: #1f2937;
+}
+
+.modal_input:focus {
+  outline: none;
+  border-color: #3c8f63;
+  box-shadow: 0 0 0 3px rgba(60, 143, 99, 0.1);
+}
+
+.modal_submit_btn {
+  width: 100%;
+  padding: 16px 24px;
+  background: linear-gradient(135deg, #3c8f63 0%, #2a6b4a 100%);
+  border: none;
+  border-radius: 12px;
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 4px 15px rgba(60, 143, 99, 0.3);
+}
+
+.modal_submit_btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(60, 143, 99, 0.4);
+}
+
+.modal_submit_btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.modal_actions {
+  padding: 0 32px 32px;
+  display: flex;
+  justify-content: center;
+}
+
+.modal_cancel_btn {
+  padding: 12px 24px;
+  background: rgba(107, 114, 128, 0.1);
+  border: 1px solid rgba(107, 114, 128, 0.2);
+  border-radius: 12px;
+  color: #6b7280;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.modal_cancel_btn:hover {
+  background: rgba(107, 114, 128, 0.2);
+  color: #374151;
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+
+/* 1024px - Desktop */
+@media screen and (max-width: 1024px) {
+  .signIn_form_container {
+    padding: 32px;
+  }
+}
+
+/* 768px - Tablet */
+@media screen and (max-width: 768px) {
+  #main_signIn_container {
+    padding: 16px;
+  }
+
+  .signIn_form_container {
+    padding: 24px;
+    border-radius: 20px;
+  }
+
+  .form_title {
+    font-size: 1.75rem;
+  }
+
+  .logo_icon {
+    font-size: 2.5rem;
+    padding: 16px;
+  }
+}
+
+/* 640px - Large Mobile */
 @media screen and (max-width: 640px) {
-  .signIn_inner_container {
-    min-width: 95%;
+  .signIn_background {
+    max-width: 100%;
+  }
+
+  .signIn_form_container {
+    padding: 20px;
+    border-radius: 16px;
+  }
+
+  .form_title {
+    font-size: 1.5rem;
+  }
+
+  .form_subtitle {
+    font-size: 1rem;
+  }
+
+  .google_signIn_btn {
+    padding: 14px 20px;
+    font-size: 0.95rem;
+  }
+
+  .form_input {
+    padding: 14px 14px 14px 44px;
+    font-size: 0.95rem;
+  }
+
+  .input_icon {
+    left: 14px;
+    font-size: 1rem;
+  }
+
+  .modal_body {
+    padding: 24px;
+  }
+
+  .modal_header {
+    padding: 24px;
+  }
+}
+
+/* 475px - Small Mobile */
+@media screen and (max-width: 475px) {
+  #main_signIn_container {
+    padding: 12px;
+  }
+
+  .signIn_form_container {
+    padding: 16px;
+    border-radius: 12px;
+  }
+
+  .form_title {
+    font-size: 1.375rem;
+  }
+
+  .logo_icon {
+    font-size: 2rem;
+    padding: 12px;
+  }
+
+  .form_options {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .modal_body {
     padding: 20px;
   }
+
+  .modal_header {
+    padding: 20px;
+  }
+
+  .modal_title {
+    font-size: 1.25rem;
+  }
 }
 
-@media screen and (max-width: 475px) {
-  .signIn_content h1 {
-    font-size: 1.8rem;
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .signIn_button,
+  .google_signIn_btn,
+  .modal_submit_btn,
+  .form_input {
+    transition: none;
   }
 
-  .google_signIn_btn {
-    margin-top: 20px;
+  .loading_spinner {
+    animation: none;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .signIn_form_container,
+  .modal_content {
+    border: 2px solid #3c8f63;
   }
 
-  .google_signIn_btn {
-    font-size: 18px;
+  .form_input {
+    border: 2px solid #374151;
   }
 
-  .signIn_input_container li input {
-    font-size: 16px;
-    margin-bottom: 20px;
-  }
-
-  .signIn_button {
-    margin-top: 20px;
-    font-size: 16px;
+  .form_input:focus {
+    border-color: #3c8f63;
+    outline: 2px solid #3c8f63;
   }
 }

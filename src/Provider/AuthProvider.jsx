@@ -1,6 +1,7 @@
 // File path__
 import auth from "../Firebase/firebase.config";
 import { AuthContext } from "../Context/AuthContext";
+import { jhError, jhToastSuccess, jhWarning } from "../utils";
 
 // From react__
 import { useEffect, useState } from "react";
@@ -14,8 +15,6 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
 } from "firebase/auth";
-import Swal from "sweetalert2";
-import { jhError, jhToastSuccess, jhWarning } from "../utils";
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -87,16 +86,14 @@ const AuthProvider = ({ children }) => {
       return result;
     } catch (error) {
       if (error.code === "auth/invalid-credential") {
-        Swal.fire({
+        jhError({
           title: "Invalid Credential!",
           text: "Invalid email or password. Try again with valid email and password",
-          icon: "error",
         });
       } else {
-        Swal.fire({
+        jhError({
           title: "Sign In Failed",
           text: "There might be some issue, Please try again!",
-          icon: "error",
         });
       }
 

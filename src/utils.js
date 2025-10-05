@@ -129,7 +129,7 @@ export const jhToastInfo = (title, text = "") => {
   });
 };
 
-// Your existing alert functions...
+// Message alert functions...
 export const jhConfirm = (options) => {
   return Swal.fire({
     ...JH_SWAL_CONFIG,

@@ -103,7 +103,7 @@ const Banner = () => {
               <div className="image_container">
                 <div className="main_image_wrapper">
                   <img
-                    src={bannerImage}
+                    src={bannerImage} 
                     alt="Professional Career Success"
                     className="main_image"
                   />
