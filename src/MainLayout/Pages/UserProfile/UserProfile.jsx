@@ -60,7 +60,7 @@ const UserProfile = () => {
             <aside className="profile-sidebar">
               {/* Quick Stats section without edit button */}
               <div className="profile-card desktop-view-only">
-                <h3 className="profile-card-title section-title">
+                <h3 className="profile-card-title section-title-line">
                   Quick Stats
                 </h3>
                 <div className="stats-container">
@@ -88,7 +88,7 @@ const UserProfile = () => {
               {/* Open to Work status badge */}
               <div className="profile-card tab-view-only">
                 <div className="status-section">
-                  <h3 className="profile-card-title section-title">
+                  <h3 className="profile-card-title section-title-line">
                     Availability
                   </h3>
                   {profile?.openToWork === true ? (
@@ -115,7 +115,7 @@ const UserProfile = () => {
                 >
                   <FiEdit className="edit-icon" />
                 </button>
-                <h3 className="profile-card-title section-title">
+                <h3 className="profile-card-title section-title-line">
                   Contact Info
                 </h3>
                 <div className="contact-info">
@@ -196,7 +196,7 @@ const UserProfile = () => {
                 >
                   <FiEdit className="edit-icon" />
                 </button>
-                <h3 className="profile-card-title section-title">Languages</h3>
+                <h3 className="profile-card-title section-title-line">Languages</h3>
                 <div className="language-tags">
                   {!profile?.languages || profile.languages.length === 0 ? (
                     <span className="no-data-text">No languages added</span>
@@ -236,8 +236,8 @@ const UserProfile = () => {
                     }")`,
                   }}
                 ></div>
-                <div className="header-content">
-                  <div className="profile-info-container">
+                <div className="header-content ">
+                  <div className="profile-info-container w-full">
                     <button
                       className="mt-[60px] card-edit-button"
                       onClick={() =>
@@ -376,7 +376,7 @@ const UserProfile = () => {
                 >
                   <FiEdit className="edit-icon" />
                 </button>
-                <h3 className="card-title-lg  section-title">About</h3>
+                <h3 className="card-title-lg  section-title-line">About</h3>
                 <p className="about-text">
                   {profile?.headline ||
                     "Tell us about yourself! Share your professional journey, passions, and what drives you in your career."}
@@ -396,7 +396,7 @@ const UserProfile = () => {
                   <FiEdit className="edit-icon" />
                 </button>
 
-                <h3 className="card-title-lg section-title">Experience</h3>
+                <h3 className="card-title-lg section-title-line">Experience</h3>
 
                 {!profile?.experience || profile.experience.length === 0 ? (
                   <div className="empty-state">
@@ -467,7 +467,7 @@ const UserProfile = () => {
                 >
                   <FiEdit className="edit-icon" />
                 </button>
-                <h3 className="card-title-lg section-title">Education</h3>
+                <h3 className="card-title-lg section-title-line">Education</h3>
                 <div className="education-list">
                   {!profile?.education || profile.education.length === 0 ? (
                     <div className="empty-state">
@@ -515,7 +515,7 @@ const UserProfile = () => {
                   <FiEdit className="edit-icon" />
                 </button>
 
-                <h3 className="card-title-lg section-title">Skills</h3>
+                <h3 className="card-title-lg section-title-line">Skills</h3>
 
                 <div className="skill-tags">
                   {!profile?.skills || profile.skills.length === 0 ? (
@@ -540,7 +540,7 @@ const UserProfile = () => {
                 >
                   <FiEdit className="edit-icon" />
                 </button>
-                <h3 className="card-title-lg section-title">Languages</h3>
+                <h3 className="card-title-lg section-title-line">Languages</h3>
 
                 <div className="language-tags">
                   {!profile?.languages || profile.languages.length === 0 ? (
@@ -569,7 +569,7 @@ const UserProfile = () => {
                   <FiEdit className="edit-icon" />
                 </button>
 
-                <h3 className="card-title-lg section-title">Projects</h3>
+                <h3 className="card-title-lg section-title-line">Projects</h3>
 
                 <div className="project-grid">
                   {!profile?.projects || profile.projects.length === 0 ? (
@@ -618,7 +618,7 @@ const UserProfile = () => {
                 >
                   <FiEdit className="edit-icon" />
                 </button>
-                <h3 className="card-title-lg section-title">Certifications</h3>
+                <h3 className="card-title-lg section-title-line">Certifications</h3>
                 <div className="certification-list">
                   {!profile?.certifications ||
                   profile.certifications.length === 0 ? (

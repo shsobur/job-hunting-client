@@ -1,5 +1,4 @@
 // File path__
-import "./ContactModal.css";
 import useUserData from "../../../Hooks/userData";
 import SeekerModalHeader from "../../../MainLayout/Shared/SeekerModalHeader/SeekerModalHeader";
 
@@ -8,7 +7,21 @@ import { useEffect, useState, useRef } from "react";
 
 // Package__
 import Swal from "sweetalert2";
-import { FaLightbulb } from "react-icons/fa";
+
+// React Icons - Outline icons for professional look
+import {
+  FaRegLightbulb,
+  FaRegBuilding,
+  FaRegMap,
+  FaMobileAlt,
+  FaKey,
+  FaLinkedin,
+  FaGithub,
+  FaGlobe,
+  FaRegFlag,
+  FaRegSave,
+  FaTimes,
+} from "react-icons/fa";
 
 const ContactModal = () => {
   const { profile, updateProfile } = useUserData();
@@ -249,31 +262,34 @@ const ContactModal = () => {
   };
 
   return (
-    <section>
-      <dialog id="contact_update_modal" className="modal">
-        <div className="modal-box max-w-[1024px] max-h-[95vh] lg:p-0 p-0">
-          <div className="contact_update_main_content_container">
-            {/* Header */}
-            <SeekerModalHeader
-              title={"Edit contact info"}
-              handleCloseModal={handleCloseModal}
-            ></SeekerModalHeader>
+    <dialog id="contact_update_modal" className="modal">
+      <div className="modal-box max-w-[1024px] max-h-[95vh] flex flex-col p-0">
+        {/* Header */}
+        <SeekerModalHeader
+          title={"Edit contact info"}
+          handleCloseModal={handleCloseModal}
+        />
 
-            {/* Form */}
-            <form onSubmit={handleContactSubmit} className="space-y-8 px-5">
-              {/* Country & City */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="form-control">
-                  <label className="label mb-2">
-                    <span className="label-text text-gray-700 font-medium text-xl">
-                      Country
-                    </span>
+        {/* Scrollable Content */}
+        <div className="flex-1 overflow-y-auto">
+          <form onSubmit={handleContactSubmit} className="px-6 py-4 space-y-6">
+            {/* Location Section */}
+            <div className="space-y-4">
+              <h3 className="flex items-center gap-3 text-xl font-semibold text-gray-800">
+                <FaRegMap className="text-[#3C8F63] text-lg" />
+                Location Information
+              </h3>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <label className="flex items-center gap-2 font-medium text-gray-700 text-lg">
+                    <FaRegFlag className="text-gray-500" />
+                    Country
                   </label>
-
                   <select
                     value={selectedCountry}
                     onChange={handleCountryChange}
-                    className="select select-bordered cursor-pointer w-full text-lg h-[45px] px-4 border-2 border-gray-300 rounded-lg focus:border-[#3C8F63] focus:outline-none transition-colors"
+                    className="select select-bordered w-full h-[55px] text-base border-2 border-gray-300 focus:border-[#3C8F63] focus:outline-none rounded-lg"
                   >
                     <option value="">Select Country</option>
                     {countriesList.map((c) => (
@@ -284,17 +300,15 @@ const ContactModal = () => {
                   </select>
                 </div>
 
-                <div className="form-control">
-                  <label className="label p-0 mb-2">
-                    <span className="label-text text-gray-700 font-medium text-xl">
-                      City
-                    </span>
+                <div className="space-y-2">
+                  <label className="flex items-center gap-2 font-medium text-gray-700 text-lg">
+                    <FaRegBuilding className="text-gray-500" />
+                    City
                   </label>
-
                   <select
                     value={selectedCity}
                     onChange={(e) => setSelectedCity(e.target.value)}
-                    className="select select-bordered cursor-pointer w-full text-lg h-[45px] px-4 border-2 border-gray-300 rounded-lg focus:border-[#3C8F63] focus:outline-none transition-colors"
+                    className="select select-bordered w-full h-[55px] text-base border-2 border-gray-300 focus:border-[#3C8F63] focus:outline-none rounded-lg"
                   >
                     <option value="">Select City</option>
                     {citiesList.map((city) => (
@@ -305,54 +319,51 @@ const ContactModal = () => {
                   </select>
                 </div>
               </div>
+            </div>
 
-              {/* Phone & OTP */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-end">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="form-control">
-                    <label className="label p-0 mb-2">
-                      <span className="label-text text-gray-700 font-medium text-xl">
-                        Code
-                      </span>
+            {/* Phone Section */}
+            <div className="space-y-4">
+              <div className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <label className="flex items-center gap-2 font-medium text-gray-700 text-lg">
+                      <FaMobileAlt className="text-gray-500" />
+                      Country Code
                     </label>
-
                     <input
                       type="text"
                       value={phoneCode}
                       onChange={(e) => setPhoneCode(e.target.value)}
-                      className="input input-bordered w-full text-lg h-[45px] px-4 border-2 border-gray-300 rounded-lg focus:border-[#3C8F63] focus:outline-none transition-colors"
+                      className="input input-bordered w-full h-[55px] text-base border-2 border-gray-300 focus:border-[#3C8F63] focus:outline-none rounded-lg"
+                      placeholder="+880"
                     />
                   </div>
 
-                  <div className="form-control">
-                    <label className="label p-0 mb-2">
-                      <span className="label-text text-gray-700 font-medium text-xl">
-                        Mobile number
-                      </span>
+                  <div className="space-y-2">
+                    <label className="flex items-center gap-2 font-medium text-gray-700 text-lg">
+                      <FaMobileAlt className="text-gray-500" />
+                      Mobile Number
                     </label>
-
                     <input
                       type="tel"
                       value={phoneNumber}
                       onChange={(e) => setPhoneNumber(e.target.value)}
                       placeholder="01787548843"
-                      className="input input-bordered w-full text-lg h-[45px] px-4 border-2 border-gray-300 rounded-lg focus:border-[#3C8F63] focus:outline-none transition-colors"
+                      className="input input-bordered w-full h-[55px] text-base border-2 border-gray-300 focus:border-[#3C8F63] focus:outline-none rounded-lg"
                     />
                   </div>
                 </div>
 
-                <div className="flex flex-col md:flex-row gap-4 items-end">
-                  <div className="form-control flex-grow">
-                    <label className="label p-0 mb-2">
-                      <span className="label-text text-gray-700 font-medium text-xl">
-                        Verification code
-                      </span>
+                <div className="flex sm:flex-row flex-col gap-4 items-end">
+                  <div className="flex-1 space-y-2 w-full">
+                    <label className="flex items-center gap-2 font-medium text-gray-700 text-lg">
+                      <FaKey className="text-gray-500" />
+                      Verification Code
                     </label>
-
                     <input
                       type="text"
                       placeholder="Enter 6-digit code"
-                      className="input input-bordered w-full text-lg h-[45px] px-4 border-2 border-gray-300 rounded-lg focus:border-[#3C8F63] focus:outline-none transition-colors"
+                      className="input input-bordered w-full h-[55px] text-base border-2 border-gray-300 focus:border-[#3C8F63] focus:outline-none rounded-lg"
                     />
                   </div>
 
@@ -360,124 +371,125 @@ const ContactModal = () => {
                     onClick={sendOtp}
                     type="button"
                     disabled={!isPhoneValid}
-                    className={`btn h-[45px] text-lg min-w-[140px] 
-                      ${
-                        isPhoneValid
-                          ? "bg-[#3C8F63] text-white hover:bg-[#337954]"
-                          : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                      }`}
+                    className={`btn h-[55px] min-w-[140px] text-base ${
+                      isPhoneValid
+                        ? "bg-[#3C8F63] text-white hover:bg-[#2d7a52]"
+                        : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                    }`}
                   >
                     Send Code
                   </button>
                 </div>
               </div>
+            </div>
 
-              {/* Social Links */}
-              <div>
-                <h3 className="text-2xl font-semibold text-gray-800 mb-6">
-                  Social Links
-                </h3>
+            {/* Social Links Section */}
+            <div className="space-y-4">
+              <h3 className="flex items-center gap-3 text-xl font-semibold text-gray-800">
+                <FaGlobe className="text-[#3C8F63] text-lg" />
+                Social Links
+              </h3>
 
-                <div className="space-y-6">
-                  <div className="form-control">
-                    <label className="label mb-2">
-                      <span className="label-text text-gray-700 font-medium text-xl">
-                        LinkedIn
-                      </span>
-                    </label>
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <label className="flex items-center gap-2 font-medium text-gray-700 text-lg">
+                    <FaLinkedin className="text-[#0077b5]" />
+                    LinkedIn Profile
+                  </label>
+                  <input
+                    type="url"
+                    value={linkedin}
+                    onChange={handleLinkedinChange}
+                    placeholder="https://linkedin.com/in/yourname"
+                    className="input input-bordered w-full h-[55px] text-base border-2 border-gray-300 focus:border-[#3C8F63] focus:outline-none rounded-lg"
+                  />
+                </div>
 
-                    <input
-                      type="url"
-                      value={linkedin}
-                      onChange={handleLinkedinChange}
-                      placeholder="https://linkedin.com/in/yourname"
-                      className="input input-bordered w-full text-lg h-[45px] px-4 border-2 border-gray-300 rounded-lg focus:border-[#3C8F63] focus:outline-none transition-colors"
-                    />
-                  </div>
+                <div className="space-y-2">
+                  <label className="flex items-center gap-2 font-medium text-gray-700 text-lg">
+                    <FaGithub className="text-gray-800" />
+                    GitHub Profile
+                  </label>
+                  <input
+                    type="url"
+                    value={github}
+                    onChange={handleGithubChange}
+                    placeholder="https://github.com/yourname"
+                    className="input input-bordered w-full h-[55px] text-base border-2 border-gray-300 focus:border-[#3C8F63] focus:outline-none rounded-lg"
+                  />
+                </div>
 
-                  <div className="form-control">
-                    <label className="label mb-2">
-                      <span className="label-text text-gray-700 font-medium text-xl">
-                        GitHub
-                      </span>
-                    </label>
-
-                    <input
-                      type="url"
-                      value={github}
-                      onChange={handleGithubChange}
-                      placeholder="https://github.com/yourname"
-                      className="input input-bordered w-full text-lg h-[45px] px-4 border-2 border-gray-300 rounded-lg focus:border-[#3C8F63] focus:outline-none transition-colors"
-                    />
-                  </div>
-
-                  <div className="form-control">
-                    <label className="label mb-2">
-                      <span className="label-text text-gray-700 font-medium text-xl">
-                        Personal Portfolio
-                      </span>
-                    </label>
-
-                    <input
-                      type="url"
-                      value={portfolio}
-                      onChange={handlePortfolioChange}
-                      placeholder="https://yourwebsite.com"
-                      className="input input-bordered w-full text-lg h-[45px] px-4 border-2 border-gray-300 rounded-lg focus:border-[#3C8F63] focus:outline-none transition-colors"
-                    />
-                  </div>
+                <div className="space-y-2">
+                  <label className="flex items-center gap-2 font-medium text-gray-700 text-lg">
+                    <FaGlobe className="text-[#3C8F63]" />
+                    Portfolio Website
+                  </label>
+                  <input
+                    type="url"
+                    value={portfolio}
+                    onChange={handlePortfolioChange}
+                    placeholder="https://yourwebsite.com"
+                    className="input input-bordered w-full h-[55px] text-base border-2 border-gray-300 focus:border-[#3C8F63] focus:outline-none rounded-lg"
+                  />
                 </div>
               </div>
+            </div>
 
-              {/* Tip Box */}
-              <div className="bg-[#F0FDF4] border border-[#3C8F63] mt-8 p-5 rounded-lg">
-                <div className="flex items-start">
-                  <FaLightbulb className="text-green-600 text-xl mr-4" />
-
-                  <div>
-                    <div className="text-[#276043] text-base">
-                      <b>
-                        <i>Tip:</i>
-                      </b>{" "}
-                      Keep your <b>phone</b>, <b>location</b>, and professional
-                      links <b>(LinkedIn, GitHub, portfolio)</b> up-to-date.
-                    </div>
-                  </div>
+            {/* Tip Box */}
+            <div className="bg-green-50 border border-green-200 rounded-xl p-4">
+              <div className="flex items-start gap-3">
+                <FaRegLightbulb className="text-green-600 text-xl mt-0.5" />
+                <div className="text-green-800 text-base">
+                  <span className="font-semibold italic">Tip:</span> Keep your{" "}
+                  <strong>phone</strong>, <strong>location</strong>, and
+                  professional links{" "}
+                  <strong>(LinkedIn, GitHub, portfolio)</strong> up-to-date for
+                  better opportunities.
                 </div>
               </div>
+            </div>
+          </form>
+        </div>
 
-              {/* Action Buttons - Now with enable/disable feature */}
-              <div className="flex justify-end gap-4 bg-[#eef1f4] px-5 py-6 mt-6">
-                <button
-                  type="button"
-                  disabled={updateLoading || !hasChanges}
-                  onClick={handleCancel}
-                  className={`btn btn-outline px-8 py-3 text-lg border-2 ${
-                    updateLoading || !hasChanges
-                      ? "border-gray-200 text-gray-400 cursor-not-allowed"
-                      : "border-gray-300 hover:bg-gray-100 hover:border-gray-400"
-                  }`}
-                >
-                  Cancel
-                </button>
+        {/* Action Buttons - Fixed at bottom */}
+        <div className="border-t bg-gray-50 px-6 py-4">
+          <div className="flex justify-end gap-3">
+            <button
+              type="button"
+              disabled={updateLoading || !hasChanges}
+              onClick={handleCancel}
+              className={`btn btn-outline h-[50px] sm:px-6 px-2 text-base ${
+                updateLoading || !hasChanges
+                  ? "border-gray-200 text-gray-400 cursor-not-allowed"
+                  : "border-gray-300 hover:bg-gray-50"
+              }`}
+            >
+              <FaTimes className="mr-2" />
+              Cancel
+            </button>
 
-                <button
-                  type="submit"
-                  disabled={updateLoading || !hasChanges}
-                  className={`btn px-8 py-3 text-lg ${
-                    updateLoading || !hasChanges
-                      ? "bg-gray-300 border-gray-300 text-gray-500 cursor-not-allowed"
-                      : "bg-[#3C8F63] border-[#3C8F63] hover:bg-[#337954] text-white"
-                  }`}
-                >
-                  {updateLoading ? "Working...." : "Save Changes"}
-                </button>
-              </div>
-            </form>
+            <button
+              type="submit"
+              disabled={updateLoading || !hasChanges}
+              onClick={handleContactSubmit}
+              className={`btn h-[50px] px-6 text-base ${
+                updateLoading || !hasChanges
+                  ? "bg-gray-300 border-gray-300 text-gray-500 cursor-not-allowed"
+                  : "bg-[#3C8F63] border-[#3C8F63] hover:bg-[#2d7a52] text-white"
+              }`}
+            >
+              <FaRegSave className="mr-2" />
+              {updateLoading ? "Saving..." : "Save Changes"}
+            </button>
           </div>
         </div>
-      </dialog>
-    </section>
+      </div>
+
+      {/* DaisyUI Modal Backdrop - Click to Close */}
+      <form method="dialog" className="modal-backdrop">
+        <button>close</button>
+      </form>
+    </dialog>
   );
 };
 
