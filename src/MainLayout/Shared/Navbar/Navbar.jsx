@@ -3,6 +3,7 @@ import logo from "../../../../public/fab.png";
 import { Link, NavLink } from "react-router-dom";
 import useUserData from "../../../Hooks/userData";
 import { AuthContext } from "../../../Context/AuthContext";
+import { jhConfirm, jhError, jhSuccess } from "../../../utils";
 
 // From react__
 import { useContext, useEffect, useRef, useState } from "react";
@@ -70,23 +71,28 @@ const Navbar = () => {
 
   // User logout__
   const handleSignOut = () => {
-    Swal.fire({
+    jhConfirm({
       title: "Are you sure?",
-      text: "You went to log out!",
+      text: "You're about to log out from your account",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#f70000",
-      cancelButtonColor: "#007c01",
       confirmButtonText: "Yes, Log out",
+      cancelButtonText: "Stay logged in",
     }).then((result) => {
       if (result.isConfirmed) {
-        logOut().then(() => {
-          Swal.fire({
-            title: "Finished!",
-            text: "Log out successfully",
-            icon: "success",
+        logOut()
+          .then(() => {
+            jhSuccess({
+              title: "Success",
+              text: "You have been logged out successfully",
+            });
+          })
+          .catch(() => {
+            jhError({
+              title: "Error!",
+              text: "Failed to log out. Please try again.",
+            });
           });
-        });
       }
     });
     setOpen(!open);

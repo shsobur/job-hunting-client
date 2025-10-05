@@ -1,5 +1,6 @@
 // File__
 import "./index.css";
+import "./Alert/Alert.css";
 import router from "./Routes/Routes.jsx";
 import AuthProvider from "./Provider/AuthProvider.jsx";
 

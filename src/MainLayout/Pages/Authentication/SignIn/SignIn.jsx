@@ -2,6 +2,7 @@
 import "./SignIn.css";
 import auth from "../../../../Firebase/firebase.config";
 import { AuthContext } from "../../../../Context/AuthContext";
+import { jhError, jhInfo, jhToastSuccess } from "../../../../utils";
 
 // From react__
 import { useContext, useState } from "react";
@@ -34,20 +35,7 @@ const SignIn = () => {
     await handleLoginUser(email, password).then(() => {
       navigate("/");
 
-      Swal.mixin({
-        toast: true,
-        position: "bottom",
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-        didOpen: (toast) => {
-          toast.onmouseenter = Swal.stopTimer;
-          toast.onmouseleave = Swal.resumeTimer;
-        },
-      }).fire({
-        icon: "success",
-        title: "Sign In successfully",
-      });
+      jhToastSuccess("Sign In successfully");
     });
   };
 
@@ -57,17 +45,14 @@ const SignIn = () => {
     try {
       await sendPasswordResetEmail(auth, recoverEmail);
 
-      Swal.fire({
+      jhInfo({
         title: "Check Your Email",
         text: "We sent a reset link to your email inbox. If you don't find it on inbox then check you spam folder",
-        icon: "info",
       });
-    } catch (error) {
-      console.log(error.code, error.message);
-      Swal.fire({
+    } catch {
+      jhError({
         title: "Password Recover Failed",
         text: "There might be some issue. Try again!",
-        icon: "error",
       });
     } finally {
       setPasswordLoading(false);
