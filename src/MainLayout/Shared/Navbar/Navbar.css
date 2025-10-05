@@ -1,4 +1,4 @@
-nav {
+.main_nav {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -404,7 +404,7 @@ nav {
 /* Responsive styles */
 
 @media screen and (max-width: 1280px) {
-  nav {
+  .main_nav {
     margin-bottom: 81px;
   }
 
@@ -420,7 +420,7 @@ nav {
 }
 
 @media screen and (max-width: 1024px) {
-  nav {
+  .main_nav {
     margin-bottom: 79px;
   }
 
@@ -439,7 +439,7 @@ nav {
 }
 
 @media screen and (max-width: 768px) {
-  nav {
+  .main_nav {
     margin-bottom: 78.39px;
   }
 
@@ -471,7 +471,7 @@ nav {
 }
 
 @media screen and (max-width: 640px) {
-  nav {
+  .main_nav {
     margin-bottom: 78px;
   }
 

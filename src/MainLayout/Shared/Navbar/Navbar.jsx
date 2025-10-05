@@ -100,7 +100,7 @@ const Navbar = () => {
 
   return (
     <>
-      <nav>
+      <nav className="main_nav">
         {/* Desktop layout__ */}
         <div
           id={isScrollingDown ? "navbar_close" : "navbar_open"}
