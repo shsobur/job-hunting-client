@@ -51,7 +51,7 @@ const SignIn = () => {
       await sendPasswordResetEmail(auth, recoverEmail);
       jhInfo({
         title: "Check Your Email",
-        text: "We sent a reset link to your email inbox. If you don't find it on inbox then check you spam folder",
+        text: "We sent a reset link to your email inbox. If you don’t find it there, please check your spam folder. Sometimes Firebase takes 2–3 minutes to send the email. We’re working to make it faster",
       });
     } catch {
       jhError({
@@ -60,7 +60,7 @@ const SignIn = () => {
       });
     } finally {
       setPasswordLoading(false);
-      document.getElementById("forget_pass_modal_close").click();
+      handleCloseModal();
     }
   };
 
@@ -76,6 +76,11 @@ const SignIn = () => {
       .catch(() => {
         setGoogleBtnOff(false);
       });
+  };
+
+  const handleCloseModal = () => {
+    const modal = document.getElementById("forgot_password_modal");
+    modal.close();
   };
 
   return (
@@ -121,7 +126,7 @@ const SignIn = () => {
                   id="email-input"
                   type="email"
                   placeholder="Enter your email address"
-                  className="form_input"
+                  className="form_input_signin"
                   {...register("email", {
                     required: "Email is required",
                     pattern: {
@@ -144,7 +149,7 @@ const SignIn = () => {
                   id="password-input"
                   type={showPassword ? "text" : "password"}
                   placeholder="Enter your password"
-                  className="form_input"
+                  className="form_input_signin"
                   {...register("password", {
                     required: "Password is required",
                     minLength: {
@@ -256,7 +261,11 @@ const SignIn = () => {
           </div>
 
           <div className="modal_actions">
-            <button id="forget_pass_modal_close" className="modal_cancel_btn">
+            <button
+              onClick={handleCloseModal}
+              id="forget_pass_modal_close"
+              className="modal_cancel_btn"
+            >
               Cancel
             </button>
           </div>

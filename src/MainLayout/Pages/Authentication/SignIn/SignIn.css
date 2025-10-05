@@ -29,15 +29,7 @@
 /* Header Section */
 .form_header {
   text-align: center;
-  margin-bottom: 32px;
-}
-
-.logo_icon {
-  font-size: 3rem;
-  color: #3c8f63;
-  background: #3c8f631a;
-  padding: 20px;
-  border-radius: 20px;
+  margin-bottom: 20px;
 }
 
 .form_title {
@@ -74,14 +66,13 @@
   align-items: center;
   justify-content: center;
   gap: 12px;
-  margin-bottom: 24px;
 }
 
 .google_signIn_btn:hover:not(:disabled) {
   border-color: #3c8f63;
-  background: rgba(60, 143, 99, 0.02);
+  background: #3c8f6305;
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 25px #0000001a;
 }
 
 .google_signIn_btn:disabled {
@@ -101,7 +92,7 @@
 .form_divider {
   position: relative;
   text-align: center;
-  margin: 24px 0;
+  margin: 15px 0;
 }
 
 .form_divider::before {
@@ -144,15 +135,15 @@
 
 .input_icon {
   position: absolute;
-  left: 16px;
+  left: 10px;
   font-size: 1.125rem;
   color: #6b7280;
   z-index: 2;
 }
 
-.form_input {
+.form_input_signin {
   width: 100%;
-  padding: 16px 16px 16px 48px;
+  padding: 16px 16px 16px 40px;
   font-size: 1rem;
   background: #ffffff;
   border: 2px solid #e5e7eb;
@@ -162,14 +153,14 @@
   font-weight: 500;
 }
 
-.form_input:focus {
+.form_input_signin:focus {
   outline: none;
   border-color: #3c8f63;
   box-shadow: 0 0 0 3px rgba(60, 143, 99, 0.1);
   background: #ffffff;
 }
 
-.form_input::placeholder {
+.form_input_signin::placeholder {
   color: #9ca3af;
 }
 
@@ -204,7 +195,6 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 8px 0;
 }
 
 .remember_me {
@@ -278,7 +268,6 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  margin-top: 8px;
   box-shadow: 0 4px 15px rgba(60, 143, 99, 0.3);
 }
 
@@ -319,8 +308,8 @@
 /* Sign Up Link */
 .signup_link_container {
   text-align: center;
-  margin-top: 24px;
-  padding-top: 24px;
+  margin-top: 5px;
+  padding-top: 15px;
   border-top: 1px solid #e5e7eb;
 }
 
@@ -360,8 +349,8 @@
 .modal_content {
   background: #ffffff;
   border-radius: 24px;
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
-  border: 1px solid rgba(60, 143, 99, 0.1);
+  box-shadow: 0 25px 50px #00000040;
+  border: 1px solid #3c8f631a;
   overflow: hidden;
 }
 
@@ -428,7 +417,7 @@
 .modal_input:focus {
   outline: none;
   border-color: #3c8f63;
-  box-shadow: 0 0 0 3px rgba(60, 143, 99, 0.1);
+  box-shadow: 0 0 0 3px #3c8f631a;
 }
 
 .modal_submit_btn {
@@ -446,12 +435,12 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  box-shadow: 0 4px 15px rgba(60, 143, 99, 0.3);
+  box-shadow: 0 4px 15px #3c8f634d;
 }
 
 .modal_submit_btn:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(60, 143, 99, 0.4);
+  box-shadow: 0 8px 25px #3c8f6366;
 }
 
 .modal_submit_btn:disabled {
@@ -467,8 +456,8 @@
 
 .modal_cancel_btn {
   padding: 12px 24px;
-  background: rgba(107, 114, 128, 0.1);
-  border: 1px solid rgba(107, 114, 128, 0.2);
+  background: #6b72801a;
+  border: 1px solid #6b728033;
   border-radius: 12px;
   color: #6b7280;
   font-size: 0.95rem;
@@ -536,7 +525,7 @@
     font-size: 0.95rem;
   }
 
-  .form_input {
+  .form_input_signin {
     padding: 14px 14px 14px 44px;
     font-size: 0.95rem;
   }
@@ -599,7 +588,7 @@
   .signIn_button,
   .google_signIn_btn,
   .modal_submit_btn,
-  .form_input {
+  .form_input_signin {
     transition: none;
   }
 
@@ -615,11 +604,11 @@
     border: 2px solid #3c8f63;
   }
 
-  .form_input {
+  .form_input_signin {
     border: 2px solid #374151;
   }
 
-  .form_input:focus {
+  .form_input_signin:focus {
     border-color: #3c8f63;
     outline: 2px solid #3c8f63;
   }
