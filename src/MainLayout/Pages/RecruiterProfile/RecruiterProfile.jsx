@@ -18,11 +18,17 @@ import DepartmentModal from "../../../Components/RecUpdateModal/DepartmentModal/
 import CompanyDetailsModal from "../../../Components/RecUpdateModal/CompanyInfo/CompanyInfo";
 import SocialLinksModal from "../../../Components/RecUpdateModal/SocialModal/SocialModal";
 import "./RecruiterProfile.css";
+import ProfileModal from "../../../Components/RecUpdateModal/ProfileModal/ProfileModal";
+import useUserData from "../../../Hooks/userData";
+import placeholderImage from "../../../assets/place_banner.png";
 
 const RecruiterProfile = () => {
+  const { profile } = useUserData();
+
   return (
     <>
       {/* All update modal component__ */}
+      <ProfileModal></ProfileModal>
       <AboutModal></AboutModal>
       <DepartmentModal></DepartmentModal>
       <CompanyDetailsModal></CompanyDetailsModal>
@@ -38,23 +44,27 @@ const RecruiterProfile = () => {
                   <div
                     className="company-avatar"
                     style={{
-                      backgroundImage:
-                        'url("https://lh3.googleusercontent.com/aida-public/AB6AXuCuetNezrPUqgcdgRGwjy3PXc535fNMM0UWC6FKfSA4pnIfkUcyUD2zaG0NtN13mZrI2EV2i9iSTRIyLRbx53A3idSkYGQ2s5b7q3pXWScjaclFGWHQFr7wwPcs-JZAycNsDIgPRMNw_VWpf5FbL1MIi44YK9ddTS0NbrbtLT1z9A13575wMXnWBe73Lo_DQd20Yqv4Z3rSGyynb85QTP0ygJEg1VvP2fIl1NzgfAxIN6A9hvwXF7owO3NXpsN1gZN1jrx3CzSak3Gq")',
+                      backgroundImage: `url("${
+                        profile?.companyLogo === ""
+                          ? placeholderImage
+                          : profile?.companyLogo
+                      }")`,
                     }}
                   ></div>
                 </div>
 
                 <div className="company-info">
-                  <h1 className="company-name">Tech Innovators Inc.</h1>
-                  <p className="company-meta">
-                    Technology | 500-1000 employees | New York City
-                  </p>
+                  <h1 className="company-name">{profile?.companyName}</h1>
+                  <p className="company-meta">{profile?.bio}</p>
 
                   <div className="status-badges">
-                    <span className="status-badge">
-                      <FaRocket className="badge-icon" />
-                      ActiveHire
-                    </span>
+                    {profile?.activeHire && (
+                      <span className="status-badge">
+                        <FaRocket className="badge-icon" />
+                        ActiveHire
+                      </span>
+                    )}
+
                     <span className="status-badge">
                       <FaCheckCircle className="badge-icon" />
                       Verified
@@ -62,7 +72,14 @@ const RecruiterProfile = () => {
                   </div>
                 </div>
 
-                <button className="header-edit-btn">
+                <button
+                  onClick={() =>
+                    document
+                      .getElementById("rec_profile_update_modal")
+                      .showModal()
+                  }
+                  className="header-edit-btn"
+                >
                   <FiEdit className="edit-icon" />
                 </button>
               </div>
@@ -108,13 +125,7 @@ const RecruiterProfile = () => {
 
                   <div className="about-content">
                     <p className="about-description">
-                      Tech Innovators Inc. is a leading technology company
-                      specializing in innovative software solutions for
-                      businesses. Founded in 2005, we have grown to a team of
-                      over 500 employees, with our headquarters in New York
-                      City. Our mission is to empower businesses through
-                      cutting-edge technology, and our vision is to be the
-                      global leader in business software solutions.
+                      {profile?.description || "Tell us about you company"}
                     </p>
 
                     <div className="mission-vision-grid">
@@ -124,7 +135,7 @@ const RecruiterProfile = () => {
                         </div>
                         <h3 className="card-title">Mission</h3>
                         <p className="card-description">
-                          To empower businesses through cutting-edge technology.
+                          {profile?.mission || "What's you company mission?"}
                         </p>
                       </div>
 
@@ -134,8 +145,7 @@ const RecruiterProfile = () => {
                         </div>
                         <h3 className="card-title">Vision</h3>
                         <p className="card-description">
-                          To be the global leader in business software
-                          solutions.
+                          {profile?.vision || "What's you company vision?"}
                         </p>
                       </div>
                     </div>

@@ -1,23 +1,30 @@
 // File path__
 import useAxios from "../../../Hooks/Axios";
-import { getCroppedImg } from "../../../utils";
-import useUserData from "../../../Hooks/userData";
+import { getCroppedImg, jhError, jhSuccess } from "../../../utils";
+import SeekerModalHeader from "../../../MainLayout/Shared/SeekerModalHeader/SeekerModalHeader";
 
 // From react__
-import { useState, useEffect, useCallback } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 
 // Package__
-import Swal from "sweetalert2";
 import Cropper from "react-easy-crop";
 import { Slider } from "@mui/material";
-import { MdUpload } from "react-icons/md";
-import { FaTimes, FaEye } from "react-icons/fa";
+import { MdUpload, MdPerson, MdDescription, MdWork } from "react-icons/md";
+import {
+  FaTimes,
+  FaEye,
+  FaRegSave,
+  FaRegImage,
+  FaCheck,
+  FaTimes as FaClose,
+} from "react-icons/fa";
+import useUserData from "../../../Hooks/userData";
 
 const ProfileUpdateModal = () => {
   const api = useAxios();
   const { profile, updateProfile } = useUserData();
 
-  // Profile data__
+  // Profile data states
   const [profileData, setProfileData] = useState({
     profilePhoto: "",
     userName: "",
@@ -25,7 +32,7 @@ const ProfileUpdateModal = () => {
     openToWork: false,
   });
 
-  // Image cropping states__
+  // Image cropping states
   const [imageSrc, setImageSrc] = useState(null);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
@@ -34,22 +41,46 @@ const ProfileUpdateModal = () => {
   const [croppedFile, setCroppedFile] = useState(null);
 
   const [isLoading, setIsLoading] = useState(false);
+  const [photoUploadLoading, setPhotoUploadLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [hasChanges, setHasChanges] = useState(false);
 
-  // Load initial profile data__
+  // Store original data
+  const originalDataRef = useRef({});
+
+  // Load initial profile data
   useEffect(() => {
     if (profile) {
-      setProfileData({
+      const initialData = {
         profilePhoto: profile.profilePhoto || "",
         userName: profile.userName || "",
         bio: profile.bio || "",
         openToWork: profile.openToWork || false,
-      });
+      };
+
+      setProfileData(initialData);
+      originalDataRef.current = initialData;
+      setHasChanges(false);
     }
   }, [profile]);
 
-  // Handle text/checkbox change__
+  // Check for changes
+  useEffect(() => {
+    const hasPhotoChanged =
+      profileData.profilePhoto !== originalDataRef.current.profilePhoto;
+    const hasNameChanged =
+      profileData.userName !== originalDataRef.current.userName;
+    const hasBioChanged = profileData.bio !== originalDataRef.current.bio;
+    const hasWorkChanged =
+      profileData.openToWork !== originalDataRef.current.openToWork;
+
+    setHasChanges(
+      hasPhotoChanged || hasNameChanged || hasBioChanged || hasWorkChanged
+    );
+  }, [profileData]);
+
+  // Handle text/checkbox changes
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setProfileData((prev) => ({
@@ -58,32 +89,24 @@ const ProfileUpdateModal = () => {
     }));
   };
 
-  // Image crop__
+  // Crop complete
   const onCropComplete = useCallback((_, croppedAreaPixels) => {
     setCroppedAreaPixels(croppedAreaPixels);
   }, []);
 
+  // Handle file input
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       setImageSrc(URL.createObjectURL(file));
       setCroppedImage(null);
       setCroppedFile(null);
+      setMessage("");
+      setErrorMessage("");
     }
   };
 
-  const handlePreview = async () => {
-    if (!croppedAreaPixels || !imageSrc) return;
-    try {
-      const { file, url } = await getCroppedImg(imageSrc, croppedAreaPixels);
-      setCroppedImage(url);
-      setCroppedFile(file);
-      setMessage("Image cropped! Click 'Save Cropped Image' to update.");
-    } catch {
-      setErrorMessage("Error cropping image. Please try again later!.");
-    }
-  };
-
+  // Cancel cropping
   const handleCancelCrop = () => {
     setImageSrc(null);
     setCroppedImage(null);
@@ -94,7 +117,20 @@ const ProfileUpdateModal = () => {
     setErrorMessage("");
   };
 
-  // Upload cropped file to backend Cloudinary__
+  // Preview cropped image
+  const handlePreview = async () => {
+    if (!croppedAreaPixels || !imageSrc) return;
+    try {
+      const { file, url } = await getCroppedImg(imageSrc, croppedAreaPixels);
+      setCroppedImage(url);
+      setCroppedFile(file);
+      setMessage("Image cropped! Click 'Save Cropped Image' to upload.");
+    } catch {
+      setErrorMessage("Error cropping image. Please try again later.");
+    }
+  };
+
+  // Upload cropped image to backend
   const handleUploadToBackend = async () => {
     if (!croppedFile) {
       setErrorMessage("Please crop an image first.");
@@ -105,8 +141,7 @@ const ProfileUpdateModal = () => {
     formData.append("file", croppedFile);
 
     try {
-      setIsLoading(true);
-
+      setPhotoUploadLoading(true);
       const res = await api.post("/upload", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
@@ -116,26 +151,22 @@ const ProfileUpdateModal = () => {
           ...prev,
           profilePhoto: res.data.url,
         }));
-
-        // Reset cropping state but keep the preview__
         setImageSrc(null);
         setCrop({ x: 0, y: 0 });
         setZoom(1);
+        setMessage("Profile photo uploaded successfully!");
       } else {
-        setErrorMessage("Image upload failed! Try again.");
+        setErrorMessage("Photo upload failed! Try again.");
       }
     } catch {
       setErrorMessage("Upload failed! Something went wrong.");
     } finally {
-      setIsLoading(false);
+      setPhotoUploadLoading(false);
     }
   };
 
-  // Final save send profile data to DB__
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-
+  // Final save changes
+  const handleSaveChanges = () => {
     const submissionData = {
       userName: profileData.userName.trim(),
       bio: profileData.bio.trim(),
@@ -143,245 +174,295 @@ const ProfileUpdateModal = () => {
       profilePhoto: profileData.profilePhoto,
     };
 
+    setIsLoading(true);
     updateProfile(submissionData, {
       onSuccess: () => {
-        document.getElementById("profile_update_modal").close();
+        handleCloseModal();
 
-        Swal.fire({
+        jhSuccess({
           title: "Success!",
           text: "Profile updated successfully.",
-          icon: "success",
         });
 
         setIsLoading(false);
       },
       onError: () => {
-        document.getElementById("profile_update_modal").close();
+        handleCloseModal();
 
-        Swal.fire({
+        jhError({
           title: "Oops!",
           text: "Something went wrong while updating.",
-          icon: "error",
         });
 
-        handleCancelCrop();
         setIsLoading(false);
       },
     });
   };
 
+  const handleCancel = () => {
+    // Reset to original data
+    setProfileData(originalDataRef.current);
+    setImageSrc(null);
+    setCroppedImage(null);
+    setCroppedFile(null);
+    setCrop({ x: 0, y: 0 });
+    setZoom(1);
+    setMessage("");
+    setErrorMessage("");
+    setHasChanges(false);
+  };
+
+  const handleCloseModal = () => {
+    const modal = document.getElementById("profile_update_modal");
+    modal.close();
+  };
+
   return (
-    <section>
-      <dialog id="profile_update_modal" className="modal">
-        <div className="modal-box max-w-[1024px] max-h-[95vh]">
-          {/* Close Button */}
-          <form method="dialog" className="mb-5">
-            <button
-              type="button"
-              className="btn btn-sm btn-circle btn-ghost border border-gray-400 absolute right-2 top-2"
-              onClick={() =>
-                document.getElementById("profile_update_modal").close()
-              }
-            >
-              <span className="text-2xl font-semibold text-gray-700">×</span>
-            </button>
-          </form>
+    <dialog id="profile_update_modal" className="modal">
+      <div className="modal-box max-w-[1024px] max-h-[95vh] flex flex-col p-0">
+        {/* Header */}
+        <SeekerModalHeader
+          title="Update Your Profile"
+          handleCloseModal={handleCloseModal}
+        />
 
-          <div className="contact_update_main_content_container">
-            <h1 className="modal_title font-semibold font-[Montserrat] text-3xl">
-              Edit your profile
-            </h1>
+        {/* Scrollable Content */}
+        <div className="flex-1 overflow-y-auto">
+          <div className="px-6 py-4 space-y-6">
+            {/* Profile Photo Section */}
+            <div className="space-y-4">
+              <h3 className="flex items-center gap-3 text-xl font-semibold text-gray-800">
+                <FaRegImage className="text-[#3C8F63] text-lg" />
+                Profile Photo
+              </h3>
 
-            {/* Profile Photo Cropper - Now integrated directly */}
-            <div className="border-2 border-gray-300 rounded-md my-5 p-4">
-              <div className="flex flex-col items-center justify-center w-full my-10">
-                {/* Upload Box */}
-                {!imageSrc && (
-                  <label className="w-full h-52 flex flex-col items-center justify-center border-2 border-dashed border-gray-400 rounded-2xl cursor-pointer bg-gray-50 hover:bg-gray-100 transition">
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleFileChange}
-                      className="hidden"
-                      disabled={isLoading}
-                    />
-                    <MdUpload className="text-5xl text-gray-500 mb-3" />
-                    <p className="text-gray-600 font-medium">Click to upload</p>
-                    <p className="text-sm text-gray-400">PNG, JPG (max 5MB)</p>
-                  </label>
-                )}
+              {/* Current Photo */}
+              {profileData.profilePhoto && !imageSrc && (
+                <div className="flex flex-col items-center space-y-4 p-4 border-2 border-gray-300 rounded-lg">
+                  <p className="font-medium text-gray-700 text-lg">
+                    Current Photo:
+                  </p>
+                  <img
+                    src={profileData.profilePhoto}
+                    alt="Profile"
+                    className="w-32 h-32 object-cover rounded-full border-2 border-gray-300"
+                  />
+                  {profileData.profilePhoto !== profile?.profilePhoto && (
+                    <div className="bg-green-50 border border-green-200 rounded-xl p-3">
+                      <div className="text-green-800 text-sm">
+                        <span className="font-semibold">Note:</span> Click "Save
+                        Changes" below to update your profile photo.
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
 
-                {/* Cropper */}
-                {imageSrc && (
-                  <div className="flex flex-col items-center gap-4 w-full p-5">
-                    <div className="relative w-full max-w-[500px] h-[300px] md:h-[500px] rounded-lg overflow-hidden shadow-md">
+              {/* Upload Section */}
+              {!imageSrc && (
+                <label className="w-full h-40 flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                    className="hidden"
+                    disabled={isLoading}
+                  />
+                  <MdUpload className="text-4xl text-gray-500 mb-3" />
+                  <p className="text-gray-600 font-medium text-lg">
+                    Upload New Photo
+                  </p>
+                  <p className="text-gray-400 text-base mt-1">
+                    PNG, JPG, WEBP (max 5MB)
+                  </p>
+                </label>
+              )}
+
+              {/* Cropper Section */}
+              {imageSrc && (
+                <div className="space-y-6 p-4 border-2 border-gray-300 rounded-lg">
+                  <h4 className="flex items-center gap-2 font-semibold text-gray-800 text-lg">
+                    <FaRegImage className="text-[#3C8F63]" />
+                    Crop Your Photo
+                  </h4>
+
+                  <div className="space-y-4">
+                    {/* Cropper Container */}
+                    <div className="relative w-full h-[300px] rounded-lg overflow-hidden border-2 border-gray-300">
                       <Cropper
                         image={imageSrc}
                         crop={crop}
                         zoom={zoom}
-                        aspect={1}
+                        aspect={1} // Square aspect ratio for profile photo
                         onCropChange={setCrop}
                         onZoomChange={setZoom}
                         onCropComplete={onCropComplete}
                       />
                     </div>
 
-                    {/* Zoom Control */}
-                    <div className="w-72">
-                      <Slider
-                        value={zoom}
-                        min={1}
-                        max={3}
-                        step={0.1}
-                        onChange={(e, newZoom) => setZoom(newZoom)}
-                        disabled={isLoading}
-                      />
+                    {/* Zoom Controls */}
+                    <div className="space-y-2">
+                      <label className="font-medium text-gray-700 text-lg">
+                        Zoom Level
+                      </label>
+                      <div className="px-4">
+                        <Slider
+                          value={zoom}
+                          min={1}
+                          max={3}
+                          step={0.1}
+                          onChange={(e, newZoom) => setZoom(newZoom)}
+                          disabled={isLoading}
+                          sx={{
+                            color: "#3C8F63",
+                            "& .MuiSlider-thumb": {
+                              backgroundColor: "#3C8F63",
+                            },
+                            "& .MuiSlider-track": {
+                              backgroundColor: "#3C8F63",
+                            },
+                          }}
+                        />
+                      </div>
                     </div>
 
-                    {/* Action Buttons */}
-                    <div className="flex gap-4 flex-wrap justify-center">
-                      {/* Cancel */}
+                    {/* Crop Action Buttons */}
+                    <div className="flex gap-3 flex-wrap">
                       <button
                         onClick={handleCancelCrop}
-                        disabled={isLoading}
-                        className="flex items-center gap-2 px-6 py-2 border-2 border-gray-300 rounded-lg hover:bg-gray-100 transition"
+                        disabled={photoUploadLoading || isLoading}
+                        className="btn btn-outline h-[50px] px-6 text-base border-2 border-gray-300 hover:bg-gray-50"
                       >
-                        <FaTimes /> Cancel
+                        <FaTimes className="mr-2" />
+                        Cancel
                       </button>
 
-                      {/* Preview */}
                       <button
-                        type="button"
                         onClick={handlePreview}
-                        disabled={isLoading || !croppedAreaPixels}
-                        className="flex items-center gap-2 px-6 py-2 border-2 border-[#3C8F63] text-[#3C8F63] rounded-lg hover:bg-green-50 transition"
+                        disabled={
+                          photoUploadLoading || isLoading || !croppedAreaPixels
+                        }
+                        className={`btn h-[50px] px-6 text-base ${
+                          photoUploadLoading || !croppedAreaPixels
+                            ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                            : "bg-[#3C8F63] hover:bg-[#2d7a52] text-white"
+                        }`}
                       >
-                        <FaEye /> Preview
+                        <FaEye className="mr-2" />
+                        Preview
                       </button>
                     </div>
+                  </div>
 
-                    {/* Cropped preview */}
-                    {croppedImage && (
-                      <div className="flex flex-col items-center border-2 border-[#3C8F63] rounded-lg py-5 w-full mt-4">
-                        <p className="text-gray-700 font-medium mb-2">
-                          Cropped Preview:
-                        </p>
-                        <img
-                          src={croppedImage}
-                          alt="Cropped"
-                          className="w-80 h-80 p-1 object-cover rounded-full shadow border-2 border-[#3C8F63]"
-                        />
-                        <button
-                          type="button"
-                          onClick={handleUploadToBackend}
-                          disabled={isLoading}
-                          className="btn mt-3 bg-[#3C8F63] text-white px-4 py-2 rounded-md hover:bg-[#368058]"
-                        >
-                          {isLoading ? "Updating..." : "Save Cropped Image"}
-                        </button>
+                  {/* Cropped Preview */}
+                  {croppedImage && (
+                    <div className="space-y-4 p-4 border-2 border-[#3C8F63] rounded-xl bg-[#f8fbf9]">
+                      <h4 className="flex items-center gap-2 font-semibold text-gray-800 text-lg">
+                        <FaRegImage className="text-[#3C8F63]" />
+                        Cropped Preview
+                      </h4>
+
+                      <div className="flex flex-col items-center space-y-3">
+                        <div className="w-32 h-32 border-2 border-gray-300 rounded-full overflow-hidden">
+                          <img
+                            src={croppedImage}
+                            alt="Cropped Profile"
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                        <p className="text-gray-600 text-sm">Profile Photo</p>
                       </div>
-                    )}
 
-                    {/* Message Display */}
-                    {message && (
-                      <div
-                        className={
-                          "p-3 rounded-md mb-4 bg-green-100 text-green-800"
-                        }
+                      <button
+                        onClick={handleUploadToBackend}
+                        disabled={isLoading || photoUploadLoading}
+                        className={`btn h-[50px] px-6 text-base ${
+                          photoUploadLoading
+                            ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                            : "bg-[#3C8F63] hover:bg-[#2d7a52] text-white"
+                        }`}
                       >
-                        {message}
-                      </div>
-                    )}
-                    {errorMessage && (
-                      <div className="p-3 rounded-md mb-4 bg-red-100 text-red-800">
+                        <FaRegSave className="mr-2" />
+                        {photoUploadLoading
+                          ? "Uploading..."
+                          : "Save Cropped Photo"}
+                      </button>
+                    </div>
+                  )}
+
+                  {/* Messages */}
+                  {message && (
+                    <div className="bg-green-50 border border-green-200 rounded-xl p-4">
+                      <div className="text-green-800 text-base">{message}</div>
+                    </div>
+                  )}
+
+                  {errorMessage && (
+                    <div className="bg-red-50 border border-red-200 rounded-xl p-4">
+                      <div className="text-red-800 text-base">
                         {errorMessage}
                       </div>
-                    )}
-                  </div>
-                )}
-
-                {/* Current Profile Photo */}
-                {!imageSrc && profileData.profilePhoto && (
-                  <div className="mt-5 text-center">
-                    <p className="text-gray-700 font-semibold text-lg mb-2">
-                      Current Profile Photo:
-                    </p>
-                    <img
-                      src={profileData.profilePhoto}
-                      alt="Current Profile"
-                      className="w-72 h-72 object-cover rounded-full border-2 border-gray-300 mx-auto"
-                    />
-                    {profileData?.profilePhoto !== profile?.profilePhoto && (
-                      <p className="mt-5 p-3 rounded-md bg-green-100 text-green-800">
-                        <b>"Save changes"</b> to update your banner, or changes
-                        will be{" "}
-                        <span className="text-orange-700 font-semibold">
-                          lost.
-                        </span>
-                      </p>
-                    )}
-                  </div>
-                )}
-              </div>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
 
-            {/* Profile Update Form */}
-            <form className="space-y-6" onSubmit={handleSubmit}>
-              {/* Name Input */}
-              <div>
-                <label
-                  className="block text-xl font-medium mb-2"
-                  htmlFor="name"
-                >
+            {/* Personal Information Section */}
+            <div className="space-y-6">
+              <h3 className="flex items-center gap-3 text-xl font-semibold text-gray-800">
+                <MdPerson className="text-[#3C8F63] text-lg" />
+                Personal Information
+              </h3>
+
+              {/* Full Name */}
+              <div className="space-y-2">
+                <label className="flex items-center gap-2 font-medium text-gray-700 text-lg">
+                  <MdPerson className="text-gray-500" />
                   Full Name
                 </label>
                 <input
-                  disabled={isLoading}
                   type="text"
-                  className="w-full p-3 md:p-4 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#3C8F63] focus:border-transparent"
-                  id="name"
                   name="userName"
                   value={profileData.userName}
                   onChange={handleChange}
                   placeholder="Enter your full name"
+                  className="input input-bordered w-full h-[55px] text-base border-2 border-gray-300 focus:border-[#3C8F63] focus:outline-none rounded-lg"
                   maxLength={30}
                 />
-                <p className="text-sm text-gray-500 mt-1">
-                  {profileData?.userName?.length}/30 characters
+                <p className="text-sm text-gray-500">
+                  {profileData.userName.length}/30 characters
                 </p>
               </div>
 
-              {/* Bio Textarea */}
-              <div>
-                <label className="block text-xl font-medium mb-2" htmlFor="bio">
+              {/* Bio */}
+              <div className="space-y-2">
+                <label className="flex items-center gap-2 font-medium text-gray-700 text-lg">
+                  <MdDescription className="text-gray-500" />
                   Bio
                 </label>
                 <textarea
-                  disabled={isLoading}
-                  className="w-full p-3 md:p-4 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#3C8F63] focus:border-transparent resize-y"
-                  id="bio"
                   name="bio"
                   value={profileData.bio}
                   onChange={handleChange}
                   placeholder="Tell us about yourself, your skills, and experience..."
                   rows="4"
+                  className="textarea textarea-bordered w-full text-base border-2 border-gray-300 focus:border-[#3C8F63] focus:outline-none rounded-lg resize-none"
                   maxLength={100}
                 />
-                <p className="text-sm text-gray-500 mt-1">
-                  {profileData?.bio?.length}/100 characters
+                <p className="text-sm text-gray-500">
+                  {profileData.bio.length}/100 characters
                 </p>
               </div>
 
-              {/* Open to Work Switch */}
-              <div className="flex items-center justify-between p-4 border-2 border-gray-300 rounded-md">
-                <div>
-                  <label
-                    className="block text-xl font-medium mb-1"
-                    htmlFor="openToWork"
-                  >
+              {/* Open to Work Toggle */}
+              <div className="flex items-center justify-between p-4 border-2 border-gray-300 rounded-lg">
+                <div className="space-y-1">
+                  <label className="flex items-center gap-2 font-medium text-gray-700 text-lg">
+                    <MdWork className="text-gray-500" />
                     Open to Work
                   </label>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-gray-600 text-base">
                     {profileData.openToWork
                       ? "You're currently open to new opportunities"
                       : "You're not actively looking for new opportunities"}
@@ -391,42 +472,70 @@ const ProfileUpdateModal = () => {
                 <label className="relative inline-flex items-center cursor-pointer">
                   <input
                     type="checkbox"
-                    className="sr-only peer"
-                    id="openToWork"
                     name="openToWork"
                     checked={profileData.openToWork}
                     onChange={handleChange}
+                    className="sr-only peer"
                     disabled={isLoading}
                   />
                   <div className="w-14 h-7 bg-gray-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-7 peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-[#3C8F63]"></div>
                 </label>
               </div>
+            </div>
 
-              {/* Action buttons */}
-              <div className="modal-action mt-8 flex flex-col-reverse sm:flex-row justify-end gap-3">
-                <button
-                  type="button"
-                  disabled={isLoading}
-                  className="btn btn-outline w-full sm:w-auto px-4 sm:px-8 py-3 text-lg border-2 border-gray-300 hover:bg-gray-100 hover:border-gray-400"
-                  onClick={() =>
-                    document.getElementById("profile_update_modal").close()
-                  }
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={isLoading}
-                  className="btn bg-[#3C8F63] border-[#3C8F63] hover:bg-[#337954] hover:border-green-700 w-full sm:w-auto px-4 sm:px-8 py-3 text-lg text-white"
-                >
-                  {isLoading ? "Working..." : "Save Changes"}
-                </button>
+            {/* Tip Box */}
+            <div className="bg-green-50 border border-green-200 rounded-xl p-4">
+              <div className="flex items-start gap-3">
+                <FaCheck className="text-green-600 text-xl mt-0.5" />
+                <div className="text-green-800 text-base">
+                  <span className="font-semibold">Tip:</span> Keep your profile
+                  information up-to-date to attract the best opportunities. A
+                  professional photo and detailed bio help employers understand
+                  your skills and experience.
+                </div>
               </div>
-            </form>
+            </div>
           </div>
         </div>
-      </dialog>
-    </section>
+
+        {/* Action Buttons - Fixed at bottom */}
+        <div className="border-t bg-gray-50 px-6 py-4">
+          <div className="flex justify-end gap-3">
+            <button
+              type="button"
+              disabled={isLoading || !hasChanges}
+              onClick={handleCancel}
+              className={`btn btn-outline h-[50px] sm:px-6 px-2 text-base ${
+                isLoading || !hasChanges
+                  ? "border-gray-200 text-gray-400 cursor-not-allowed"
+                  : "border-gray-300 hover:bg-gray-50"
+              }`}
+            >
+              <FaClose className="mr-2" />
+              Cancel
+            </button>
+
+            <button
+              onClick={handleSaveChanges}
+              disabled={isLoading || !hasChanges}
+              className={`btn h-[50px] px-6 text-base ${
+                isLoading || !hasChanges
+                  ? "bg-gray-300 border-gray-300 text-gray-500 cursor-not-allowed"
+                  : "bg-[#3C8F63] border-[#3C8F63] hover:bg-[#2d7a52] text-white"
+              }`}
+            >
+              <FaRegSave className="mr-2" />
+              {isLoading ? "Saving..." : "Save Changes"}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* DaisyUI Modal Backdrop - Click to Close */}
+      <form method="dialog" className="modal-backdrop">
+        <button>close</button>
+      </form>
+    </dialog>
   );
 };
 
