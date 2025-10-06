@@ -273,11 +273,10 @@ const ContactModal = () => {
         {/* Scrollable Content */}
         <div className="flex-1 overflow-y-auto">
           <form onSubmit={handleContactSubmit} className="px-6 py-4 space-y-6">
-            {/* Location Section */}
+            {/* Personal Section */}
             <div className="space-y-4">
               <h3 className="flex items-center gap-3 text-xl font-semibold text-gray-800">
-                <FaRegMap className="text-[#3C8F63] text-lg" />
-                Location Information
+                Personal Information
               </h3>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
