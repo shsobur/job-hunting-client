@@ -297,7 +297,14 @@ const RecruiterProfile = () => {
                 <div className="sidebar-card">
                   <div className="card-header">
                     <h3 className="card-title">Key People</h3>
-                    <button className="card-edit-btn">
+                    <button
+                      onClick={() =>
+                        document
+                          .getElementById("rec_key_people_modal")
+                          .showModal()
+                      }
+                      className="card-edit-btn"
+                    >
                       <FiEdit className="edit-icon" />
                     </button>
                   </div>

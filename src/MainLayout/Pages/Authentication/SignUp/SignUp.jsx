@@ -90,10 +90,10 @@ const SignUp = () => {
       hearFrom: selected,
       userRole: selectedRole,
       userEmail: email,
-      userName: "Company" + number,
-      companyName: "",
+      companyName: "Company" + number,
       companyLogo: "",
       companyWebsite: "",
+      bio: "",
       industry: "",
       companySize: {
         currentEmployees: null,
@@ -117,13 +117,7 @@ const SignUp = () => {
       vision: "",
       departments: [],
       companyGallery: [],
-      keyPeople: [
-        {
-          image: "",
-          name: "",
-          role: "",
-        },
-      ],
+      keyPeople: [],
       activeHire: true,
       verified: false,
       social: {
