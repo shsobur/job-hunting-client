@@ -21,6 +21,7 @@ import "./RecruiterProfile.css";
 import ProfileModal from "../../../Components/RecUpdateModal/ProfileModal/ProfileModal";
 import useUserData from "../../../Hooks/userData";
 import placeholderImage from "../../../assets/place_banner.png";
+import People from "../../../Components/RecUpdateModal/People/People";
 
 const RecruiterProfile = () => {
   const { profile } = useUserData();
@@ -32,6 +33,7 @@ const RecruiterProfile = () => {
       <AboutModal></AboutModal>
       <DepartmentModal></DepartmentModal>
       <CompanyDetailsModal></CompanyDetailsModal>
+      <People></People>
       <SocialLinksModal></SocialLinksModal>
 
       <section id="recruiter_profile_container">

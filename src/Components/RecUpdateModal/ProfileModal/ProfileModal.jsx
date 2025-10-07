@@ -538,7 +538,7 @@ const ProfileModal = () => {
         </div>
 
         {/* DaisyUI Modal Backdrop - Click to Close */}
-        <form method="dialog" className="modal-backdrop">
+        <form method="dialog">
           <button>close</button>
         </form>
       </dialog>

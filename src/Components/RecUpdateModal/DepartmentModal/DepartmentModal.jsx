@@ -1,6 +1,9 @@
-import Swal from "sweetalert2";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import useUserData from "../../../Hooks/userData";
+import SeekerModalHeader from "../../../MainLayout/Shared/SeekerModalHeader/SeekerModalHeader";
+import { jhSuccess, jhError } from "../../../utils";
+import { MdBusinessCenter, MdSearch, MdAdd, MdClose } from "react-icons/md";
+import { FaRegSave, FaTimes } from "react-icons/fa";
 
 const DepartmentModal = () => {
   const { profile, updateProfile } = useUserData();
@@ -8,6 +11,10 @@ const DepartmentModal = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [dpUpdateLoading, setDpUpdateLoading] = useState(false);
+  const [hasChanges, setHasChanges] = useState(false);
+
+  // Store original data
+  const originalDataRef = useRef([]);
 
   // Sorted departments A-Z
   const departments = [
@@ -43,8 +50,19 @@ const DepartmentModal = () => {
   ].sort();
 
   useEffect(() => {
-    setSelectedDepartments(profile?.departments);
+    const initialDepartments = profile?.departments || [];
+    setSelectedDepartments(initialDepartments);
+    originalDataRef.current = initialDepartments;
+    setHasChanges(false);
   }, [profile]);
+
+  // Check for changes
+  useEffect(() => {
+    const hasChanged =
+      JSON.stringify(selectedDepartments) !==
+      JSON.stringify(originalDataRef.current);
+    setHasChanges(hasChanged);
+  }, [selectedDepartments]);
 
   const filteredDepartments = departments.filter((dept) =>
     dept.toLowerCase().includes(searchTerm.toLowerCase())
@@ -67,31 +85,32 @@ const DepartmentModal = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const department = {
+    const departmentData = {
       departments: selectedDepartments,
     };
 
     setDpUpdateLoading(true);
-    updateProfile(department, {
+    updateProfile(departmentData, {
       onSuccess: () => {
-        document.getElementById("rec_department_update_modal").close();
+        handleCloseModal();
 
-        Swal.fire({
+        jhSuccess({
           title: "Success!",
-          text: "Department updated successfully.",
-          icon: "success",
+          text: "Departments updated successfully.",
         });
 
+        // Update original data after successful save
+        originalDataRef.current = [...selectedDepartments];
         setDpUpdateLoading(false);
+        setHasChanges(false);
       },
 
       onError: () => {
-        document.getElementById("rec_department_update_modal").close();
+        handleCloseModal();
 
-        Swal.fire({
+        jhError({
           title: "Oops!",
           text: "Something went wrong while updating.",
-          icon: "error",
         });
 
         setDpUpdateLoading(false);
@@ -99,125 +118,184 @@ const DepartmentModal = () => {
     });
   };
 
+  const handleCancel = () => {
+    // Reset to original data
+    setSelectedDepartments(originalDataRef.current);
+    setHasChanges(false);
+  };
+
+  const handleCloseModal = () => {
+    const modal = document.getElementById("rec_department_update_modal");
+    modal.close();
+  };
+
   return (
-    <>
-      <section>
-        <dialog id="rec_department_update_modal" className="modal">
-          <div className="modal-box max-w-[1024px]">
-            <form method="dialog" className="mb-5">
-              <button className="btn btn-sm btn-circle btn-ghost border border-gray-400 absolute right-2 top-2">
-                <span className="text-2xl font-semibold text-gray-700">×</span>
-              </button>
-            </form>
+    <dialog id="rec_department_update_modal" className="modal">
+      <div className="modal-box max-w-[1024px] max-h-[95vh] flex flex-col p-0">
+        {/* Header */}
+        <SeekerModalHeader
+          title="Update Company Departments"
+          handleCloseModal={handleCloseModal}
+        />
 
-            <div className="contact_update_main_content_container">
-              <h1 className="modal_title font-semibold font-[Montserrat] text-3xl">
-                Edit Department Info
-              </h1>
-            </div>
+        {/* Scrollable Content */}
+        <div className="flex-1 overflow-y-auto">
+          <div className="px-6 py-4 space-y-6">
+            {/* Department Selection Section */}
+            <div className="space-y-4">
+              <h3 className="flex items-center gap-3 text-xl font-semibold text-gray-800">
+                Company Departments
+              </h3>
 
-            <div className="mt-6">
-              <form className="space-y-6" onSubmit={handleSubmit}>
-                <div className="h-[40vh]">
-                  <label className="block text-xl font-medium mb-2">
-                    Departments
+              {/* Search and Selection */}
+              <div className="space-y-4">
+                <div className="relative">
+                  <label className="flex items-center gap-2 font-medium text-gray-700 text-lg mb-2">
+                    <MdSearch className="text-gray-500" />
+                    Search and Add Departments
                   </label>
 
-                  {/* Department selection interface */}
-                  <div className="relative">
-                    <div className="flex items-center border-2 border-gray-300 rounded-md p-2 focus-within:ring-2 focus-within:ring-[#3C8F63] focus-within:border-transparent">
-                      <input
-                        disabled={dpUpdateLoading}
-                        type="text"
-                        placeholder="Search departments..."
-                        className="flex-grow p-2 focus:outline-none"
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        onFocus={() => setIsDropdownOpen(true)}
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                        className="p-2 text-gray-500 hover:text-gray-700"
-                      >
-                        {isDropdownOpen ? "▲" : "▼"}
-                      </button>
-                    </div>
-
-                    {/* Dropdown menu */}
-                    {isDropdownOpen && (
-                      <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto">
-                        {filteredDepartments.length > 0 ? (
-                          filteredDepartments.map((department) => (
-                            <div
-                              key={department}
-                              className="p-3 hover:bg-gray-100 cursor-pointer"
-                              onClick={() => handleAddDepartment(department)}
-                            >
-                              {department}
-                            </div>
-                          ))
-                        ) : (
-                          <div className="p-3 text-gray-500">
-                            No departments found
-                          </div>
-                        )}
-                      </div>
-                    )}
+                  <div className="flex items-center border-2 border-gray-300 rounded-lg focus-within:border-[#3C8F63] transition-colors">
+                    <input
+                      disabled={dpUpdateLoading}
+                      type="text"
+                      placeholder="Type to search departments..."
+                      className="flex-grow p-4 h-[55px] text-base focus:outline-none rounded-l-lg"
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      onFocus={() => setIsDropdownOpen(true)}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                      disabled={dpUpdateLoading}
+                      className="p-4 text-gray-500 hover:text-gray-700 transition-colors"
+                    >
+                      {isDropdownOpen ? "▲" : "▼"}
+                    </button>
                   </div>
 
-                  {/* Selected departments */}
-                  <div className="mt-4">
-                    {selectedDepartments?.length > 0 ? (
-                      <div className="flex flex-wrap gap-2">
-                        {selectedDepartments.map((department) => (
+                  {/* Dropdown menu */}
+                  {isDropdownOpen && (
+                    <div className="absolute z-10 w-full mt-2 bg-white border-2 border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                      {filteredDepartments.length > 0 ? (
+                        filteredDepartments.map((department) => (
                           <div
                             key={department}
-                            className="bg-[#3C8F63] text-white px-3 py-1 rounded-full flex items-center"
+                            className="p-4 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0 transition-colors"
+                            onClick={() => handleAddDepartment(department)}
                           >
-                            {department}
-                            <button
-                              type="button"
-                              onClick={() => handleRemoveDepartment(department)}
-                              className="ml-2 text-white hover:text-gray-200"
-                            >
-                              ×
-                            </button>
+                            <div className="flex items-center gap-3">
+                              <MdAdd className="text-[#3C8F63] flex-shrink-0" />
+                              <span className="text-gray-700">
+                                {department}
+                              </span>
+                            </div>
                           </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <p className="text-gray-500 mt-2">
-                        No departments selected yet
-                      </p>
-                    )}
-                  </div>
+                        ))
+                      ) : (
+                        <div className="p-4 text-gray-500 text-center">
+                          No departments found matching "{searchTerm}"
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
 
-                {/* Action buttons */}
-                <div className="modal-action mt-8 flex justify-end space-x-3">
-                  <form method="dialog">
-                    <button
-                      disabled={dpUpdateLoading}
-                      className="btn btn-outline px-8 py-3 text-lg border-2 border-gray-300 hover:bg-gray-100 hover:border-gray-400"
-                    >
-                      Cancel
-                    </button>
-                  </form>
-                  <button
-                    type="submit"
-                    disabled={dpUpdateLoading}
-                    className="btn bg-[#3C8F63] border-[#3C8F63] hover:bg-[#337954] hover:border-green-700 px-8 py-3 text-lg text-white"
-                  >
-                    {dpUpdateLoading ? "Working..." : "Save Changes"}
-                  </button>
+                {/* Selected Departments */}
+                <div className="space-y-3">
+                  <label className="flex items-center gap-2 font-medium text-gray-700 text-lg">
+                    <MdBusinessCenter className="text-gray-500" />
+                    Selected Departments ({selectedDepartments.length})
+                  </label>
+
+                  {selectedDepartments?.length > 0 ? (
+                    <div className="flex flex-wrap gap-3">
+                      {selectedDepartments.map((department) => (
+                        <div
+                          key={department}
+                          className="bg-[#3C8F63] text-white px-4 py-2 rounded-lg flex items-center gap-2 shadow-sm"
+                        >
+                          <span className="text-base">{department}</span>
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveDepartment(department)}
+                            disabled={dpUpdateLoading}
+                            className="text-white hover:text-gray-200 transition-colors p-1 rounded-full hover:bg-[#2d7a52]"
+                          >
+                            <MdClose size={16} />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-center py-8 border-2 border-dashed border-gray-300 rounded-lg">
+                      <MdBusinessCenter className="text-gray-400 text-4xl mx-auto mb-3" />
+                      <p className="text-gray-500 text-lg">
+                        No departments selected yet
+                      </p>
+                      <p className="text-gray-400 text-base mt-1">
+                        Search and add departments from the list above
+                      </p>
+                    </div>
+                  )}
                 </div>
-              </form>
+              </div>
+            </div>
+
+            {/* Tip Box */}
+            <div className="bg-green-50 border border-green-200 rounded-xl p-4">
+              <div className="flex items-start gap-3">
+                <MdBusinessCenter className="text-green-600 text-xl mt-0.5" />
+                <div className="text-green-800 text-base">
+                  <span className="font-semibold">Tip:</span> Select the
+                  departments that exist in your company. This helps candidates
+                  find relevant job opportunities and understand your
+                  organizational structure better.
+                </div>
+              </div>
             </div>
           </div>
-        </dialog>
-      </section>
-    </>
+        </div>
+
+        {/* Action Buttons - Fixed at bottom */}
+        <div className="border-t bg-gray-50 px-6 py-4">
+          <div className="flex justify-end gap-3">
+            <button
+              type="button"
+              disabled={dpUpdateLoading || !hasChanges}
+              onClick={handleCancel}
+              className={`btn btn-outline h-[50px] sm:px-6 px-2 text-base ${
+                dpUpdateLoading || !hasChanges
+                  ? "border-gray-200 text-gray-400 cursor-not-allowed"
+                  : "border-gray-300 hover:bg-gray-50"
+              }`}
+            >
+              <FaTimes className="mr-2" />
+              Cancel
+            </button>
+
+            <button
+              onClick={handleSubmit}
+              disabled={dpUpdateLoading || !hasChanges}
+              className={`btn h-[50px] px-6 text-base ${
+                dpUpdateLoading || !hasChanges
+                  ? "bg-gray-300 border-gray-300 text-gray-500 cursor-not-allowed"
+                  : "bg-[#3C8F63] border-[#3C8F63] hover:bg-[#2d7a52] text-white"
+              }`}
+            >
+              <FaRegSave className="mr-2" />
+              {dpUpdateLoading ? "Saving..." : "Save Changes"}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* DaisyUI Modal Backdrop - Click to Close */}
+      <form method="dialog">
+        <button>close</button>
+      </form>
+    </dialog>
   );
 };
 
