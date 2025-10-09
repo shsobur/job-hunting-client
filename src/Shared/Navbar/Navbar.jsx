@@ -235,12 +235,17 @@ const Navbar = () => {
                         </span>
                       </NavLink>
 
-                      <NavLink to="/dashboard">
+                      <NavLink
+                        to={
+                          profile?.userRole === "Recruiter"
+                            ? "/dashboard/recruiter-overview"
+                            : ""
+                        }
+                      >
                         <span
                           onClick={() => setOpen(!open)}
                           className="dropdown_item"
                         >
-                          
                           <LuLayoutDashboard />
                           Dashboard
                         </span>
