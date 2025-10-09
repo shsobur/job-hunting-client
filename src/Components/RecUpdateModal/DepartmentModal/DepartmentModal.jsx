@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import useUserData from "../../../Hooks/userData";
-import SeekerModalHeader from "../../../MainLayout/Shared/SeekerModalHeader/SeekerModalHeader";
+import SeekerModalHeader from "../../../Shared/SeekerModalHeader/SeekerModalHeader";
 import { jhSuccess, jhError } from "../../../utils";
 import { MdBusinessCenter, MdSearch, MdAdd, MdClose } from "react-icons/md";
 import { FaRegSave, FaTimes } from "react-icons/fa";

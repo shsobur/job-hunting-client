@@ -1,15 +1,14 @@
 import "./Navbar.css";
-import logo from "../../../../public/fab.png";
+import logo from "/fab.png";
 import { Link, NavLink } from "react-router-dom";
-import useUserData from "../../../Hooks/userData";
-import { AuthContext } from "../../../Context/AuthContext";
-import { jhConfirm, jhError, jhSuccess } from "../../../utils";
+import useUserData from "../../Hooks/userData";
+import { AuthContext } from "../../Context/AuthContext";
+import { jhConfirm, jhError, jhSuccess } from "../../utils";
 
 // From react__
 import { useContext, useEffect, useRef, useState } from "react";
 
 // Package(REACT ICONS, SWEET ALERT)__
-import Swal from "sweetalert2";
 import { RxCross1 } from "react-icons/rx";
 import { ImProfile } from "react-icons/im";
 import { IoIosMenu } from "react-icons/io";
@@ -18,6 +17,7 @@ import { HiMiniUserCircle } from "react-icons/hi2";
 import { AiOutlineShopping } from "react-icons/ai";
 import { PiSignIn, PiSignOut } from "react-icons/pi";
 import { IoChevronDown, IoChevronUp, IoHomeOutline } from "react-icons/io5";
+import { LuLayoutDashboard } from "react-icons/lu";
 
 const Navbar = () => {
   const menuRef = useRef();
@@ -232,6 +232,17 @@ const Navbar = () => {
                         >
                           <ImProfile />
                           My Profile
+                        </span>
+                      </NavLink>
+
+                      <NavLink to="/dashboard">
+                        <span
+                          onClick={() => setOpen(!open)}
+                          className="dropdown_item"
+                        >
+                          
+                          <LuLayoutDashboard />
+                          Dashboard
                         </span>
                       </NavLink>
 

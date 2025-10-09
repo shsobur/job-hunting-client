@@ -8,6 +8,7 @@ import HomeLayout from "../MainLayout/Pages/HomePageLayout/HomeLayout/HomeLayout
 import { createBrowserRouter } from "react-router-dom";
 import UserProfile from "../MainLayout/Pages/UserProfile/UserProfile";
 import RecruiterProfile from "../MainLayout/Pages/RecruiterProfile/RecruiterProfile";
+import Dashboard from "../DashboardLayout/Dashboard";
 
 const router = createBrowserRouter([
   {
@@ -36,6 +37,13 @@ const router = createBrowserRouter([
       },
     ],
   },
+  {
+    path: "/dashboard",
+    element: <Dashboard></Dashboard>,
+    children: [
+      {}
+    ]
+  }
 ]);
 
 export default router;

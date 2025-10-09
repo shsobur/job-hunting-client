@@ -11,7 +11,12 @@ import {
   FaBullhorn,
   FaBuilding,
   FaHeadset,
+  FaGlobe,
+  FaMapMarkerAlt,
+  FaUsers,
+  FaCalendar,
 } from "react-icons/fa";
+import { FaCodeBranch } from "react-icons/fa6";
 import { FiEdit } from "react-icons/fi";
 import AboutModal from "../../../Components/RecUpdateModal/AboutModal/AboutModal";
 import DepartmentModal from "../../../Components/RecUpdateModal/DepartmentModal/DepartmentModal";
@@ -25,6 +30,103 @@ import People from "../../../Components/RecUpdateModal/People/People";
 
 const RecruiterProfile = () => {
   const { profile } = useUserData();
+
+  // Department icons mapping__
+  const departmentIcons = {
+    "Engineering / Development": <FaCode className="department-icon" />,
+    "Human Resources (HR)": <FaHeadset className="department-icon" />,
+    "Business Development": <FaChartLine className="department-icon" />,
+    "Media & Communications": <FaBullhorn className="department-icon" />,
+    "UX / UI Design": <FaWrench className="department-icon" />,
+    "Data & Analytics": <FaChartLine className="department-icon" />,
+    Sales: <FaChartLine className="department-icon" />,
+    Marketing: <FaBullhorn className="department-icon" />,
+    Finance: <FaBuilding className="department-icon" />,
+    Administration: <FaBuilding className="department-icon" />,
+    "Content / Editorial": <FaBullhorn className="department-icon" />,
+    "Customer Support / Service": <FaHeadset className="department-icon" />,
+    "Design / Creative": <FaWrench className="department-icon" />,
+    "Digital Strategy / Innovation": (
+      <FaChartLine className="department-icon" />
+    ),
+    "Facilities / Maintenance": <FaBuilding className="department-icon" />,
+    "Finance / Accounting": <FaBuilding className="department-icon" />,
+    "IT / Information Technology": <FaCode className="department-icon" />,
+    "Legal / Compliance": <FaBuilding className="department-icon" />,
+    Operations: <FaBuilding className="department-icon" />,
+    "Procurement / Purchasing": <FaBuilding className="department-icon" />,
+    "Product Management": <FaChartLine className="department-icon" />,
+    "Production / Manufacturing": <FaWrench className="department-icon" />,
+    "Project Management": <FaChartLine className="department-icon" />,
+    "Public Relations (PR)": <FaBullhorn className="department-icon" />,
+    "Quality Assurance (QA)": <FaWrench className="department-icon" />,
+    "Research & Development (R&D)": <FaWrench className="department-icon" />,
+    "Security / Risk Management": <FaBuilding className="department-icon" />,
+    "Social Media / Community Management": (
+      <FaBullhorn className="department-icon" />
+    ),
+    "Supply Chain / Logistics": <FaBuilding className="department-icon" />,
+    "Training / Learning & Development": (
+      <FaHeadset className="department-icon" />
+    ),
+  };
+
+  // Get department icon or default__
+  const getDepartmentIcon = (departmentName) => {
+    return (
+      departmentIcons[departmentName] || (
+        <FaBuilding className="department-icon" />
+      )
+    );
+  };
+
+  // Format company size__
+  const getCompanySize = () => {
+    if (!profile?.companySize) return "Not specified";
+
+    const { currentEmployees, sizeRange } = profile.companySize;
+
+    if (currentEmployees && sizeRange) {
+      return `${currentEmployees} employees (${sizeRange})`;
+    } else if (currentEmployees) {
+      return `${currentEmployees} employees`;
+    } else if (sizeRange) {
+      return sizeRange;
+    }
+
+    return "Not specified";
+  };
+
+  // Format headquarters__
+  const getHeadquarters = () => {
+    if (!profile?.headquarters) return "Not specified";
+
+    const { country, city, area } = profile.headquarters;
+    const parts = [area, city, country].filter(Boolean);
+
+    return parts.length > 0 ? parts.join(", ") : "Not specified";
+  };
+
+  // Format branches__
+  const getBranches = () => {
+    if (!profile?.branchLocations || profile.branchLocations.length === 0) {
+      return "No branches";
+    }
+
+    return `${profile.branchLocations.length} branch${
+      profile.branchLocations.length > 1 ? "es" : ""
+    }`;
+  };
+
+  // Check if social links exist__
+  const hasSocialLinks = () => {
+    return (
+      profile?.social?.linkedin ||
+      profile?.social?.x ||
+      (profile?.social?.additionalLinks &&
+        Object.keys(profile.social.additionalLinks).length > 0)
+    );
+  };
 
   return (
     <>
@@ -47,29 +149,35 @@ const RecruiterProfile = () => {
                     className="company-avatar"
                     style={{
                       backgroundImage: `url("${
-                        profile?.companyLogo === ""
-                          ? placeholderImage
-                          : profile?.companyLogo
+                        profile?.companyLogo || placeholderImage
                       }")`,
                     }}
                   ></div>
                 </div>
 
                 <div className="company-info">
-                  <h1 className="company-name">{profile?.companyName}</h1>
-                  <p className="company-meta">{profile?.bio}</p>
+                  <h1 className="company-name">
+                    {profile?.companyName || "Your Company Name"}
+                  </h1>
+                  <p className="company-meta">
+                    {profile?.bio || "Add a compelling bio about your company"}
+                  </p>
 
                   <div className="status-badges">
                     {profile?.activeHire && (
                       <span className="status-badge">
                         <FaRocket className="badge-icon" />
-                        ActiveHire
+                        Active Hiring
                       </span>
                     )}
 
-                    <span className="status-badge">
+                    <span
+                      className={`status-badge ${
+                        !profile?.verified ? "status-badge-unverified" : ""
+                      }`}
+                    >
                       <FaCheckCircle className="badge-icon" />
-                      Verified
+                      {profile?.verified ? "Verified" : "Unverified"}
                     </span>
                   </div>
                 </div>
@@ -127,7 +235,13 @@ const RecruiterProfile = () => {
 
                   <div className="about-content">
                     <p className="about-description">
-                      {profile?.description || "Tell us about you company"}
+                      {profile?.description || (
+                        <span className="text-gray-500 italic">
+                          Tell us about your company's history, values, and what
+                          makes it unique. This helps candidates understand your
+                          culture and mission.
+                        </span>
+                      )}
                     </p>
 
                     <div className="mission-vision-grid">
@@ -137,7 +251,12 @@ const RecruiterProfile = () => {
                         </div>
                         <h3 className="card-title">Mission</h3>
                         <p className="card-description">
-                          {profile?.mission || "What's you company mission?"}
+                          {profile?.mission || (
+                            <span className="text-gray-500 italic">
+                              What's your company's core purpose and what it
+                              aims to achieve?
+                            </span>
+                          )}
                         </p>
                       </div>
 
@@ -147,7 +266,12 @@ const RecruiterProfile = () => {
                         </div>
                         <h3 className="card-title">Vision</h3>
                         <p className="card-description">
-                          {profile?.vision || "What's you company vision?"}
+                          {profile?.vision || (
+                            <span className="text-gray-500 italic">
+                              Describe the future your company aspires to
+                              create.
+                            </span>
+                          )}
                         </p>
                       </div>
                     </div>
@@ -157,7 +281,11 @@ const RecruiterProfile = () => {
                 {/* Departments Section */}
                 <section className="profile-section">
                   <div className="section-header">
-                    <h2 className="section-title">Departments</h2>
+                    <h2 className="section-title">
+                      Departments{" "}
+                      {profile?.departments &&
+                        `(${profile.departments.length})`}
+                    </h2>
                     <button
                       className="section-edit-btn"
                       onClick={() =>
@@ -170,35 +298,30 @@ const RecruiterProfile = () => {
                     </button>
                   </div>
 
-                  <div className="departments-grid">
-                    <div className="department-card">
-                      <FaWrench className="department-icon" />
-                      <span className="department-name">Engineering</span>
+                  {profile?.departments && profile.departments.length > 0 ? (
+                    <div className="departments-grid">
+                      {profile.departments.map((department, index) => (
+                        <div key={index} className="department-card">
+                          {getDepartmentIcon(department)}
+                          <span className="department-name">{department}</span>
+                        </div>
+                      ))}
                     </div>
-                    <div className="department-card">
-                      <FaCode className="department-icon" />
-                      <span className="department-name">Product</span>
+                  ) : (
+                    <div className="empty-state">
+                      <FaBuilding className="empty-state-icon w-full" />
+                      <p className="empty-state-text">
+                        No departments added yet
+                      </p>
+                      <p className="empty-state-subtext">
+                        Add your company departments to show candidates your
+                        organizational structure
+                      </p>
                     </div>
-                    <div className="department-card">
-                      <FaChartLine className="department-icon" />
-                      <span className="department-name">Sales</span>
-                    </div>
-                    <div className="department-card">
-                      <FaBullhorn className="department-icon" />
-                      <span className="department-name">Marketing</span>
-                    </div>
-                    <div className="department-card">
-                      <FaBuilding className="department-icon" />
-                      <span className="department-name">Finance</span>
-                    </div>
-                    <div className="department-card">
-                      <FaHeadset className="department-icon" />
-                      <span className="department-name">HR</span>
-                    </div>
-                  </div>
+                  )}
                 </section>
 
-                {/* Gallery Section */}
+                {/* Gallery Section - Keeping static for now since no data in DB */}
                 <section className="profile-section">
                   <div className="section-header">
                     <h2 className="section-title">Company Gallery</h2>
@@ -207,40 +330,12 @@ const RecruiterProfile = () => {
                     </button>
                   </div>
 
-                  <div className="gallery-grid">
-                    <div className="gallery-item featured">
-                      <img
-                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuAnhk5Pc25LFOAYMMYnei2UMpIZfpAtNWs4OwIJwEDNkLCN0A9N903eEv4ZC2YwlCXUncF6GZKJC1JNh5L_UpwEYfH7kQDd4dHp-blKUPnbkFIXbsYMN2aA71HvQE_6-8EZI2TD3K1yHxG2ieMFyv9qG_E2aQmJxolCm0AOiON0ymQx4AVCW_AMwdnG5P9TrbynSPcZsHbJZZLXMJe7grGsgo6C8zwOxeRdYjx-_-4k_SKbxAH5qmCmsq-i77FAN7MD9svTYBayec2q"
-                        alt="Company event 1"
-                      />
-                    </div>
-                    <div className="gallery-item">
-                      <img
-                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuCyc8P_guSKqUTUjT0Fzyb9Cm9-kOts-PwdJncnBNE0ezvmdrbg0pu4k6eg-ryOfA9pb6-hEHeTsZvakIi4SNWyGwBRzKHwBCqWr_1QYaKpJT9RZ7RqOKMSF8NTkH4pXGDe2wOwHhrznJESWBqHcPsUWF0diIyquzeReMFCES7sT6AMVSlMiH05uQscXL0ZetlJ17lpy7yzLaj5yJtG6C0LMMaj2mNjgNL2cBomnXBO92kSNrfVPI-BdwvdxcyUMp7HNSbt9KCmhUte"
-                        alt="Company event 2"
-                      />
-                    </div>
-                    <div className="gallery-item">
-                      <img
-                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuCwBD6ZEKyydpwswGDQzA40z0jADWfSy-ZZSgw8ehP5Ttn9OyIPvb5by067gKeM3PBL8koDY-jA7Op2vfttEy3cCYziKCVz5nd7OHC8A3PS2pt8G56FCSteWyDRQ2i9iHCJh3GTElpWULXma5L7fXX-YWFbiabfsmcjOgL7JD4xwO1R_1ZLJ9hfJtD2y-6DVN5EcbIKjOZ5wooCJeqWUliiB1-C82xNC8epIVC8NVelbg-GR_UMclzzb8a0JmuDwB_PX10PsWg-POWD"
-                        alt="Company event 3"
-                      />
-                    </div>
-                    <div className="gallery-item">
-                      <img
-                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuCxsIV8D5Q6oMWy-Xi3hbeqC90422eCRShMrrqMWmLjJ4jP489qb9WNfXbKcBkqYlMthvr0pqLR2E0VyhEQsjS1Iq7NwowCRH6LedJWe-2HILQF9N6EMUT3beP2-0iK0gHBA1Jb9v6bfWFjc-tEjGZJuR9eORHh_ak3dLSiIc6Rakdi_JWMsuGDFlL2ustUEjqgJ8HKdy1CFls5G5jWyOskuUUrdAP3p8ecfXQOwCTKp-a7yUCABE5QO1Ox-mdr_WLbklgJHaCmxpMV"
-                        alt="Company event 4"
-                      />
-                    </div>
-                    <div className="gallery-item more-items">
-                      <img
-                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBqclP6ydWJ8KWTejeq2rkEUZjHYXOZMk1ABGGA_Q18-cb-Vpn96UhBTA07giYayjDhUMyZQ8MSNkRLLrsPdZKkJh1rQj1arIN7YLKaHDkHxoHIcM_ytma4CFUEARTxDAlA8l8i5c8iHJJPzEOWnvXXMQ0kJm1evqSiyhnR3NMyrpkqvYo1W_4rO0T77fzGN8FapJc88SvY8l_YO8GPvH4h_f8fetS5EBTRhB-Dk3Uymd92e-SQKXLJX2LjkIfwDlIytkCh0rzbVhiN"
-                        alt="Company event 5"
-                      />
-                      <div className="more-overlay">
-                        <span className="more-text">5+ More</span>
-                      </div>
-                    </div>
+                  <div className="empty-state">
+                    <FaEye className="empty-state-icon w-full" />
+                    <p className="empty-state-text">Gallery coming soon</p>
+                    <p className="empty-state-subtext">
+                      Showcase your workplace and company culture through photos
+                    </p>
                   </div>
                 </section>
               </main>
@@ -265,30 +360,68 @@ const RecruiterProfile = () => {
 
                   <div className="details-list">
                     <div className="detail-item">
-                      <span className="detail-label">Website</span>
-                      <a href="#" className="detail-value link">
-                        techinnovators.com
-                      </a>
+                      <span className="detail-label">
+                        <FaGlobe className="detail-icon" />
+                        Website
+                      </span>
+                      {profile?.companyWebsite ? (
+                        <a
+                          href={profile.companyWebsite}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="detail-value link"
+                        >
+                          {profile.companyWebsite.replace(/^https?:\/\//, "")}
+                        </a>
+                      ) : (
+                        <span className="detail-value text-gray-500">
+                          Not added
+                        </span>
+                      )}
                     </div>
+
                     <div className="detail-item">
-                      <span className="detail-label">Industry</span>
-                      <span className="detail-value">Technology</span>
+                      <span className="detail-label">
+                        <FaBuilding className="detail-icon" />
+                        Industry
+                      </span>
+                      <span className="detail-value">
+                        {profile?.industry || "Not specified"}
+                      </span>
                     </div>
+
                     <div className="detail-item">
-                      <span className="detail-label">Company size</span>
-                      <span className="detail-value">500-1000</span>
+                      <span className="detail-label">
+                        <FaUsers className="detail-icon" />
+                        Company size
+                      </span>
+                      <span className="detail-value">{getCompanySize()}</span>
                     </div>
+
                     <div className="detail-item">
-                      <span className="detail-label">Founded</span>
-                      <span className="detail-value">2005</span>
+                      <span className="detail-label">
+                        <FaCalendar className="detail-icon" />
+                        Founded
+                      </span>
+                      <span className="detail-value">
+                        {profile?.foundedYear || "Not specified"}
+                      </span>
                     </div>
+
                     <div className="detail-item">
-                      <span className="detail-label">Headquarters</span>
-                      <span className="detail-value">New York City, NY</span>
+                      <span className="detail-label">
+                        <FaMapMarkerAlt className="detail-icon" />
+                        Headquarters
+                      </span>
+                      <span className="detail-value">{getHeadquarters()}</span>
                     </div>
+
                     <div className="detail-item">
-                      <span className="detail-label">Branches</span>
-                      <span className="detail-value">NYC, San Francisco</span>
+                      <span className="detail-label">
+                        <FaCodeBranch className="detail-icon" />
+                        Branches
+                      </span>
+                      <span className="detail-value">{getBranches()}</span>
                     </div>
                   </div>
                 </div>
@@ -296,11 +429,14 @@ const RecruiterProfile = () => {
                 {/* Key People Card */}
                 <div className="sidebar-card">
                   <div className="card-header">
-                    <h3 className="card-title">Key People</h3>
+                    <h3 className="card-title">
+                      Key People{" "}
+                      {profile?.keyPeople && `(${profile.keyPeople.length})`}
+                    </h3>
                     <button
                       onClick={() =>
                         document
-                          .getElementById("rec_key_people_modal")
+                          .getElementById("rec_people_update_modal")
                           .showModal()
                       }
                       className="card-edit-btn"
@@ -309,35 +445,32 @@ const RecruiterProfile = () => {
                     </button>
                   </div>
 
-                  <div className="people-list">
-                    <div className="person-card">
-                      <div
-                        className="person-avatar"
-                        style={{
-                          backgroundImage:
-                            'url("https://lh3.googleusercontent.com/aida-public/AB6AXuBayWUlvMBTLiUf0DeYX2cjVXw-EhfMrKqINqxQAI1s4ts0OYCrKg_63ueN61qMW68FIZQUIgqdU1xYhOuKfGUfbryIY08-ggXMOGkBWPwG1snMjCHEj4tW5qfU6As1fGtHWMQteCMYhnXTXZfwU8Mc5Pb_VF3f6tDSVc-gh4ETgnGt42EdvPV_RmHoOPe9UfcOa2FAMYQZtxKfCFTCOmqwZV9sao4iGjgLKG5M7jAdKGxBMZ_KSoCopv3AfAxCrr7OsC_4Pwo9F840")',
-                        }}
-                      ></div>
-                      <div className="person-info">
-                        <h4 className="person-name">Ethan Carter</h4>
-                        <p className="person-role">CEO</p>
-                      </div>
+                  {profile?.keyPeople && profile.keyPeople.length > 0 ? (
+                    <div className="people-list">
+                      {profile.keyPeople.map((person, index) => (
+                        <div key={index} className="person-card">
+                          <div
+                            className="person-avatar"
+                            style={{
+                              backgroundImage: `url("${person.image}")`,
+                            }}
+                          ></div>
+                          <div className="person-info">
+                            <h4 className="person-name">{person.name}</h4>
+                            <p className="person-role">{person.position}</p>
+                          </div>
+                        </div>
+                      ))}
                     </div>
-
-                    <div className="person-card">
-                      <div
-                        className="person-avatar"
-                        style={{
-                          backgroundImage:
-                            'url("https://lh3.googleusercontent.com/aida-public/AB6AXuBTSqdRxN-ly486ZUGAYT_4FERjezs4XEL74J64QQLo5_v7gJEUhW8XyySAcMbjclEAjHDWRpu9gNqFvISoquWh7MHuvs4CrPLlLBiCHxeuxZANPU7gvxaz9yatCNbT5GdwYMLt3izlfFIsS7W4huCMZGJglJcamG7lkD7pfqtD9AeB6eamg3SGNOszwqucNmTWUheSFyl0UmTofHINhFX-xT-jXNQUvDVlYBm6QUG1n77v8sd3j7__PYS0zpZphsQSNWl9ajH0EoYf")',
-                        }}
-                      ></div>
-                      <div className="person-info">
-                        <h4 className="person-name">Olivia Bennett</h4>
-                        <p className="person-role">Founder</p>
-                      </div>
+                  ) : (
+                    <div className="empty-state-small">
+                      <FaUsers className="empty-state-icon w-full" />
+                      <p className="empty-state-text">No key people added</p>
+                      <p className="empty-state-subtext">
+                        Add your leadership team members
+                      </p>
                     </div>
-                  </div>
+                  )}
                 </div>
 
                 {/* Social Links Card */}
@@ -356,14 +489,41 @@ const RecruiterProfile = () => {
                     </button>
                   </div>
 
-                  <div className="social-links">
-                    <a href="#" className="social-link" aria-label="LinkedIn">
-                      <FaLinkedin />
-                    </a>
-                    <a href="#" className="social-link" aria-label="Twitter">
-                      <FaTwitter />
-                    </a>
-                  </div>
+                  {hasSocialLinks() ? (
+                    <div className="social-links">
+                      {profile?.social?.linkedin && (
+                        <a
+                          href={profile.social.linkedin}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="social-link"
+                          aria-label="LinkedIn"
+                        >
+                          <FaLinkedin />
+                        </a>
+                      )}
+                      {profile?.social?.x && (
+                        <a
+                          href={profile.social.x}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="social-link"
+                          aria-label="Twitter"
+                        >
+                          <FaTwitter />
+                        </a>
+                      )}
+                      {/* Additional social links can be added here */}
+                    </div>
+                  ) : (
+                    <div className="empty-state-small">
+                      <FaLinkedin className="empty-state-icon w-full" />
+                      <p className="empty-state-text">No social links</p>
+                      <p className="empty-state-subtext">
+                        Add your social media profiles
+                      </p>
+                    </div>
+                  )}
                 </div>
               </aside>
             </div>

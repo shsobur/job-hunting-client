@@ -1,6 +1,6 @@
 // File path__
 import useUserData from "../../../Hooks/userData";
-import SeekerModalHeader from "../../../MainLayout/Shared/SeekerModalHeader/SeekerModalHeader";
+import SeekerModalHeader from "../../../Shared/SeekerModalHeader/SeekerModalHeader";
 
 // From react__
 import { useState, useEffect, useRef } from "react";

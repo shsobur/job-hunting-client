@@ -1,7 +1,7 @@
 // File path__
 import useAxios from "../../../Hooks/Axios";
 import { getCroppedImg } from "../../../utils";
-import SeekerModalHeader from "../../../MainLayout/Shared/SeekerModalHeader/SeekerModalHeader";
+import SeekerModalHeader from "../../../Shared/SeekerModalHeader/SeekerModalHeader";
 
 // From react__
 import { useState, useCallback, useRef, useEffect } from "react";

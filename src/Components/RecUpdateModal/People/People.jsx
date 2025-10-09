@@ -1,7 +1,7 @@
 // File path__
 import useAxios from "../../../Hooks/Axios";
 import { getCroppedImg, jhSuccess, jhError } from "../../../utils";
-import SeekerModalHeader from "../../../MainLayout/Shared/SeekerModalHeader/SeekerModalHeader";
+import SeekerModalHeader from "../../../Shared/SeekerModalHeader/SeekerModalHeader";
 
 // From react__
 import { useState, useCallback, useRef, useEffect } from "react";
@@ -427,7 +427,7 @@ const PeopleModal = () => {
 
                       {/* Cropped Preview */}
                       {croppedImage && (
-                        <div className="space-y-4 p-4 border-2 border-[#3C8F63] rounded-xl bg-green-50">
+                        <div className="space-y-4 p-4 border-2 border-[#3C8F63] rounded-xl bg-[#f8fbf9]">
                           <h4 className="flex items-center gap-2 font-semibold text-gray-800 text-lg">
                             <FaRegImage className="text-[#3C8F63]" />
                             Cropped Preview

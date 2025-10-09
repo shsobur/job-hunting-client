@@ -3,7 +3,7 @@ import { FaSchool, FaLightbulb } from "react-icons/fa";
 import { FiLock, FiUnlock } from "react-icons/fi";
 import useUserData from "../../../Hooks/userData";
 import Swal from "sweetalert2";
-import SeekerModalHeader from "../../../MainLayout/Shared/SeekerModalHeader/SeekerModalHeader";
+import SeekerModalHeader from "../../../Shared/SeekerModalHeader/SeekerModalHeader";
 
 const EducationModal = () => {
   const { profile, updateProfile } = useUserData();

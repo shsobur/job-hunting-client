@@ -15,7 +15,7 @@ import { TbBrandDiscord } from "react-icons/tb";
 import { FcDribbble } from "react-icons/fc";
 import { BsReddit } from "react-icons/bs";
 import useUserData from "../../../Hooks/userData";
-import SeekerModalHeader from "../../../MainLayout/Shared/SeekerModalHeader/SeekerModalHeader";
+import SeekerModalHeader from "../../../Shared/SeekerModalHeader/SeekerModalHeader";
 import { jhSuccess, jhError } from "../../../utils";
 
 const SocialLinksModal = () => {

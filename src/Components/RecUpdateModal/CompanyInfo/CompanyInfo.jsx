@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import useUserData from "../../../Hooks/userData";
-import SeekerModalHeader from "../../../MainLayout/Shared/SeekerModalHeader/SeekerModalHeader";
+import SeekerModalHeader from "../../../Shared/SeekerModalHeader/SeekerModalHeader";
 import { jhSuccess, jhError } from "../../../utils";
 import {
   MdLanguage,
