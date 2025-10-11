@@ -17,7 +17,6 @@ const SidebarNav = ({
   sidebarOpen,
   setSidebarOpen,
 }) => {
-  console.log(userLoading);
 
   const userRoleChecker = () => {
     const defaultRoutes = [

@@ -10,7 +10,7 @@ import { AuthContext } from "../Context/AuthContext";
 
 const Dashboard = () => {
   const { profile } = useUserData();
-  const {user, userLoading} = useContext(AuthContext);
+  const { user, userLoading } = useContext(AuthContext);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [notificationOpen, setNotificationOpen] = useState(false);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
@@ -58,7 +58,7 @@ const Dashboard = () => {
           ></TopNavbar>
 
           {/* CONTENT AREA - Completely Empty as Requested */}
-          <DashboardContent profile={profile} userLoading={userLoading} user={user}></DashboardContent>
+          <DashboardContent userLoading={userLoading}></DashboardContent>
         </div>
 
         {/* Overlay for mobile sidebar */}

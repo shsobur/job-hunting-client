@@ -1,7 +1,7 @@
 import { FiBriefcase } from "react-icons/fi";
 import { Outlet } from "react-router";
 
-const DashboardContent = ({ profile, user, userLoading }) => {
+const DashboardContent = ({userLoading }) => {
   return (
     <>
       <main className="flex-1 p-2 overflow-auto">
@@ -18,7 +18,7 @@ const DashboardContent = ({ profile, user, userLoading }) => {
           </div>
         ) : (
           <>
-            <div className="rounded-2xl h-full flex items-center justify-center bg-white shadow-inner">
+            <div className="rounded-2xl p-5 h-full bg-gradient-to-br from-[#f8fafc] to-[#f1f5f9] shadow-inner">
               <Outlet></Outlet>
             </div>
           </>
