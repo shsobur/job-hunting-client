@@ -1,39 +1,44 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import {
-  FiBriefcase,
-  FiDollarSign,
-  FiCalendar,
-  FiUser,
-  FiPlus,
-  FiX,
-  FiTag,
-} from "react-icons/fi";
+import { FiBriefcase, FiCalendar, FiUser, FiPlus, FiX } from "react-icons/fi";
 import useUserData from "../../../../Hooks/userData";
+import useAxios from "../../../../Hooks/Axios";
+import { jhError, jhSuccess, jhToastWarning } from "../../../../utils";
 
 const RecPostJob = () => {
+  const api = useAxios();
   const { profile } = useUserData();
   const [currentStep, setCurrentStep] = useState(1);
+  const [postLoading, setPostLoading] = useState(false);
 
-  // All dynamic fields in one state
-  const [dynamicFields, setDynamicFields] = useState({
-    responsibilities: [""],
-    requirementSkills: [""],
-    niceToHave: [""],
-    benefits: [""],
-    tags: [""],
-    whoCanApply: [""],
+  // Professional state management for chips/tags__
+  const [chips, setChips] = useState({
+    responsibilities: [],
+    requirementSkills: [],
+    niceToHave: [],
+    benefits: [],
+    tags: [],
+    whoCanApply: [],
   });
 
   const [enableWhoCanApply, setEnableWhoCanApply] = useState(false);
+  const [currentInput, setCurrentInput] = useState({
+    responsibilities: "",
+    requirementSkills: "",
+    niceToHave: "",
+    benefits: "",
+    tags: "",
+    whoCanApply: "",
+  });
 
-  // React Hook Form
+  // React Hook Form with ALL fields required__
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
     trigger,
+    setValue,
   } = useForm({
     defaultValues: {
       jobTitle: "",
@@ -44,11 +49,11 @@ const RecPostJob = () => {
       area: "",
       department: "",
       position: "",
-      experienceLevel: "Mid",
+      experienceLevel: "Mid Level",
       salaryRange: {
         min: "",
         max: "",
-        currency: "BDT",
+        currency: "USD",
         period: "year",
       },
       applicationDeadline: "",
@@ -59,37 +64,44 @@ const RecPostJob = () => {
 
   const formValues = watch();
 
-  // Dynamic field functions__
-  const addDynamicField = (fieldName) => {
-    setDynamicFields((prev) => ({
-      ...prev,
-      [fieldName]: [...prev[fieldName], ""],
-    }));
-  };
-
-  const removeDynamicField = (fieldName, index) => {
-    if (dynamicFields[fieldName].length > 1) {
-      setDynamicFields((prev) => ({
+  // TAG SYSTEM__
+  const addChip = (fieldName, value) => {
+    if (value.trim() && !chips[fieldName].includes(value.trim())) {
+      setChips((prev) => ({
         ...prev,
-        [fieldName]: prev[fieldName].filter((_, i) => i !== index),
+        [fieldName]: [...prev[fieldName], value.trim()],
       }));
+      setCurrentInput((prev) => ({ ...prev, [fieldName]: "" }));
     }
   };
 
-  const updateDynamicField = (fieldName, index, value) => {
-    const updatedFields = [...dynamicFields[fieldName]];
-    updatedFields[index] = value;
-    setDynamicFields((prev) => ({
+  const removeChip = (fieldName, index) => {
+    setChips((prev) => ({
       ...prev,
-      [fieldName]: updatedFields,
+      [fieldName]: prev[fieldName].filter((_, i) => i !== index),
     }));
   };
 
-  // Simple step validation__
+  const handleChipInputKeyPress = (fieldName, e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      addChip(fieldName, currentInput[fieldName]);
+    }
+  };
+
+  const handleChipInputChange = (fieldName, value) => {
+    setCurrentInput((prev) => ({ ...prev, [fieldName]: value }));
+  };
+
+  const addChipButtonClick = (fieldName) => {
+    addChip(fieldName, currentInput[fieldName]);
+  };
+
+  //VALIDATION SYSTEM__
   const validateStep = async (nextStep) => {
     let fieldsToValidate = [];
 
-    // Step 1 validation fields__
+    // STEP 1: All basic info required__
     if (currentStep === 1) {
       fieldsToValidate = [
         "jobTitle",
@@ -102,89 +114,218 @@ const RecPostJob = () => {
         "position",
       ];
     }
-    // Step 2 validation fields
+    // STEP 2: All details required__
     else if (currentStep === 2) {
-      fieldsToValidate = ["experienceLevel", "position"];
+      fieldsToValidate = [
+        "experienceLevel",
+        "openPositions",
+        "salaryRange.min",
+        "salaryRange.max",
+        "applicationDeadline",
+      ];
     }
-    // Step 3 validation fields
+    // STEP 3: Description__
     else if (currentStep === 3) {
       fieldsToValidate = ["jobDescription"];
+
+      // Validate that required chips have at least one item__
+      const requiredChips = [
+        "responsibilities",
+        "requirementSkills",
+        "benefits",
+      ];
+      const chipErrors = requiredChips.filter(
+        (field) => chips[field].length === 0
+      );
+
+      if (chipErrors.length > 0) {
+        jhToastWarning(`Please add at least one item in: ${chipErrors.join(", ")}`)
+        return;
+      }
     }
 
-    // Trigger validation for the current step fields
     const isValid = await trigger(fieldsToValidate);
-
-    // If valid, move to next step
     if (isValid) {
       setCurrentStep(nextStep);
     }
   };
 
-  // Form submission__
-  const onSubmit = (data) => {
-    // Filter out empty strings from dynamic fields
-    const filteredDynamicFields = {};
-    Object.keys(dynamicFields).forEach((key) => {
-      filteredDynamicFields[key] = dynamicFields[key].filter(
-        (item) => item.trim() !== ""
-      );
-    });
-
-    // Complete job data object__
+  const onSubmit = async (data) => {
     const completeJobData = {
       ...data,
-      ...filteredDynamicFields,
-      // Remove whoCanApply if checkbox is not enabled__
-      whoCanApply: enableWhoCanApply ? filteredDynamicFields.whoCanApply : [],
+      ...chips,
+      whoCanApply: enableWhoCanApply ? chips.whoCanApply : [],
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
-      isActive: true,
       isExpired: false,
       totalApply: 0,
+      companyID: profile._id,
+      companyName: profile.companyName,
+      companyLogo: profile.companyLogo,
+      companyWebsite: profile.companyWebsite,
     };
 
-    console.log("Complete Job Data for Backend:", completeJobData);
+    console.log("PROFESSIONAL JOB DATA:", completeJobData);
+
+    setPostLoading(true);
+    await api.post("/recruiter-api/post-job", completeJobData)
+      .then((res) => {
+        if (res.data.insertedId) {
+          setPostLoading(false);
+          resetFrom();
+
+          jhSuccess({
+            title: "Job Posted Successfully!",
+            text: "Your job has been published and is now visible to job seekers.",
+          });
+        } else {
+          setPostLoading(false);
+          jhError({
+            title: "Posting Failed",
+            text: "Failed to create job post. Please try again.",
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        setPostLoading(false);
+        resetFrom();
+        jhError({
+          title: "Posting Failed",
+          text:
+            error.response?.data?.message ||
+            "Failed to post job. Please try again.",
+        });
+      });
   };
 
-  const renderDynamicFields = (fieldName, title, placeholder) => (
+  const resetFrom = () => {
+    setValue("jobTitle", "");
+    setValue("jobType", "Full-time");
+    setValue("workplaceType", "On-site");
+    setValue("country", "");
+    setValue("city", "");
+    setValue("area", "");
+    setValue("department", "");
+    setValue("position", "");
+    setValue("experienceLevel", "Mid Level");
+    setValue("salaryRange.min", "");
+    setValue("salaryRange.max", "");
+    setValue("salaryRange.currency", "USD");
+    setValue("salaryRange.period", "year");
+    setValue("applicationDeadline", "");
+    setValue("openPositions", 1);
+    setValue("jobDescription", "");
+
+    // 2. Reset all chips to empty__
+    setChips({
+      responsibilities: [],
+      requirementSkills: [],
+      niceToHave: [],
+      benefits: [],
+      tags: [],
+      whoCanApply: [],
+    });
+
+    // 3. Reset current inputs__
+    setCurrentInput({
+      responsibilities: "",
+      requirementSkills: "",
+      niceToHave: "",
+      benefits: "",
+      tags: "",
+      whoCanApply: "",
+    });
+
+    // 4. Reset whoCanApply checkbox__
+    setEnableWhoCanApply(false);
+
+    // 5. Go back to step 1__
+    setCurrentStep(1);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const renderChipSection = (
+    fieldName,
+    title,
+    placeholder,
+    required = false
+  ) => (
     <div className="mb-6">
-      <label className="block text-sm font-medium text-gray-700 mb-3">
-        {title}
+      <label className="block text-xl font-medium text-gray-700 mb-3">
+        {title} {required && "*"}
+        {/* TAG LIMIT COUNTER - ONLY FOR TAGS */}
+        {fieldName === "tags" && (
+          <span className="text-sm font-normal text-gray-500 ml-2">
+            ({chips.tags.length}/10)
+          </span>
+        )}
       </label>
-      <div className="space-y-3">
-        {dynamicFields[fieldName].map((item, index) => (
-          <div key={index} className="flex gap-3">
-            <div className="flex-1">
-              <input
-                type="text"
-                placeholder={`${placeholder} ${index + 1}`}
-                value={item}
-                onChange={(e) =>
-                  updateDynamicField(fieldName, index, e.target.value)
-                }
-                className="w-full pl-4 pr-4 py-3 border-2 border-gray-200 rounded-xl outline-none focus:border-[#3C8F63] transition-all duration-200 bg-gray-50"
-              />
-            </div>
-            {dynamicFields[fieldName].length > 1 && (
+
+      {/* Chips Display */}
+      {chips[fieldName].length > 0 && (
+        <div className="flex flex-wrap gap-2 mb-3">
+          {chips[fieldName].map((chip, index) => (
+            <div
+              key={index}
+              className={`flex items-center gap-2 text-white px-3 py-2 rounded-lg text-base ${
+                fieldName === "tags" ? "bg-blue-500" : "bg-[#3C8F63]"
+              }`}
+            >
+              {/* SHOW NUMBERS ONLY FOR TAGS */}
+              {index + 1}. {chip}
               <button
                 type="button"
-                onClick={() => removeDynamicField(fieldName, index)}
-                className="px-4 py-3 border-2 border-red-200 text-red-600 rounded-xl hover:bg-red-50 transition-all duration-200"
+                onClick={() => removeChip(fieldName, index)}
+                className="hover:text-red-200 transition-colors"
               >
-                <FiX size={18} />
+                <FiX size={14} />
               </button>
-            )}
-          </div>
-        ))}
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Input with Add Button */}
+      <div className="flex gap-3">
+        <input
+          type="text"
+          placeholder={placeholder}
+          value={currentInput[fieldName]}
+          disabled={fieldName === "tags" && chips.tags.length >= 10}
+          onChange={(e) => handleChipInputChange(fieldName, e.target.value)}
+          onKeyPress={(e) => handleChipInputKeyPress(fieldName, e)}
+          className={`flex-1 pl-4 pr-4 py-3 border-2 rounded-xl outline-none transition-all duration-200 bg-gray-50 ${
+            fieldName === "tags" && currentInput.tagsError
+              ? "border-red-300"
+              : "border-gray-200 focus:border-[#3C8F63]"
+          }`}
+        />
         <button
           type="button"
-          onClick={() => addDynamicField(fieldName)}
-          className="flex items-center gap-2 px-4 py-3 border-2 border-dashed border-gray-300 text-gray-600 rounded-xl hover:border-[#3C8F63] hover:text-[#3C8F63] transition-all duration-200"
+          onClick={() => addChipButtonClick(fieldName)}
+          className="px-6 py-3 bg-[#3C8F63] text-white rounded-xl font-medium hover:bg-[#2a6b4a] transition-all duration-200"
         >
           <FiPlus size={18} />
-          Add {title}
         </button>
       </div>
+
+      {/* Helper Text */}
+      <p className="text-sm text-gray-500 mt-2">
+        Type and press Enter or click + to add
+      </p>
+
+      {/* TAG LIMIT ERROR MESSAGE */}
+      {fieldName === "tags" && currentInput.tagsError && (
+        <p className="text-red-500 text-sm mt-1">{currentInput.tagsError}</p>
+      )}
+
+      {/* Required Validation Message */}
+      {required && chips[fieldName].length === 0 && currentStep === 3 && (
+        <p className="text-red-500 text-sm mt-1">
+          Please add at least one {title.toLowerCase()}
+        </p>
+      )}
     </div>
   );
 
@@ -235,7 +376,7 @@ const RecPostJob = () => {
         {/* Form Container */}
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="bg-white rounded-2xl shadow-xl border border-[#3c8f6320] overflow-hidden w-full">
-            {/* Step 1: Basic Information */}
+            {/* ==================== STEP 1: BASIC INFORMATION ==================== */}
             {currentStep === 1 && (
               <div className="p-5">
                 <div className="flex items-center gap-3 mb-6">
@@ -282,7 +423,11 @@ const RecPostJob = () => {
                       Job Type *
                     </label>
                     <select
-                      className="w-full pl-4 pr-4 py-3 border-2 border-gray-200 rounded-xl outline-none focus:border-[#3C8F63] transition-all duration-200 bg-gray-50"
+                      className={`w-full pl-4 pr-4 py-3 border-2 rounded-xl outline-none transition-all duration-200 bg-gray-50 ${
+                        errors.jobType
+                          ? "border-red-300"
+                          : "border-gray-200 focus:border-[#3C8F63]"
+                      }`}
                       {...register("jobType", {
                         required: "Job type is required",
                       })}
@@ -292,6 +437,11 @@ const RecPostJob = () => {
                       <option value="Contract">Contract</option>
                       <option value="Internship">Internship</option>
                     </select>
+                    {errors.jobType && (
+                      <p className="text-red-500 text-sm mt-1">
+                        {errors.jobType.message}
+                      </p>
+                    )}
                   </div>
 
                   {/* Workplace Type */}
@@ -300,7 +450,11 @@ const RecPostJob = () => {
                       Workplace Type *
                     </label>
                     <select
-                      className="w-full pl-4 pr-4 py-3 border-2 border-gray-200 rounded-xl outline-none focus:border-[#3C8F63] transition-all duration-200 bg-gray-50"
+                      className={`w-full pl-4 pr-4 py-3 border-2 rounded-xl outline-none transition-all duration-200 bg-gray-50 ${
+                        errors.workplaceType
+                          ? "border-red-300"
+                          : "border-gray-200 focus:border-[#3C8F63]"
+                      }`}
                       {...register("workplaceType", {
                         required: "Workplace type is required",
                       })}
@@ -309,6 +463,11 @@ const RecPostJob = () => {
                       <option value="Remote">Remote</option>
                       <option value="Hybrid">Hybrid</option>
                     </select>
+                    {errors.workplaceType && (
+                      <p className="text-red-500 text-sm mt-1">
+                        {errors.workplaceType.message}
+                      </p>
+                    )}
                   </div>
 
                   {/* Location - Three Parts */}
@@ -336,7 +495,8 @@ const RecPostJob = () => {
                           </p>
                         )}
                       </div>
-                      <div className="relative">
+
+                      <div>
                         <input
                           type="text"
                           placeholder="City"
@@ -355,10 +515,10 @@ const RecPostJob = () => {
                           </p>
                         )}
                       </div>
+
                       <div>
                         <input
                           type="text"
-                          name="area"
                           placeholder="Area"
                           className={`w-full pl-4 pr-4 py-3 border-2 rounded-xl outline-none transition-all duration-200 bg-gray-50 ${
                             errors.area
@@ -414,7 +574,6 @@ const RecPostJob = () => {
                     </label>
                     <input
                       type="text"
-                      name="position"
                       placeholder="e.g. Senior Developer"
                       className={`w-full pl-4 pr-4 py-3 border-2 rounded-xl outline-none transition-all duration-200 bg-gray-50 ${
                         errors.position
@@ -446,7 +605,7 @@ const RecPostJob = () => {
               </div>
             )}
 
-            {/* Step 2: Job Details */}
+            {/* ==================== STEP 2: JOB DETAILS ==================== */}
             {currentStep === 2 && (
               <div className="p-8">
                 <div className="flex items-center gap-3 mb-6">
@@ -465,7 +624,11 @@ const RecPostJob = () => {
                       Experience Level *
                     </label>
                     <select
-                      className="w-full pl-4 pr-4 py-3 border-2 border-gray-200 rounded-xl outline-none focus:border-[#3C8F63] transition-all duration-200 bg-gray-50"
+                      className={`w-full pl-4 pr-4 py-3 border-2 rounded-xl outline-none transition-all duration-200 bg-gray-50 ${
+                        errors.experienceLevel
+                          ? "border-red-300"
+                          : "border-gray-200 focus:border-[#3C8F63]"
+                      }`}
                       {...register("experienceLevel", {
                         required: "Experience level is required",
                       })}
@@ -475,19 +638,29 @@ const RecPostJob = () => {
                       <option value="Senior Level">Senior Level</option>
                       <option value="Executive">Executive</option>
                     </select>
+                    {errors.experienceLevel && (
+                      <p className="text-red-500 text-sm mt-1">
+                        {errors.experienceLevel.message}
+                      </p>
+                    )}
                   </div>
 
                   {/* Open Positions */}
                   <div>
                     <label className="block text-xl font-medium text-gray-700 mb-2">
-                      Open Positions
+                      Open Positions *
                     </label>
                     <input
                       type="number"
                       min="1"
                       placeholder="1"
-                      className="w-full pl-4 pr-4 py-3 border-2 border-gray-200 rounded-xl outline-none focus:border-[#3C8F63] transition-all duration-200 bg-gray-50"
+                      className={`w-full pl-4 pr-4 py-3 border-2 rounded-xl outline-none transition-all duration-200 bg-gray-50 ${
+                        errors.openPositions
+                          ? "border-red-300"
+                          : "border-gray-200 focus:border-[#3C8F63]"
+                      }`}
                       {...register("openPositions", {
+                        required: "Open positions is required",
                         min: { value: 1, message: "Must be at least 1" },
                         valueAsNumber: true,
                       })}
@@ -502,42 +675,67 @@ const RecPostJob = () => {
                   {/* Salary Range */}
                   <div className="md:col-span-2">
                     <label className="block text-xl font-medium text-gray-700 mb-2">
-                      Salary Range
+                      Salary Range *
                     </label>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                       <div className="relative">
-                        <FiDollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                         <input
                           type="number"
                           placeholder="Min"
-                          className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl outline-none focus:border-[#3C8F63] transition-all duration-200 bg-gray-50"
+                          className={`w-full pl-4 pr-4 py-3 border-2 rounded-xl outline-none transition-all duration-200 bg-gray-50 ${
+                            errors.salaryRange?.min
+                              ? "border-red-300"
+                              : "border-gray-200 focus:border-[#3C8F63]"
+                          }`}
                           {...register("salaryRange.min", {
+                            required: "Minimum salary is required",
                             valueAsNumber: true,
                           })}
                         />
+                        {errors.salaryRange?.min && (
+                          <p className="text-red-500 text-sm">
+                            Min: {errors.salaryRange.min.message}
+                          </p>
+                        )}
                       </div>
+
                       <div className="relative">
-                        <FiDollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                         <input
                           type="number"
                           placeholder="Max"
-                          className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl outline-none focus:border-[#3C8F63] transition-all duration-200 bg-gray-50"
+                          className={`w-full pl-4 pr-4 py-3 border-2 rounded-xl outline-none transition-all duration-200 bg-gray-50 ${
+                            errors.salaryRange?.max
+                              ? "border-red-300"
+                              : "border-gray-200 focus:border-[#3C8F63]"
+                          }`}
                           {...register("salaryRange.max", {
+                            required: "Maximum salary is required",
                             valueAsNumber: true,
                           })}
                         />
+                        {errors.salaryRange?.max && (
+                          <p className="text-red-500 text-sm">
+                            Max: {errors.salaryRange.max.message}
+                          </p>
+                        )}
                       </div>
+
                       <select
                         className="px-4 py-3 border-2 border-gray-200 rounded-xl outline-none focus:border-[#3C8F63] transition-all duration-200 bg-gray-50"
-                        {...register("salaryRange.currency")}
+                        {...register("salaryRange.currency", {
+                          required: "Currency is required",
+                        })}
                       >
                         <option value="USD">USD</option>
                         <option value="EUR">EUR</option>
                         <option value="GBP">GBP</option>
                       </select>
+
                       <select
                         className="px-4 py-3 border-2 border-gray-200 rounded-xl outline-none focus:border-[#3C8F63] transition-all duration-200 bg-gray-50"
-                        {...register("salaryRange.period")}
+                        {...register("salaryRange.period", {
+                          required: "Period is required",
+                        })}
                       >
                         <option value="year">per year</option>
                         <option value="month">per month</option>
@@ -549,16 +747,27 @@ const RecPostJob = () => {
                   {/* Application Deadline */}
                   <div className="md:col-span-2">
                     <label className="block text-xl font-medium text-gray-700 mb-2">
-                      Application Deadline
+                      Application Deadline *
                     </label>
                     <div className="relative">
                       <FiCalendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                       <input
                         type="date"
-                        className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl outline-none focus:border-[#3C8F63] transition-all duration-200 bg-gray-50"
-                        {...register("applicationDeadline")}
+                        className={`w-full pl-10 pr-4 py-3 border-2 rounded-xl outline-none transition-all duration-200 bg-gray-50 ${
+                          errors.applicationDeadline
+                            ? "border-red-300"
+                            : "border-gray-200 focus:border-[#3C8F63]"
+                        }`}
+                        {...register("applicationDeadline", {
+                          required: "Application deadline is required",
+                        })}
                       />
                     </div>
+                    {errors.applicationDeadline && (
+                      <p className="text-red-500 text-sm mt-1">
+                        {errors.applicationDeadline.message}
+                      </p>
+                    )}
                   </div>
                 </div>
 
@@ -582,7 +791,7 @@ const RecPostJob = () => {
               </div>
             )}
 
-            {/* Step 3: Job Description */}
+            {/* ==================== STEP 3: JOB DESCRIPTION ==================== */}
             {currentStep === 3 && (
               <div className="p-8">
                 <div className="flex items-center gap-3 mb-6">
@@ -623,67 +832,34 @@ const RecPostJob = () => {
                   )}
                 </div>
 
-                {/* All Dynamic Fields */}
-                {renderDynamicFields(
+                {/* Professional Chip Sections */}
+                {renderChipSection(
                   "responsibilities",
-                  "Responsibility",
-                  "Responsibility"
+                  "Responsibilities",
+                  "Add responsibility",
+                  true
                 )}
-                {renderDynamicFields(
+                {renderChipSection(
                   "requirementSkills",
                   "Required Skills",
-                  "Required Skill"
+                  "Add required skill",
+                  true
                 )}
-                {renderDynamicFields(
+                {renderChipSection(
                   "niceToHave",
                   "Nice to Have",
-                  "Nice to Have"
+                  "Add nice to have skill",
+                  false
                 )}
-                {renderDynamicFields("benefits", "Benefit", "Benefit")}
+                {renderChipSection("benefits", "Benefits", "Add benefit", true)}
 
-                {/* Tags - Special for searching */}
-                <div className="mb-6">
-                  <label className="block text-xl font-medium text-gray-700 mb-3">
-                    <FiTag className="inline mr-2" />
-                    Search Tags (Like YouTube)
-                  </label>
-                  <div className="space-y-3">
-                    {dynamicFields.tags.map((tag, index) => (
-                      <div key={index} className="flex gap-3">
-                        <div className="flex-1">
-                          <input
-                            type="text"
-                            placeholder={`Tag ${
-                              index + 1
-                            } (e.g. React, Remote, Senior)`}
-                            value={tag}
-                            onChange={(e) =>
-                              updateDynamicField("tags", index, e.target.value)
-                            }
-                            className="w-full pl-4 pr-4 py-3 border-2 border-gray-200 rounded-xl outline-none focus:border-[#3C8F63] transition-all duration-200 bg-gray-50"
-                          />
-                        </div>
-                        {dynamicFields.tags.length > 1 && (
-                          <button
-                            type="button"
-                            onClick={() => removeDynamicField("tags", index)}
-                            className="px-4 py-3 border-2 border-red-200 text-red-600 rounded-xl hover:bg-red-50 transition-all duration-200"
-                          >
-                            <FiX size={18} />
-                          </button>
-                        )}
-                      </div>
-                    ))}
-                    <button
-                      type="button"
-                      onClick={() => addDynamicField("tags")}
-                      className="flex items-center gap-2 px-4 py-3 border-2 border-dashed border-gray-300 text-gray-600 rounded-xl hover:border-[#3C8F63] hover:text-[#3C8F63] transition-all duration-200"
-                    >
-                      <FiPlus size={18} />
-                      Add Tag
-                    </button>
-                  </div>
-                </div>
+                {/* Tags - Professional Search Tags */}
+                {renderChipSection(
+                  "tags",
+                  "Search Tags (It will help your post rank higher)",
+                  "Add tag (e.g. React, Remote, Senior)",
+                  true
+                )}
 
                 {/* Who Can Apply - Optional with checkbox */}
                 <div className="mb-6">
@@ -699,48 +875,13 @@ const RecPostJob = () => {
                     </label>
                   </div>
 
-                  {enableWhoCanApply && (
-                    <div className="space-y-3">
-                      {dynamicFields.whoCanApply.map((item, index) => (
-                        <div key={index} className="flex gap-3">
-                          <div className="flex-1">
-                            <input
-                              type="text"
-                              placeholder={`Requirement ${index + 1}`}
-                              value={item}
-                              onChange={(e) =>
-                                updateDynamicField(
-                                  "whoCanApply",
-                                  index,
-                                  e.target.value
-                                )
-                              }
-                              className="w-full pl-4 pr-4 py-3 border-2 border-gray-200 rounded-xl outline-none focus:border-[#3C8F63] transition-all duration-200 bg-gray-50"
-                            />
-                          </div>
-                          {dynamicFields.whoCanApply.length > 1 && (
-                            <button
-                              type="button"
-                              onClick={() =>
-                                removeDynamicField("whoCanApply", index)
-                              }
-                              className="px-4 py-3 border-2 border-red-200 text-red-600 rounded-xl hover:bg-red-50 transition-all duration-200"
-                            >
-                              <FiX size={18} />
-                            </button>
-                          )}
-                        </div>
-                      ))}
-                      <button
-                        type="button"
-                        onClick={() => addDynamicField("whoCanApply")}
-                        className="flex items-center gap-2 px-4 py-3 border-2 border-dashed border-gray-300 text-gray-600 rounded-xl hover:border-[#3C8F63] hover:text-[#3C8F63] transition-all duration-200"
-                      >
-                        <FiPlus size={18} />
-                        Add Requirement
-                      </button>
-                    </div>
-                  )}
+                  {enableWhoCanApply &&
+                    renderChipSection(
+                      "whoCanApply",
+                      "Who Can Apply",
+                      "Add requirement",
+                      false
+                    )}
                 </div>
 
                 {/* Navigation */}
@@ -763,7 +904,7 @@ const RecPostJob = () => {
               </div>
             )}
 
-            {/* Step 4: Review & Submit */}
+            {/* ==================== STEP 4: REVIEW & SUBMIT ==================== */}
             {currentStep === 4 && (
               <div className="p-8">
                 <div className="flex items-center gap-3 mb-6">
@@ -775,7 +916,7 @@ const RecPostJob = () => {
                   </h2>
                 </div>
 
-                {/* Preview Card */}
+                {/* Professional Preview Card */}
                 <div className="bg-gradient-to-r from-[#3C8F63]/5 to-[#3C8F63]/10 border-2 border-[#3C8F63]/20 rounded-2xl p-6 mb-6">
                   <div className="flex items-start justify-between mb-4">
                     <div>
@@ -783,7 +924,7 @@ const RecPostJob = () => {
                         {formValues.jobTitle || "Job Title"}
                       </h3>
                       <p className="text-gray-600">
-                        {formValues.country && formValues.city
+                        {formValues.city && formValues.country
                           ? `${formValues.city}, ${formValues.country}`
                           : "Location"}{" "}
                         • {formValues.department || "Department"}
@@ -803,8 +944,8 @@ const RecPostJob = () => {
                     <div>
                       <p className="text-gray-500">Salary</p>
                       <p className="font-medium">
-                        {formValues.salaryRange.min &&
-                        formValues.salaryRange.max
+                        {formValues.salaryRange?.min &&
+                        formValues.salaryRange?.max
                           ? `$${formValues.salaryRange.min} - $${formValues.salaryRange.max}`
                           : "Not specified"}
                       </p>
@@ -830,6 +971,7 @@ const RecPostJob = () => {
                 <div className="flex justify-between mt-8 pt-6 border-t border-gray-200">
                   <button
                     type="button"
+                    disabled={postLoading}
                     onClick={() => setCurrentStep(3)}
                     className="px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-xl font-medium hover:bg-gray-50 transition-all duration-200"
                   >
@@ -837,9 +979,13 @@ const RecPostJob = () => {
                   </button>
                   <button
                     type="submit"
+                    disabled={postLoading}
                     className="px-8 py-3 bg-[#3C8F63] text-white rounded-xl font-medium hover:bg-[#2a6b4a] transition-all duration-200 shadow-lg shadow-[#3C8F63]/30 hover:shadow-xl hover:shadow-[#3C8F63]/40"
                   >
-                    Post Job
+                    {
+                      postLoading ? "Working..." : "Post Job"
+                    }
+                    
                   </button>
                 </div>
               </div>

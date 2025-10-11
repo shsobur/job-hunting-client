@@ -181,7 +181,11 @@ const TopNavbar = ({
 
                     {/* Dropdown Items */}
                     <NavLink
-                      to="/user-profile"
+                      to={
+                        profile.userRole === "Recruiter"
+                          ? "/recruiter-profile"
+                          : "/user-profile"
+                      }
                       onClick={() => setProfileDropdownOpen(false)}
                       className="flex items-center gap-3 px-5 py-3 text-gray-600 text-sm font-medium transition-all duration-200 hover:bg-[#3c8f6314] hover:text-[#3C8F63]"
                     >
