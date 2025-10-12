@@ -27,6 +27,7 @@ import ProfileModal from "../../../Components/RecUpdateModal/ProfileModal/Profil
 import useUserData from "../../../Hooks/userData";
 import placeholderImage from "../../../assets/place_banner.png";
 import People from "../../../Components/RecUpdateModal/People/People";
+import VerifyMessage from "../../../Components/VerifyMessage/VerifyMessage";
 
 const RecruiterProfile = () => {
   const { profile } = useUserData();
@@ -137,6 +138,7 @@ const RecruiterProfile = () => {
       <CompanyDetailsModal></CompanyDetailsModal>
       <People></People>
       <SocialLinksModal></SocialLinksModal>
+      <VerifyMessage></VerifyMessage>
 
       <section id="recruiter_profile_container">
         <div className="recruiter-container">
@@ -173,12 +175,27 @@ const RecruiterProfile = () => {
 
                     <span
                       className={`status-badge ${
-                        !profile?.verified ? "status-badge-unverified" : ""
+                        profile?.verified === "Pending" ||
+                        profile?.verified === "Unverified"
+                          ? "status-badge-unverified"
+                          : ""
                       }`}
                     >
                       <FaCheckCircle className="badge-icon" />
-                      {profile?.verified ? "Verified" : "Unverified"}
+                      {profile?.verified}
                     </span>
+                    {!profile?.verified && (
+                      <span
+                        onClick={() =>
+                          document
+                            .getElementById("verify_message_modal")
+                            .showModal()
+                        }
+                        className="profile_verify_btn"
+                      >
+                        Verify now
+                      </span>
+                    )}
                   </div>
                 </div>
 

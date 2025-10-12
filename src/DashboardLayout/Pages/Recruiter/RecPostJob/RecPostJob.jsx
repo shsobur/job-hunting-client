@@ -139,7 +139,9 @@ const RecPostJob = () => {
       );
 
       if (chipErrors.length > 0) {
-        jhToastWarning(`Please add at least one item in: ${chipErrors.join(", ")}`)
+        jhToastWarning(
+          `Please add at least one item in: ${chipErrors.join(", ")}`
+        );
         return;
       }
     }
@@ -165,10 +167,9 @@ const RecPostJob = () => {
       companyWebsite: profile.companyWebsite,
     };
 
-    console.log("PROFESSIONAL JOB DATA:", completeJobData);
-
     setPostLoading(true);
-    await api.post("/recruiter-api/post-job", completeJobData)
+    await api
+      .post("/recruiter-api/post-job", completeJobData)
       .then((res) => {
         if (res.data.insertedId) {
           setPostLoading(false);
@@ -982,10 +983,7 @@ const RecPostJob = () => {
                     disabled={postLoading}
                     className="px-8 py-3 bg-[#3C8F63] text-white rounded-xl font-medium hover:bg-[#2a6b4a] transition-all duration-200 shadow-lg shadow-[#3C8F63]/30 hover:shadow-xl hover:shadow-[#3C8F63]/40"
                   >
-                    {
-                      postLoading ? "Working..." : "Post Job"
-                    }
-                    
+                    {postLoading ? "Working..." : "Post Job"}
                   </button>
                 </div>
               </div>

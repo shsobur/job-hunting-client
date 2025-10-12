@@ -119,7 +119,7 @@ const SignUp = () => {
       companyGallery: [],
       keyPeople: [],
       activeHire: true,
-      verified: false,
+      verified: "Unverified",
       social: {
         linkedin: "",
         x: "",
@@ -135,7 +135,6 @@ const SignUp = () => {
       profilePhoto: "",
       headline: "",
       bio: "",
-      age: null,
       education: [],
       experience: [],
       skills: [],

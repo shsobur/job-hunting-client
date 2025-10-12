@@ -1,12 +1,12 @@
 // File path__
 import useUserData from "../Hooks/userData";
+import { AuthContext } from "../Context/AuthContext";
 import TopNavbar from "../Shared/TopNavbar/TopNavbar";
 import SidebarNav from "../Shared/SidebarNav/SidebarNav";
 import DashboardContent from "../Shared/DashboardMain/DashboardContent";
 
 // From react__
 import { useState, useRef, useEffect, useContext } from "react";
-import { AuthContext } from "../Context/AuthContext";
 
 const Dashboard = () => {
   const { profile } = useUserData();

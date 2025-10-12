@@ -168,9 +168,9 @@ const Navbar = () => {
                       onClick={() => setOpen(!open)}
                     >
                       <div className="user_info">
-                        {profile?.profilePhoto ? (
+                        {profile?.profilePhoto || profile?.companyLogo ? (
                           <img
-                            src={profile.profilePhoto}
+                            src={profile?.profilePhoto || profile?.companyLogo}
                             alt="Profile"
                             className="user_avatar"
                           />
@@ -180,7 +180,7 @@ const Navbar = () => {
                           </div>
                         )}
                         <span className="user_name">
-                          {profile?.userName || "User"}
+                          {profile?.userName || profile?.companyName || "User"}
                         </span>
                       </div>
                       {open ? (
@@ -196,9 +196,9 @@ const Navbar = () => {
                     >
                       {/* User Info Section */}
                       <div className="user_profile_section">
-                        {profile?.profilePhoto ? (
+                        {profile?.profilePhoto || profile?.companyLogo ? (
                           <img
-                            src={profile.profilePhoto}
+                            src={profile?.profilePhoto || profile?.companyLogo}
                             alt="Profile"
                             className="profile_image"
                           />
@@ -209,7 +209,7 @@ const Navbar = () => {
                         )}
                         <div className="profile_info">
                           <div className="profile_name">
-                            {profile?.userName || "Welcome User"}
+                            {profile?.userName || profile?.companyName || "Welcome User"}
                           </div>
                           <div className="profile_email">
                             {user?.email || "User"}
