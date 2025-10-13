@@ -209,7 +209,9 @@ const Navbar = () => {
                         )}
                         <div className="profile_info">
                           <div className="profile_name">
-                            {profile?.userName || profile?.companyName || "Welcome User"}
+                            {profile?.userName ||
+                              profile?.companyName ||
+                              "Welcome User"}
                           </div>
                           <div className="profile_email">
                             {user?.email || "User"}
@@ -239,7 +241,9 @@ const Navbar = () => {
                         to={
                           profile?.userRole === "Recruiter"
                             ? "/dashboard/recruiter-overview"
-                            : ""
+                            : profile?.userRole === "Admin"
+                            ? "/dashboard/admin-overview"
+                            : "/dashboard/user-overview"
                         }
                       >
                         <span

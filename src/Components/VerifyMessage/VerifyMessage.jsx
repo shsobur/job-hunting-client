@@ -87,6 +87,8 @@ const VerifyMessage = () => {
       submittedAt: new Date().toISOString(),
       companyId: profile._id,
       completed: percent,
+      companyName: profile.companyName,
+      email: profile.userEmail,
     };
 
     setIsLoading(true);
@@ -385,7 +387,7 @@ const VerifyMessage = () => {
                     }`}
                   >
                     <FiSend className="mr-2" />
-                    Send Verification Request
+                    {isLoading ? "Sending..." : "Send Verification Request"}
                   </button>
                 </div>
               </div>

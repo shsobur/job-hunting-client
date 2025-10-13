@@ -45,7 +45,6 @@ const Dashboard = () => {
         {/* MAIN CONTENT AREA */}
         <div className="flex-1 flex flex-col lg:ml-0 min-w-0">
           <TopNavbar
-            user={user}
             profile={profile}
             userLoading={userLoading}
             dropdownRef={dropdownRef}

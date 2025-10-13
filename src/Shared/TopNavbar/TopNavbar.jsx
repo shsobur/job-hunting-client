@@ -10,7 +10,6 @@ import {
 import { NavLink } from "react-router";
 
 const TopNavbar = ({
-  user,
   profile,
   userLoading,
   dropdownRef,
@@ -182,7 +181,7 @@ const TopNavbar = ({
                     {/* Dropdown Items */}
                     <NavLink
                       to={
-                        profile.userRole === "Recruiter"
+                        profile?.userRole === "Recruiter"
                           ? "/recruiter-profile"
                           : "/user-profile"
                       }

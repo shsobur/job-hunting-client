@@ -11,6 +11,8 @@ import RecOverview from "../DashboardLayout/Pages/Recruiter/RecOverview/RecOverv
 
 // Package__
 import { createBrowserRouter } from "react-router-dom";
+import AdminOverview from "../DashboardLayout/Pages/Admin/AdminOverview/AdminOverview";
+import VerifyCompany from "../DashboardLayout/Pages/Admin/VerifyCompany/VerifyCompany";
 
 const router = createBrowserRouter([
   {
@@ -43,6 +45,17 @@ const router = createBrowserRouter([
     path: "/dashboard",
     element: <Dashboard></Dashboard>,
     children: [
+      // Admin routes__
+      {
+        path: "/dashboard/admin-overview",
+        element: <AdminOverview></AdminOverview>
+      },
+      {
+        path: "/dashboard/verify-company",
+        element: <VerifyCompany></VerifyCompany>,
+      },
+
+      // Recruiter__
       {
         path: "/dashboard/recruiter-overview",
         element: <RecOverview></RecOverview>,

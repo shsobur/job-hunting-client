@@ -17,7 +17,6 @@ const SidebarNav = ({
   sidebarOpen,
   setSidebarOpen,
 }) => {
-
   const userRoleChecker = () => {
     const defaultRoutes = [
       {
@@ -34,10 +33,16 @@ const SidebarNav = ({
 
     const roleRoutes = {
       Admin: [
-        { id: "overview", label: "Overview", icon: <FiHome size={20} /> },
+        {
+          id: "overview",
+          path: "/dashboard/admin-overview",
+          label: "Overview",
+          icon: <FiHome size={20} />,
+        },
         {
           id: "admin-panel",
-          label: "Admin Panel",
+          path: "/dashboard/verify-company",
+          label: "Verify Company",
           icon: <FiUsers size={20} />,
         },
       ],
@@ -56,8 +61,12 @@ const SidebarNav = ({
         },
       ],
       "Job Seeker": [
-        { id: "overview", label: "Overview", icon: <FiHome size={20} /> },
-        { id: "job-search", label: "Job Seeker", icon: <FiSearch size={20} /> },
+        {
+          id: "overview",
+          path: "/dashboard/user-overview",
+          label: "Overview",
+          icon: <FiHome size={20} />,
+        },
       ],
     };
 

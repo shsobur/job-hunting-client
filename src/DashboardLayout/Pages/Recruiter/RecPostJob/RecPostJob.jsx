@@ -12,7 +12,14 @@ import { useForm } from "react-hook-form";
 import { GoAlert } from "react-icons/go";
 import { IoCheckmarkCircleOutline } from "react-icons/io5";
 import { MdElectricBolt, MdOutlineInfo } from "react-icons/md";
-import { FiBriefcase, FiCalendar, FiUser, FiPlus, FiX, FiLock } from "react-icons/fi";
+import {
+  FiBriefcase,
+  FiCalendar,
+  FiUser,
+  FiPlus,
+  FiX,
+  FiLock,
+} from "react-icons/fi";
 
 const RecPostJob = () => {
   const api = useAxios();
@@ -175,6 +182,8 @@ const RecPostJob = () => {
       companyLogo: profile.companyLogo,
       companyWebsite: profile.companyWebsite,
     };
+
+    console.log(completeJobData);
 
     setPostLoading(true);
     await api
@@ -362,7 +371,6 @@ const RecPostJob = () => {
 
                 {/* Main Content */}
                 <div className="p-4">
-
                   {/* Warning Alert */}
                   <div className="bg-red-50 border-2 border-red-200 rounded-xl p-4 mb-5">
                     <div className="flex items-start gap-4">
@@ -402,7 +410,7 @@ const RecPostJob = () => {
                     <div className="bg-green-50 border-2 border-green-200 rounded-xl p-4">
                       <div className="flex items-center gap-3 mb-3">
                         <div className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center">
-                          <MdElectricBolt size={20} color="green"/>
+                          <MdElectricBolt size={20} color="green" />
                         </div>
                         <h4 className="font-semibold text-green-800">
                           Priority Listing
@@ -474,19 +482,23 @@ const RecPostJob = () => {
                           .getElementById("verify_message_modal")
                           .showModal()
                       }
-                      disabled={profile.verified === "Pending" || profile.verified === "Verified"}
+                      disabled={
+                        profile.verified === "Pending" ||
+                        profile.verified === "Verified"
+                      }
                       className="flex-1 bg-[#3C8F63] text-white py-3 px-6 rounded-xl font-semibold text-lg hover:bg-[#2a6b4a] transition-all duration-200 shadow-lg shadow-[#3C8F63]/30 hover:shadow-xl hover:shadow-[#3C8F63]/40 flex items-center justify-center gap-2"
                     >
-                    <IoCheckmarkCircleOutline size={20} />
-                    {
-                      profile.verified === "Pending" ? "You request is on pending..." : "Request Verification"
-                    }
-                      
+                      <IoCheckmarkCircleOutline size={20} />
+                      {profile.verified === "Pending"
+                        ? "You request is on pending..."
+                        : "Request Verification"}
                     </button>
 
-                    <button className="flex-1 border-2 border-gray-300 text-gray-700 py-3 px-6 rounded-xl font-semibold text-lg hover:bg-gray-50 transition-all duration-200 flex items-center justify-center gap-2">
-                      <MdOutlineInfo size={20} />
-                      Learn More
+                    <button className="flex-1 border-2 border-gray-300 text-gray-700 py-3 px-6 rounded-xl font-semibold text-lg hover:bg-gray-50 transition-all duration-200 ">
+                      <a href="https://portfolio-2-c48ba.web.app/" target="main" className="flex items-center justify-center gap-2">
+                        <MdOutlineInfo size={20} />
+                        Learn More
+                      </a>
                     </button>
                   </div>
 
@@ -513,7 +525,7 @@ const RecPostJob = () => {
             {/* Header Section */}
             <div className="text-center mb-5">
               <div className="inline-flex items-center justify-center w-16 h-16 bg-[#3C8F63] rounded-2xl shadow-lg mb-4">
-                <FiBriefcase className="text-white text-2xl" />
+                <FiBriefcase size={35} className="text-white" />
               </div>
               <h1 className="text-3xl font-bold text-gray-800 mb-2">
                 Post a New Job
