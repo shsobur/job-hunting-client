@@ -184,7 +184,7 @@ const RecruiterProfile = () => {
                       <FaCheckCircle className="badge-icon" />
                       {profile?.verified}
                     </span>
-                    {!profile?.verified && (
+                    {profile?.verified === "Unverified" && (
                       <span
                         onClick={() =>
                           document

@@ -1,16 +1,16 @@
 // File__
 import Main from "../MainLayout/Main";
+import Dashboard from "../DashboardLayout/Dashboard";
 import SignIn from "../MainLayout/Pages/Authentication/SignIn/SignIn";
 import SignUp from "../MainLayout/Pages/Authentication/SignUp/SignUp";
+import UserProfile from "../MainLayout/Pages/UserProfile/UserProfile";
 import HomeLayout from "../MainLayout/Pages/HomePageLayout/HomeLayout/HomeLayout";
+import RecPostJob from "../DashboardLayout/Pages/Recruiter/RecPostJob/RecPostJob";
+import RecruiterProfile from "../MainLayout/Pages/RecruiterProfile/RecruiterProfile";
+import RecOverview from "../DashboardLayout/Pages/Recruiter/RecOverview/RecOverview";
 
 // Package__
 import { createBrowserRouter } from "react-router-dom";
-import UserProfile from "../MainLayout/Pages/UserProfile/UserProfile";
-import RecruiterProfile from "../MainLayout/Pages/RecruiterProfile/RecruiterProfile";
-import Dashboard from "../DashboardLayout/Dashboard";
-import RecOverview from "../DashboardLayout/Pages/Recruiter/RecOverview/RecOverview";
-import RecPostJob from "../DashboardLayout/Pages/Recruiter/RecPostJob/RecPostJob";
 
 const router = createBrowserRouter([
   {

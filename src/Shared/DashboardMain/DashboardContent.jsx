@@ -18,7 +18,7 @@ const DashboardContent = ({userLoading }) => {
           </div>
         ) : (
           <>
-            <div className="rounded-2xl p-5 h-full bg-gradient-to-br from-[#f8fafc] to-[#f1f5f9] shadow-inner">
+            <div className="rounded-2xl p-2 h-full bg-gradient-to-br from-[#f8fafc] to-[#f1f5f9] shadow-inner">
               <Outlet></Outlet>
             </div>
           </>

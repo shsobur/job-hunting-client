@@ -196,7 +196,9 @@ const UserProfile = () => {
                 >
                   <FiEdit className="edit-icon" />
                 </button>
-                <h3 className="profile-card-title section-title-line">Languages</h3>
+                <h3 className="profile-card-title section-title-line">
+                  Languages
+                </h3>
                 <div className="language-tags">
                   {!profile?.languages || profile.languages.length === 0 ? (
                     <span className="no-data-text">No languages added</span>
@@ -402,7 +404,7 @@ const UserProfile = () => {
                   <div className="empty-state">
                     <HiOutlineBuildingOffice2
                       size={48}
-                      className="empty-icon"
+                      className="empty-icon w-full"
                     />
                     <p className="empty-text">No experience added yet</p>
                     <p className="empty-subtext">
@@ -471,7 +473,10 @@ const UserProfile = () => {
                 <div className="education-list">
                   {!profile?.education || profile.education.length === 0 ? (
                     <div className="empty-state">
-                      <IoSchoolOutline size={48} className="empty-icon" />
+                      <IoSchoolOutline
+                        size={48}
+                        className="empty-icon w-full"
+                      />
                       <p className="empty-text">No education added yet</p>
                       <p className="empty-subtext">
                         Add your educational background
@@ -573,13 +578,22 @@ const UserProfile = () => {
 
                 <div className="project-grid">
                   {!profile?.projects || profile.projects.length === 0 ? (
-                    <div className="empty-state">
-                      <FaReact size={48} className="empty-icon" />
-                      <p className="empty-text">No projects added yet</p>
-                      <p className="empty-subtext">
-                        Showcase your work and achievements
-                      </p>
-                    </div>
+                    <>
+                      <div className="empty-state">
+                        <FaReact size={48} className="empty-icon w-full" />
+                        <p className="empty-text">No projects added yet</p>
+                        <p className="empty-subtext">
+                          Showcase your work and achievements
+                        </p>
+                      </div>
+                      <div className="empty-state">
+                        <FaReact size={48} className="empty-icon w-full" />
+                        <p className="empty-text">No projects added yet</p>
+                        <p className="empty-subtext">
+                          Showcase your work and achievements
+                        </p>
+                      </div>
+                    </>
                   ) : (
                     profile.projects.map((project, index) => (
                       <div key={index} className="project-card">
@@ -618,12 +632,14 @@ const UserProfile = () => {
                 >
                   <FiEdit className="edit-icon" />
                 </button>
-                <h3 className="card-title-lg section-title-line">Certifications</h3>
+                <h3 className="card-title-lg section-title-line">
+                  Certifications
+                </h3>
                 <div className="certification-list">
                   {!profile?.certifications ||
                   profile.certifications.length === 0 ? (
                     <div className="empty-state">
-                      <FiAward size={48} className="empty-icon" />
+                      <FiAward size={48} className="empty-icon w-full" />
                       <p className="empty-text">No certifications added yet</p>
                       <p className="empty-subtext">
                         Add your professional certifications

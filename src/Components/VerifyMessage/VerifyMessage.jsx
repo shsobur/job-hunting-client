@@ -28,52 +28,53 @@ const VerifyMessage = () => {
   } = useForm();
 
   useEffect(() => {
+    const checkProfileData = () => {
+      let dataCount = 0;
+
+      const checks = [
+        profile?.companyName,
+        profile?.companyLogo,
+        profile?.companyWebsite,
+        profile?.industry,
+        profile?.companySize?.currentEmployees &&
+          profile?.companySize?.sizeRange,
+        profile?.foundedYear,
+        profile?.headquarters?.country &&
+          profile?.headquarters?.city &&
+          profile?.headquarters?.area,
+        profile?.description,
+        profile?.mission,
+        profile?.vision,
+        profile?.bio,
+        profile?.departments?.length >= 1,
+        profile?.keyPeople?.length >= 1,
+        profile?.social?.linkedin ||
+          profile?.social?.x ||
+          (profile?.social?.additionalLinks &&
+            Object.keys(profile.social.additionalLinks).length >= 1),
+        profile?.companyGallery?.length >= 1,
+      ];
+
+      dataCount = checks.filter(Boolean).length;
+      const calculatedPercent = Math.floor((dataCount / 15) * 100);
+
+      setPercent(calculatedPercent);
+
+      // Smart Progress Bar Colors__
+      if (calculatedPercent >= 90) {
+        setProgressColor("bg-green-700");
+        setIsProfileComplete(true);
+      } else if (calculatedPercent >= 70) {
+        setProgressColor("bg-orange-500");
+        setIsProfileComplete(false);
+      } else {
+        setProgressColor("bg-red-500");
+        setIsProfileComplete(false);
+      }
+    };
+
     checkProfileData();
   }, [profile]);
-
-  const checkProfileData = () => {
-    let dataCount = 0;
-
-    const checks = [
-      profile?.companyName,
-      profile?.companyLogo,
-      profile?.companyWebsite,
-      profile?.industry,
-      profile?.companySize?.currentEmployees && profile?.companySize?.sizeRange,
-      profile?.foundedYear,
-      profile?.headquarters?.country &&
-        profile?.headquarters?.city &&
-        profile?.headquarters?.area,
-      profile?.description,
-      profile?.mission,
-      profile?.vision,
-      profile?.bio,
-      profile?.departments?.length >= 1,
-      profile?.keyPeople?.length >= 1,
-      profile?.social?.linkedin ||
-        profile?.social?.x ||
-        (profile?.social?.additionalLinks &&
-          Object.keys(profile.social.additionalLinks).length >= 1),
-      profile?.companyGallery?.length >= 1,
-    ];
-
-    dataCount = checks.filter(Boolean).length;
-    const calculatedPercent = Math.floor((dataCount / 15) * 100);
-
-    setPercent(calculatedPercent);
-
-    // Smart Progress Bar Colors__
-    if (calculatedPercent >= 90) {
-      setProgressColor("bg-green-700");
-      setIsProfileComplete(true);
-    } else if (calculatedPercent >= 70) {
-      setProgressColor("bg-orange-500");
-      setIsProfileComplete(false);
-    } else {
-      setProgressColor("bg-red-500");
-      setIsProfileComplete(false);
-    }
-  };
 
   // Form Submission__
   const onSubmit = async (data) => {
@@ -202,7 +203,8 @@ const VerifyMessage = () => {
                 {percent < 90 && (
                   <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
                     <p className="text-yellow-800 text-sm">
-                      <strong>Requirement:</strong> You need at least 90%
+                      <strong>Requirement:</strong> You need at least{" "}
+                      <b>90% </b>
                       profile completion to apply for verification.
                     </p>
                   </div>
