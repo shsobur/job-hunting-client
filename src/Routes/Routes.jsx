@@ -24,9 +24,15 @@ const router = createBrowserRouter([
         element: <HomeLayout></HomeLayout>,
       },
       {
+        path: "/recruiter-profile/:email",
+        element: <RecruiterProfile></RecruiterProfile>,
+        loader: ({params}) => fetch(`http://localhost:5000/common-api/profile-data/${params.email}`)
+      },
+      {
         path: "/recruiter-profile",
         element: <RecruiterProfile></RecruiterProfile>,
       },
+      
       {
         path: "/user-profile",
         element: <UserProfile></UserProfile>,

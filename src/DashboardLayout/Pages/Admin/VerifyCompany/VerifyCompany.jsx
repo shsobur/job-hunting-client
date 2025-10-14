@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { GrShieldSecurity } from "react-icons/gr";
 import useAxios from "../../../../Hooks/Axios";
+import { GrShieldSecurity } from "react-icons/gr";
 import AdminTableSkeleton from "../../../../Components/AdminTableSkeleton/AdminTableSkeleton";
+import { Link } from "react-router-dom";
 
 const VerifyCompany = () => {
   const api = useAxios();
@@ -11,9 +12,12 @@ const VerifyCompany = () => {
   useEffect(() => {
     setMessageLoading(true);
     const requestData = async () => {
-      const res = await api.get("/admin-api/company-verify-request");
-      if (res.data) { 
+      try {
+        const res = await api.get("/admin-api/company-verify-request");
         setVerifyMessage(res.data);
+      } catch (err) {
+        console.error("Error fetching data:", err);
+      } finally {
         setMessageLoading(false);
       }
     };
@@ -109,15 +113,15 @@ const VerifyCompany = () => {
 
                           <td className="py-4 px-4">
                             <div className="flex gap-2">
-
                               <button className="px-4 py-2 bg-[#3C8F63] text-white rounded-xl font-medium hover:bg-[#2a6b4a] transition-all duration-200 shadow-lg shadow-[#3C8F63]/30 hover:shadow-xl hover:shadow-[#3C8F63]/40 text-sm">
                                 Message
                               </button>
 
-                              <button className="px-4 py-2 border-2 border-[#3C8F63] text-[#3C8F63] rounded-xl font-medium hover:bg-[#3C8F63] hover:text-white transition-all duration-200 text-sm">
-                                Profile
-                              </button>
-
+                              <Link to={`/recruiter-profile/${company.email}`}>
+                                <button className="px-4 py-2 border-2 border-[#3C8F63] text-[#3C8F63] rounded-xl font-medium hover:bg-[#3C8F63] hover:text-white transition-all duration-200 text-sm">
+                                  Profile
+                                </button>
+                              </Link>
                             </div>
                           </td>
                         </tr>
@@ -179,17 +183,16 @@ const VerifyCompany = () => {
 
                 {/* Action Buttons */}
                 <div className="flex gap-2">
-
                   <button className="flex-1 px-3 py-2 bg-[#3C8F63] text-white rounded-xl font-medium hover:bg-[#2a6b4a] transition-all duration-200 shadow-lg shadow-[#3C8F63]/30 hover:shadow-xl hover:shadow-[#3C8F63]/40 text-sm">
                     Message
                   </button>
-                  
-                  <button className="flex-1 px-3 py-2 border-2 border-[#3C8F63] text-[#3C8F63] rounded-xl font-medium hover:bg-[#3C8F63] hover:text-white transition-all duration-200 text-sm">
-                    Profile
-                  </button>
 
+                  <Link to={`/recruiter-profile/${company.email}`}>
+                    <button className="flex-1 px-3 py-2 border-2 border-[#3C8F63] text-[#3C8F63] rounded-xl font-medium hover:bg-[#3C8F63] hover:text-white transition-all duration-200 text-sm">
+                      Profile
+                    </button>
+                  </Link>
                 </div>
-
               </div>
             ))}
           </div>

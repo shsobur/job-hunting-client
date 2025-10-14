@@ -28,11 +28,14 @@ import { IoSchoolOutline } from "react-icons/io5";
 import { HiOutlineBuildingOffice2 } from "react-icons/hi2";
 import { PiBuildingApartmentBold } from "react-icons/pi";
 import LoadingScreen from "../../../Components/LoadingScreen/LoadingScreen";
+import { useContext } from "react";
+import { AuthContext } from "../../../Context/AuthContext";
 
 const UserProfile = () => {
   const { profile, isLoading } = useUserData();
+  const {userLoading} = useContext(AuthContext);
 
-  if (isLoading) {
+  if (userLoading || isLoading) {
     return <LoadingScreen />;
   }
 

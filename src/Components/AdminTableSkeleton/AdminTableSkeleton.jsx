@@ -1,5 +1,5 @@
 const AdminTableSkeleton = () => {
-  return Array.from({ length: 5 }).map((_, index) => (
+  return Array.from({ length: 1 }).map((_, index) => (
     <tr key={index} className="border-b border-gray-100">
       <td className="py-4 px-4">
         <div className="flex items-center space-x-3">
