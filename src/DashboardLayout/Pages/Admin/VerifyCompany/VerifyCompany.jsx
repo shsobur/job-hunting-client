@@ -3,11 +3,14 @@ import useAxios from "../../../../Hooks/Axios";
 import { GrShieldSecurity } from "react-icons/gr";
 import AdminTableSkeleton from "../../../../Components/AdminTableSkeleton/AdminTableSkeleton";
 import { Link } from "react-router-dom";
+import CompanyMessage from "../../../../Components/CompanyMessage/CompanyMessage";
 
 const VerifyCompany = () => {
   const api = useAxios();
   const [verifyMessage, setVerifyMessage] = useState([]);
   const [messageLoading, setMessageLoading] = useState(false);
+  const [clickedMessage, setClickedMessage] = useState({});
+  console.log(clickedMessage);
 
   useEffect(() => {
     setMessageLoading(true);
@@ -26,6 +29,7 @@ const VerifyCompany = () => {
 
   return (
     <>
+      <CompanyMessage companyMessage={clickedMessage}></CompanyMessage>
       <div className="py-2 px-2 overflow-y-auto">
         <div className="w-full mx-auto">
           {/* Header Section */}
@@ -42,7 +46,7 @@ const VerifyCompany = () => {
           </div>
 
           {/* Desktop Table View (above 1280px) */}
-          <div className="hidden xl:block bg-white rounded-2xl border border-[#3c8f6320] overflow-hidden w-full">
+          <div className="hidden xl:block bg-white rounded-2xl border border-[#3c8f6320] overflow-auto w-full">
             <div className="p-5">
               <table className="w-full">
                 <thead>
@@ -113,7 +117,15 @@ const VerifyCompany = () => {
 
                           <td className="py-4 px-4">
                             <div className="flex gap-2">
-                              <button className="px-4 py-2 bg-[#3C8F63] text-white rounded-xl font-medium hover:bg-[#2a6b4a] transition-all duration-200 shadow-lg shadow-[#3C8F63]/30 hover:shadow-xl hover:shadow-[#3C8F63]/40 text-sm">
+                              <button
+                                onClick={() => {
+                                  setClickedMessage(company);
+                                  document
+                                    .getElementById("company_verify_message")
+                                    .showModal();
+                                }}
+                                className="px-4 py-2 bg-[#3C8F63] text-white rounded-xl font-medium hover:bg-[#2a6b4a] transition-all duration-200 shadow-lg shadow-[#3C8F63]/30 hover:shadow-xl hover:shadow-[#3C8F63]/40 text-sm"
+                              >
                                 Message
                               </button>
 
@@ -183,7 +195,15 @@ const VerifyCompany = () => {
 
                 {/* Action Buttons */}
                 <div className="flex gap-2">
-                  <button className="flex-1 px-3 py-2 bg-[#3C8F63] text-white rounded-xl font-medium hover:bg-[#2a6b4a] transition-all duration-200 shadow-lg shadow-[#3C8F63]/30 hover:shadow-xl hover:shadow-[#3C8F63]/40 text-sm">
+                  <button
+                    onClick={() => {
+                      setClickedMessage(company);
+                      document
+                        .getElementById("company_verify_message")
+                        .showModal();
+                    }}
+                    className="flex-1 px-3 py-2 bg-[#3C8F63] text-white rounded-xl font-medium hover:bg-[#2a6b4a] transition-all duration-200 shadow-lg shadow-[#3C8F63]/30 hover:shadow-xl hover:shadow-[#3C8F63]/40 text-sm"
+                  >
                     Message
                   </button>
 

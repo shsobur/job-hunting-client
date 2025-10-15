@@ -38,13 +38,19 @@ const RecruiterProfile = () => {
   const { email } = useParams();
   const profileData = useLoaderData();
   const { profile } = useUserData();
-  const [dynamicData, setDynamicData] = useState({});
+  const [dynamicData, setDynamicData] = useState(null);
 
   useEffect(() => {
     if (user?.email !== email) {
       setDynamicData(profileData);
     }
-  }, [profileData, profile, user, email]);
+  }, [profileData, user, email]);
+
+  // Use dynamicData if available, otherwise use profile__
+  const data = dynamicData || profile;
+
+  // Check if current user can edit this profile__
+  const canEdit = user?.email === data?.userEmail;
 
   // Department icons mapping__
   const departmentIcons = {
@@ -95,64 +101,22 @@ const RecruiterProfile = () => {
     );
   };
 
-  // Format company size__
-  const getCompanySize = () => {
-    if (!profile?.companySize) return "Not specified";
-
-    const { currentEmployees, sizeRange } = profile.companySize;
-
-    if (currentEmployees && sizeRange) {
-      return `${currentEmployees} employees (${sizeRange})`;
-    } else if (currentEmployees) {
-      return `${currentEmployees} employees`;
-    } else if (sizeRange) {
-      return sizeRange;
-    }
-
-    return "Not specified";
-  };
-
-  // Format headquarters__
-  const getHeadquarters = () => {
-    if (!profile?.headquarters) return "Not specified";
-
-    const { country, city, area } = profile.headquarters;
-    const parts = [area, city, country].filter(Boolean);
-
-    return parts.length > 0 ? parts.join(", ") : "Not specified";
-  };
-
-  // Format branches__
-  const getBranches = () => {
-    if (!profile?.branchLocations || profile.branchLocations.length === 0) {
-      return "No branches";
-    }
-
-    return `${profile.branchLocations.length} branch${
-      profile.branchLocations.length > 1 ? "es" : ""
-    }`;
-  };
-
   // Check if social links exist__
-  const hasSocialLinks = () => {
-    return (
-      profile?.social?.linkedin ||
-      profile?.social?.x ||
-      (profile?.social?.additionalLinks &&
-        Object.keys(profile.social.additionalLinks).length > 0)
-    );
-  };
+  const hasSocialLinks =
+    data?.social?.linkedin ||
+    data?.social?.x ||
+    Object.keys(data?.social?.additionalLinks || {}).length > 0;
 
   return (
     <>
-      {/* All update modal component__ */}
-      <ProfileModal></ProfileModal>
-      <AboutModal></AboutModal>
-      <DepartmentModal></DepartmentModal>
-      <CompanyDetailsModal></CompanyDetailsModal>
-      <People></People>
-      <SocialLinksModal></SocialLinksModal>
-      <VerifyMessage></VerifyMessage>
+      {/* All update modal components */}
+      <ProfileModal />
+      <AboutModal />
+      <DepartmentModal />
+      <CompanyDetailsModal />
+      <People />
+      <SocialLinksModal />
+      <VerifyMessage />
 
       <section id="recruiter_profile_container">
         <div className="recruiter-container">
@@ -165,9 +129,7 @@ const RecruiterProfile = () => {
                     className="company-avatar"
                     style={{
                       backgroundImage: `url("${
-                        dynamicData
-                          ? dynamicData?.companyLogo
-                          : profile?.companyLogo || placeholderImage
+                        data?.companyLogo || placeholderImage
                       }")`,
                     }}
                   ></div>
@@ -175,19 +137,14 @@ const RecruiterProfile = () => {
 
                 <div className="company-info">
                   <h1 className="company-name">
-                    {dynamicData
-                      ? dynamicData?.companyName
-                      : profile?.companyName || "Your Company Name"}
+                    {data?.companyName || "Your Company Name"}
                   </h1>
                   <p className="company-meta">
-                    {dynamicData
-                      ? dynamicData?.bio
-                      : profile?.bio ||
-                        "Add a compelling bio about your company"}
+                    {data?.bio || "Add a compelling bio about your company"}
                   </p>
 
                   <div className="status-badges">
-                    {(dynamicData?.activeHire || profile?.activeHire) && (
+                    {data?.activeHire && (
                       <span className="status-badge">
                         <FaRocket className="badge-icon" />
                         Active Hiring
@@ -196,23 +153,17 @@ const RecruiterProfile = () => {
 
                     <span
                       className={`status-badge ${
-                        (dynamicData
-                          ? dynamicData?.verified
-                          : profile?.verified) === "Pending" ||
-                        (dynamicData
-                          ? dynamicData?.verified
-                          : profile?.verified) === "Unverified"
+                        data?.verified === "Pending" ||
+                        data?.verified === "Unverified"
                           ? "status-badge-unverified"
                           : ""
                       }`}
                     >
                       <FaCheckCircle className="badge-icon" />
-                      {dynamicData ? dynamicData?.verified : profile?.verified}
+                      {data?.verified || "Not Verified"}
                     </span>
 
-                    {(dynamicData
-                      ? dynamicData?.verified
-                      : profile?.verified) === "Unverified" && (
+                    {data?.verified === "Unverified" && (
                       <span
                         onClick={() =>
                           document
@@ -227,19 +178,18 @@ const RecruiterProfile = () => {
                   </div>
                 </div>
 
-                {user?.email === profile?.userEmail ||
-                  (user?.email === dynamicData?.userEmail && (
-                    <button
-                      onClick={() =>
-                        document
-                          .getElementById("rec_profile_update_modal")
-                          .showModal()
-                      }
-                      className="header-edit-btn"
-                    >
-                      <FiEdit className="edit-icon" />
-                    </button>
-                  ))}
+                {canEdit && (
+                  <button
+                    onClick={() =>
+                      document
+                        .getElementById("rec_profile_update_modal")
+                        .showModal()
+                    }
+                    className="header-edit-btn"
+                  >
+                    <FiEdit className="edit-icon" />
+                  </button>
+                )}
               </div>
             </div>
 
@@ -269,33 +219,29 @@ const RecruiterProfile = () => {
                 <section className="profile-section">
                   <div className="section-header">
                     <h2 className="section-title">About Us</h2>
-
-                    {user?.email === profile?.userEmail ||
-                      (user?.email === dynamicData?.userEmail && (
-                        <button
-                          className="section-edit-btn"
-                          onClick={() =>
-                            document
-                              .getElementById("rec_about_update_modal")
-                              .showModal()
-                          }
-                        >
-                          <FiEdit className="edit-icon" />
-                        </button>
-                      ))}
+                    {canEdit && (
+                      <button
+                        className="section-edit-btn"
+                        onClick={() =>
+                          document
+                            .getElementById("rec_about_update_modal")
+                            .showModal()
+                        }
+                      >
+                        <FiEdit className="edit-icon" />
+                      </button>
+                    )}
                   </div>
 
                   <div className="about-content">
                     <p className="about-description">
-                      {dynamicData
-                        ? dynamicData?.description
-                        : profile?.description || (
-                            <span className="text-gray-500 italic">
-                              Tell us about your company's history, values, and
-                              what makes it unique. This helps candidates
-                              understand your culture and mission.
-                            </span>
-                          )}
+                      {data?.description || (
+                        <span className="text-gray-500 italic">
+                          Tell us about your company's history, values, and what
+                          makes it unique. This helps candidates understand your
+                          culture and mission.
+                        </span>
+                      )}
                     </p>
 
                     <div className="mission-vision-grid">
@@ -305,14 +251,12 @@ const RecruiterProfile = () => {
                         </div>
                         <h3 className="card-title">Mission</h3>
                         <p className="card-description">
-                          {dynamicData
-                            ? dynamicData?.mission
-                            : profile?.mission || (
-                                <span className="text-gray-500 italic">
-                                  What's your company's core purpose and what it
-                                  aims to achieve?
-                                </span>
-                              )}
+                          {data?.mission || (
+                            <span className="text-gray-500 italic">
+                              What's your company's core purpose and what it
+                              aims to achieve?
+                            </span>
+                          )}
                         </p>
                       </div>
 
@@ -322,14 +266,12 @@ const RecruiterProfile = () => {
                         </div>
                         <h3 className="card-title">Vision</h3>
                         <p className="card-description">
-                          {dynamicData
-                            ? dynamicData?.vision
-                            : profile?.vision || (
-                                <span className="text-gray-500 italic">
-                                  Describe the future your company aspires to
-                                  create.
-                                </span>
-                              )}
+                          {data?.vision || (
+                            <span className="text-gray-500 italic">
+                              Describe the future your company aspires to
+                              create.
+                            </span>
+                          )}
                         </p>
                       </div>
                     </div>
@@ -341,58 +283,32 @@ const RecruiterProfile = () => {
                   <div className="section-header">
                     <h2 className="section-title">
                       Departments{" "}
-                      {profile?.departments ||
-                        (dynamicData?.departments &&
-                          `(${
-                            profile?.departments?.length ||
-                            dynamicData?.departments?.length
-                          })`)}
+                      {data?.departments?.length
+                        ? `(${data.departments.length})`
+                        : ""}
                     </h2>
-
-                    {user?.email === profile?.userEmail ||
-                      (user?.email === dynamicData?.userEmail && (
-                        <button
-                          className="section-edit-btn"
-                          onClick={() =>
-                            document
-                              .getElementById("rec_department_update_modal")
-                              .showModal()
-                          }
-                        >
-                          <FiEdit className="edit-icon" />
-                        </button>
-                      ))}
+                    {canEdit && (
+                      <button
+                        className="section-edit-btn"
+                        onClick={() =>
+                          document
+                            .getElementById("rec_department_update_modal")
+                            .showModal()
+                        }
+                      >
+                        <FiEdit className="edit-icon" />
+                      </button>
+                    )}
                   </div>
 
-                  {profile?.departments ||
-                  (dynamicData?.departments && profile?.departments?.length) ||
-                  dynamicData?.departments?.length > 0 ? (
+                  {data?.departments?.length > 0 ? (
                     <div className="departments-grid">
-                      {dynamicData ? (
-                        <>
-                          {dynamicData?.departments?.map(
-                            (department, index) => (
-                              <div key={index} className="department-card">
-                                {getDepartmentIcon(department)}
-                                <span className="department-name">
-                                  {department}
-                                </span>
-                              </div>
-                            )
-                          )}
-                        </>
-                      ) : (
-                        <>
-                          {profile?.departments?.map((department, index) => (
-                            <div key={index} className="department-card">
-                              {getDepartmentIcon(department)}
-                              <span className="department-name">
-                                {department}
-                              </span>
-                            </div>
-                          ))}
-                        </>
-                      )}
+                      {data.departments.map((department, index) => (
+                        <div key={index} className="department-card">
+                          {getDepartmentIcon(department)}
+                          <span className="department-name">{department}</span>
+                        </div>
+                      ))}
                     </div>
                   ) : (
                     <div className="empty-state">
@@ -408,13 +324,15 @@ const RecruiterProfile = () => {
                   )}
                 </section>
 
-                {/* Gallery Section - Keeping static for now since no data in DB */}
+                {/* Gallery Section */}
                 <section className="profile-section">
                   <div className="section-header">
                     <h2 className="section-title">Company Gallery</h2>
-                    <button className="section-edit-btn">
-                      <FiEdit className="edit-icon" />
-                    </button>
+                    {canEdit && (
+                      <button className="section-edit-btn">
+                        <FiEdit className="edit-icon" />
+                      </button>
+                    )}
                   </div>
 
                   <div className="empty-state">
@@ -433,20 +351,18 @@ const RecruiterProfile = () => {
                 <div className="sidebar-card">
                   <div className="card-header">
                     <h3 className="card-title">Company Details</h3>
-
-                    {user?.email === profile?.userEmail ||
-                      (user?.email === dynamicData?.userEmail && (
-                        <button
-                          className="card-edit-btn"
-                          onClick={() =>
-                            document
-                              .getElementById("res_company_details_modal")
-                              .showModal()
-                          }
-                        >
-                          <FiEdit className="edit-icon" />
-                        </button>
-                      ))}
+                    {canEdit && (
+                      <button
+                        className="card-edit-btn"
+                        onClick={() =>
+                          document
+                            .getElementById("res_company_details_modal")
+                            .showModal()
+                        }
+                      >
+                        <FiEdit className="edit-icon" />
+                      </button>
+                    )}
                   </div>
 
                   <div className="details-list">
@@ -455,25 +371,14 @@ const RecruiterProfile = () => {
                         <FaGlobe className="detail-icon" />
                         Website
                       </span>
-                      {profile?.companyWebsite ||
-                      dynamicData?.companyWebsite ? (
+                      {data?.companyWebsite ? (
                         <a
-                          href={
-                            profile?.companyWebsite ||
-                            dynamicData?.companyWebsite
-                          }
+                          href={data.companyWebsite}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="detail-value link"
                         >
-                          {profile?.companyWebsite?.replace(
-                            /^https?:\/\//,
-                            ""
-                          ) ||
-                            dynamicData?.companyWebsite?.replace(
-                              /^https?:\/\//,
-                              ""
-                            )}
+                          {data.companyWebsite.replace(/^https?:\/\//, "")}
                         </a>
                       ) : (
                         <span className="detail-value text-gray-500">
@@ -488,9 +393,7 @@ const RecruiterProfile = () => {
                         Industry
                       </span>
                       <span className="detail-value">
-                        {dynamicData
-                          ? dynamicData?.industry
-                          : profile?.industry || "Not specified"}
+                        {data?.industry || "Not specified"}
                       </span>
                     </div>
 
@@ -500,13 +403,8 @@ const RecruiterProfile = () => {
                         Company size
                       </span>
                       <span className="detail-value">
-                        {dynamicData
-                          ? dynamicData?.companySize?.currentEmployees
-                          : profile?.companySize?.currentEmployees}{" "}
-                        /{" "}
-                        {dynamicData
-                          ? dynamicData?.companySize?.sizeRange
-                          : profile?.companySize?.currentEmployees}
+                        {data?.companySize?.currentEmployees || "0"} /{" "}
+                        {data?.companySize?.sizeRange || "0"}
                       </span>
                     </div>
 
@@ -516,9 +414,7 @@ const RecruiterProfile = () => {
                         Founded
                       </span>
                       <span className="detail-value">
-                        {profile?.foundedYear ||
-                          dynamicData?.foundedYear ||
-                          "Not specified"}
+                        {data?.foundedYear || "Not specified"}
                       </span>
                     </div>
 
@@ -528,18 +424,13 @@ const RecruiterProfile = () => {
                         Headquarters
                       </span>
                       <span className="detail-value">
-                        {dynamicData ? (
+                        {data?.headquarters ? (
                           <>
-                            {dynamicData?.headquarters?.country} /{" "}
-                            {dynamicData?.headquarters?.city} /{" "}
-                            {dynamicData?.headquarters?.area}
+                            {data.headquarters.country} /{" "}
+                            {data.headquarters.city} / {data.headquarters.area}
                           </>
                         ) : (
-                          <>
-                            {profile?.headquarters?.country} /{" "}
-                            {profile?.headquarters?.city} /{" "}
-                            {profile?.headquarters?.area}
-                          </>
+                          "Not specified"
                         )}
                       </span>
                     </div>
@@ -559,69 +450,46 @@ const RecruiterProfile = () => {
                   <div className="card-header">
                     <h3 className="card-title">
                       Key People{" "}
-                      {profile?.keyPeople ||
-                        (dynamicData?.keyPeople &&
-                          `(${
-                            profile?.keyPeople?.length ||
-                            dynamicData?.keyPeople?.length
-                          })`)}
+                      {data?.keyPeople?.length
+                        ? `(${data.keyPeople.length})`
+                        : ""}
                     </h3>
-
-                    {user?.email === profile?.userEmail ||
-                      (user?.email === dynamicData?.userEmail && (
-                        <button
-                          onClick={() =>
-                            document
-                              .getElementById("rec_people_update_modal")
-                              .showModal()
-                          }
-                          className="card-edit-btn"
-                        >
-                          <FiEdit className="edit-icon" />
-                        </button>
-                      ))}
+                    {canEdit && (
+                      <button
+                        onClick={() =>
+                          document
+                            .getElementById("rec_people_update_modal")
+                            .showModal()
+                        }
+                        className="card-edit-btn"
+                      >
+                        <FiEdit className="edit-icon" />
+                      </button>
+                    )}
                   </div>
 
-                  {profile?.keyPeople ||
-                  (dynamicData?.keyPeople && profile?.keyPeople?.length) ||
-                  dynamicData?.keyPeople?.length > 0 ? (
+                  {data?.keyPeople?.length > 0 ? (
                     <div className="people-list">
-                      {dynamicData ? (
-                        <>
-                          {dynamicData.keyPeople.map((person, index) => (
-                            <div key={index} className="person-card">
-                              <div
-                                className="person-avatar"
-                                style={{
-                                  backgroundImage: `url("${person.image}")`,
-                                }}
-                              ></div>
-                              <div className="person-info">
-                                <h4 className="person-name">{person.name}</h4>
-                                <p className="person-role">{person.position}</p>
-                              </div>
-                            </div>
-                          ))}
-                        </>
-                      ) : (
-                        <>
-                          {" "}
-                          {profile.keyPeople.map((person, index) => (
-                            <div key={index} className="person-card">
-                              <div
-                                className="person-avatar"
-                                style={{
-                                  backgroundImage: `url("${person.image}")`,
-                                }}
-                              ></div>
-                              <div className="person-info">
-                                <h4 className="person-name">{person.name}</h4>
-                                <p className="person-role">{person.position}</p>
-                              </div>
-                            </div>
-                          ))}
-                        </>
-                      )}
+                      {data.keyPeople.map((person, index) => (
+                        <div key={index} className="person-card">
+                          <div
+                            className="person-avatar"
+                            style={{
+                              backgroundImage: `url("${
+                                person?.image || placeholderImage
+                              }")`,
+                            }}
+                          ></div>
+                          <div className="person-info">
+                            <h4 className="person-name">
+                              {person?.name || "Unknown"}
+                            </h4>
+                            <p className="person-role">
+                              {person?.position || "No position"}
+                            </p>
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   ) : (
                     <div className="empty-state-small">
@@ -638,82 +506,69 @@ const RecruiterProfile = () => {
                 <div className="sidebar-card">
                   <div className="card-header">
                     <h3 className="card-title">Social Links</h3>
-
-                    {user?.email === profile?.userEmail ||
-                      (user?.email === dynamicData?.userEmail && (
-                        <button
-                          className="card-edit-btn"
-                          onClick={() =>
-                            document
-                              .getElementById("res_social_links_modal")
-                              .showModal()
-                          }
-                        >
-                          <FiEdit className="edit-icon" />
-                        </button>
-                      ))}
+                    {canEdit && (
+                      <button
+                        className="card-edit-btn"
+                        onClick={() =>
+                          document
+                            .getElementById("res_social_links_modal")
+                            .showModal()
+                        }
+                      >
+                        <FiEdit className="edit-icon" />
+                      </button>
+                    )}
                   </div>
 
-                  {(() => {
-                    const data = dynamicData || profile;
-                    const hasSocialLinks =
-                      data?.social?.linkedin ||
-                      data?.social?.x ||
-                      Object.keys(data?.social?.additionalLinks || {}).length >
-                        0;
-
-                    return hasSocialLinks ? (
-                      <div className="social-links">
-                        {data?.social?.linkedin && (
-                          <a
-                            href={data.social.linkedin}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="social-link"
-                            aria-label="LinkedIn"
-                          >
-                            <FaLinkedin />
-                          </a>
-                        )}
-                        {data?.social?.x && (
-                          <a
-                            href={data.social.x}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="social-link"
-                            aria-label="Twitter"
-                          >
-                            <FaTwitter />
-                          </a>
-                        )}
-                        {Object.entries(
-                          data?.social?.additionalLinks || {}
-                        ).map(
-                          ([platform, url]) =>
-                            url && (
-                              <a
-                                key={platform}
-                                href={url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="social-link"
-                                aria-label={platform}
-                              >
-                                <FaLink />
-                              </a>
-                            )
-                        )}
-                      </div>
-                    ) : (
-                      <div className="empty-state-small">
-                        <FaLinkedin className="empty-state-icon w-full" />
-                        <p className="empty-state-text">No social links</p>
-                        <p className="empty-state-subtext">
-                          Add your social media profiles
-                        </p>
-                      </div>
-                    );
-                  })()}
+                  {hasSocialLinks ? (
+                    <div className="social-links">
+                      {data?.social?.linkedin && (
+                        <a
+                          href={data.social.linkedin}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="social-link"
+                          aria-label="LinkedIn"
+                        >
+                          <FaLinkedin />
+                        </a>
+                      )}
+                      {data?.social?.x && (
+                        <a
+                          href={data.social.x}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="social-link"
+                          aria-label="Twitter"
+                        >
+                          <FaTwitter />
+                        </a>
+                      )}
+                      {Object.entries(data?.social?.additionalLinks || {}).map(
+                        ([platform, url]) =>
+                          url && (
+                            <a
+                              key={platform}
+                              href={url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="social-link"
+                              aria-label={platform}
+                            >
+                              <FaLink />
+                            </a>
+                          )
+                      )}
+                    </div>
+                  ) : (
+                    <div className="empty-state-small">
+                      <FaLinkedin className="empty-state-icon w-full" />
+                      <p className="empty-state-text">No social links</p>
+                      <p className="empty-state-subtext">
+                        Add your social media profiles
+                      </p>
+                    </div>
+                  )}
                 </div>
               </aside>
             </div>
