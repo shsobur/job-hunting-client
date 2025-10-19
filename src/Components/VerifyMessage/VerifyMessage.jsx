@@ -87,6 +87,7 @@ const VerifyMessage = () => {
       submittedAt: new Date().toISOString(),
       companyId: profile._id,
       completed: percent,
+      isVerify: "Unverified",
       companyName: profile.companyName,
       email: profile.userEmail,
     };

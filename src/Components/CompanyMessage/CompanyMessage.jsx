@@ -8,8 +8,13 @@ import {
   FaCalendar,
   FaPaperclip,
 } from "react-icons/fa";
+import useAxios from "../../Hooks/Axios";
+import { jhConfirm, jhError, jhSuccess } from "../../utils";
+import useUserData from "../../Hooks/userData";
 
 const CompanyMessage = ({ companyMessage }) => {
+  const api = useAxios();
+  const { updateProfile } = useUserData();
   const [rejectReason, setRejectReason] = useState("");
   const [isRejecting, setIsRejecting] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -24,10 +29,73 @@ const CompanyMessage = ({ companyMessage }) => {
     });
   };
 
-  const handleAccept = () => {
+  const handleAccept = async () => {
     setIsSubmitting(true);
 
-    console.log("Accepting verification for:", companyMessage.companyName);
+    const newCompanyData = {
+      companyId: companyMessage.companyId,
+      companyName: companyMessage.companyName,
+      email: companyMessage.email,
+      isVerify: "Verified",
+      isBlock: false,
+      blockTime: 0,
+    };
+
+    handleCloseModal();
+
+    jhConfirm({
+      title: "Are you sure?",
+      text: "You want to approve this company?",
+      icon: "info",
+      showCancelButton: true,
+      confirmButtonText: "Yes, Approve",
+      cancelButtonText: "Cancel",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const res = await api.put(
+            `/admin-api/company-verify-approve-data/${companyMessage._id}`,
+            newCompanyData
+          );
+
+          if (res.data.modifiedCount > 0) {
+            const res = await api.patch(
+              `/admin-api/company-profile-status/${companyMessage.email}`
+            );
+            if (res.data.modifiedCount > 0) {
+              jhSuccess({
+                title: "Success",
+                text: "Company Approved Successfully",
+              });
+            } else {
+              jhError({
+                title: "Error",
+                text: "Profile updated, but company profile update failed",
+              });
+            }
+
+            handleCloseModal();
+          } else {
+            jhError({
+              title: "Error",
+              text: "Failed to approve. Please try again.",
+            });
+          }
+        } catch (error) {
+          console.error("Approval error:", error);
+          jhError({
+            title: "Error",
+            text: "Something went wrong. Please try again.",
+          });
+        } finally {
+          setIsSubmitting(false);
+        }
+      } else {
+        setIsSubmitting(false);
+        const modal = document.getElementById("company_verify_message");
+        modal.showModal();
+      }
+    });
   };
 
   const handleReject = () => {
@@ -40,10 +108,6 @@ const CompanyMessage = ({ companyMessage }) => {
       alert("Please provide a reason for rejection");
       return;
     }
-
-    setIsSubmitting(true);
-
-    // Simulate API call
 
     setIsSubmitting(false);
     setIsRejecting(false);
@@ -65,7 +129,7 @@ const CompanyMessage = ({ companyMessage }) => {
 
   return (
     <dialog id="company_verify_message" className="modal">
-      <div className="modal-box max-w-4xl max-h-[95vh] flex flex-col p-0">
+      <div className="modal-box max-w-[1024px] max-h-[95vh] flex flex-col p-0">
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-gray-200 bg-white sticky top-0 z-10 rounded-t-lg">
           <div className="flex items-center gap-3">
@@ -266,11 +330,6 @@ const CompanyMessage = ({ companyMessage }) => {
           </div>
         </div>
       </div>
-
-      {/* DaisyUI Modal Backdrop - Click to Close */}
-      <form method="dialog">
-        <button onClick={handleCloseModal}>close</button>
-      </form>
     </dialog>
   );
 };
