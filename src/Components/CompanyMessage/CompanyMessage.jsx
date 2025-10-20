@@ -9,23 +9,14 @@ import {
   FaPaperclip,
 } from "react-icons/fa";
 import useAxios from "../../Hooks/Axios";
-import { jhConfirm, jhError, jhSuccess } from "../../utils";
+import emailjs from "@emailjs/browser";
+import { jhConfirm, jhError, jhSuccess, jhToastInfo } from "../../utils";
 
 const CompanyMessage = ({ companyMessage }) => {
   const api = useAxios();
   const [rejectReason, setRejectReason] = useState("");
   const [isRejecting, setIsRejecting] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  // const formatDate = (dateString) => {
-  //   return new Date(dateString).toLocaleDateString("en-US", {
-  //     year: "numeric",
-  //     month: "long",
-  //     day: "numeric",
-  //     hour: "2-digit",
-  //     minute: "2-digit",
-  //   });
-  // };
 
   const handleAccept = async () => {
     setIsSubmitting(true);
@@ -37,6 +28,11 @@ const CompanyMessage = ({ companyMessage }) => {
       isVerify: "Verified",
       isBlock: false,
       blockTime: 0,
+    };
+
+    const templateParams = {
+      to_email: companyMessage.email,
+      companyName: companyMessage.companyName,
     };
 
     handleCloseModal();
@@ -65,6 +61,21 @@ const CompanyMessage = ({ companyMessage }) => {
                 title: "Success",
                 text: "Company Approved Successfully",
               });
+
+              emailjs
+                .send(
+                  import.meta.env.VITE_SECOND_EMAIL_SERVICE_ID,
+                  import.meta.env.VITE_SECOND_EMAIL_TEMPLATE_ID,
+                  templateParams,
+                  import.meta.env.VITE_SECOND_EMAIL_PUBLIC_KEY,
+                )
+                .then(() => {
+                  console.log("Email send");
+                  jhToastInfo("Email send to company");
+                })
+                .catch(err => {
+                  console.log("Email send failed",err);
+                })
             } else {
               jhError({
                 title: "Error",
@@ -103,7 +114,7 @@ const CompanyMessage = ({ companyMessage }) => {
     }
 
     if (!rejectReason.trim()) {
-      alert("Please provide a reason for rejection");
+      jhToastInfo("Please provide a reason for rejection");
       return;
     }
 

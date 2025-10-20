@@ -10,7 +10,6 @@ const VerifyCompany = () => {
   const [verifyMessage, setVerifyMessage] = useState([]);
   const [messageLoading, setMessageLoading] = useState(false);
   const [clickedMessage, setClickedMessage] = useState({});
-  console.log(clickedMessage);
 
   useEffect(() => {
     setMessageLoading(true);
