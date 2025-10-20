@@ -1,3 +1,4 @@
+import "./RecruiterProfile.css";
 import {
   FaRocket,
   FaCheckCircle,
@@ -23,7 +24,6 @@ import AboutModal from "../../../Components/RecUpdateModal/AboutModal/AboutModal
 import DepartmentModal from "../../../Components/RecUpdateModal/DepartmentModal/DepartmentModal";
 import CompanyDetailsModal from "../../../Components/RecUpdateModal/CompanyInfo/CompanyInfo";
 import SocialLinksModal from "../../../Components/RecUpdateModal/SocialModal/SocialModal";
-import "./RecruiterProfile.css";
 import ProfileModal from "../../../Components/RecUpdateModal/ProfileModal/ProfileModal";
 import useUserData from "../../../Hooks/userData";
 import placeholderImage from "../../../assets/place_banner.png";
@@ -180,12 +180,19 @@ const RecruiterProfile = () => {
 
                 {canEdit && (
                   <button
+                    title={
+                      data?.verified === "Pending" &&
+                      "You can't edit now. You profile will be check by admin"
+                    }
+                    disabled={data?.verified === "Pending"}
                     onClick={() =>
                       document
                         .getElementById("rec_profile_update_modal")
                         .showModal()
                     }
-                    className="header-edit-btn"
+                    className={`rec-profile-edit-btn ${
+                      data?.verified === "Pending" ? "pending" : ""
+                    }`}
                   >
                     <FiEdit className="edit-icon" />
                   </button>
@@ -221,12 +228,19 @@ const RecruiterProfile = () => {
                     <h2 className="section-title">About Us</h2>
                     {canEdit && (
                       <button
-                        className="section-edit-btn"
+                        title={
+                          data?.verified === "Pending" &&
+                          "You can't edit now. You profile will be check by admin"
+                        }
+                        disabled={data?.verified === "Pending"}
                         onClick={() =>
                           document
                             .getElementById("rec_about_update_modal")
                             .showModal()
                         }
+                        className={`rec-profile-edit-btn ${
+                          data?.verified === "Pending" ? "pending" : ""
+                        }`}
                       >
                         <FiEdit className="edit-icon" />
                       </button>
@@ -287,14 +301,22 @@ const RecruiterProfile = () => {
                         ? `(${data.departments.length})`
                         : ""}
                     </h2>
+
                     {canEdit && (
                       <button
-                        className="section-edit-btn"
+                        title={
+                          data?.verified === "Pending" &&
+                          "You can't edit now. You profile will be check by admin"
+                        }
+                        disabled={data?.verified === "Pending"}
                         onClick={() =>
                           document
                             .getElementById("rec_department_update_modal")
                             .showModal()
                         }
+                        className={`rec-profile-edit-btn ${
+                          data?.verified === "Pending" ? "pending" : ""
+                        }`}
                       >
                         <FiEdit className="edit-icon" />
                       </button>
@@ -329,7 +351,21 @@ const RecruiterProfile = () => {
                   <div className="section-header">
                     <h2 className="section-title">Company Gallery</h2>
                     {canEdit && (
-                      <button className="section-edit-btn">
+                      <button
+                        title={
+                          data?.verified === "Pending" &&
+                          "You can't edit now. You profile will be check by admin"
+                        }
+                        disabled={data?.verified === "Pending"}
+                        onClick={() =>
+                          document
+                            .getElementById("rec_picture_update_modal")
+                            .showModal()
+                        }
+                        className={`rec-profile-edit-btn ${
+                          data?.verified === "Pending" ? "pending" : ""
+                        }`}
+                      >
                         <FiEdit className="edit-icon" />
                       </button>
                     )}
@@ -353,12 +389,19 @@ const RecruiterProfile = () => {
                     <h3 className="card-title">Company Details</h3>
                     {canEdit && (
                       <button
-                        className="card-edit-btn"
+                        title={
+                          data?.verified === "Pending" &&
+                          "You can't edit now. You profile will be check by admin"
+                        }
+                        disabled={data?.verified === "Pending"}
                         onClick={() =>
                           document
                             .getElementById("res_company_details_modal")
                             .showModal()
                         }
+                        className={`rec-profile-edit-btn ${
+                          data?.verified === "Pending" ? "pending" : ""
+                        }`}
                       >
                         <FiEdit className="edit-icon" />
                       </button>
@@ -454,14 +497,22 @@ const RecruiterProfile = () => {
                         ? `(${data.keyPeople.length})`
                         : ""}
                     </h3>
+
                     {canEdit && (
                       <button
+                        title={
+                          data?.verified === "Pending" &&
+                          "You can't edit now. You profile will be check by admin"
+                        }
+                        disabled={data?.verified === "Pending"}
                         onClick={() =>
                           document
-                            .getElementById("rec_people_update_modal")
+                            .getElementById("rec_key_people_modal")
                             .showModal()
                         }
-                        className="card-edit-btn"
+                        className={`rec-profile-edit-btn ${
+                          data?.verified === "Pending" ? "pending" : ""
+                        }`}
                       >
                         <FiEdit className="edit-icon" />
                       </button>
@@ -506,14 +557,22 @@ const RecruiterProfile = () => {
                 <div className="sidebar-card">
                   <div className="card-header">
                     <h3 className="card-title">Social Links</h3>
+
                     {canEdit && (
                       <button
-                        className="card-edit-btn"
+                        title={
+                          data?.verified === "Pending" &&
+                          "You can't edit now. You profile will be check by admin"
+                        }
+                        disabled={data?.verified === "Pending"}
                         onClick={() =>
                           document
                             .getElementById("res_social_links_modal")
                             .showModal()
                         }
+                        className={`rec-profile-edit-btn ${
+                          data?.verified === "Pending" ? "pending" : ""
+                        }`}
                       >
                         <FiEdit className="edit-icon" />
                       </button>

@@ -10,24 +10,22 @@ import {
 } from "react-icons/fa";
 import useAxios from "../../Hooks/Axios";
 import { jhConfirm, jhError, jhSuccess } from "../../utils";
-import useUserData from "../../Hooks/userData";
 
 const CompanyMessage = ({ companyMessage }) => {
   const api = useAxios();
-  const { updateProfile } = useUserData();
   const [rejectReason, setRejectReason] = useState("");
   const [isRejecting, setIsRejecting] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  };
+  // const formatDate = (dateString) => {
+  //   return new Date(dateString).toLocaleDateString("en-US", {
+  //     year: "numeric",
+  //     month: "long",
+  //     day: "numeric",
+  //     hour: "2-digit",
+  //     minute: "2-digit",
+  //   });
+  // };
 
   const handleAccept = async () => {
     setIsSubmitting(true);
@@ -184,7 +182,7 @@ const CompanyMessage = ({ companyMessage }) => {
                   <div>
                     <p className="text-sm text-gray-600">Submitted On</p>
                     <p className="font-semibold text-gray-800">
-                      {formatDate(companyMessage?.submittedAt)}
+                      {companyMessage?.submittedAt}
                     </p>
                   </div>
                 </div>

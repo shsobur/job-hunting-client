@@ -1,13 +1,15 @@
 // File path__
 import useAxios from "../../Hooks/Axios";
 import useUserData from "../../Hooks/userData";
-import { jhError, jhSuccess } from "../../utils";
+import { jhError, jhSuccess, jhToastInfo } from "../../utils";
 import SeekerModalHeader from "../../Shared/SeekerModalHeader/SeekerModalHeader";
 
 // Form react__
 import { useEffect, useState } from "react";
 
 // Package__
+import { format } from "date-fns";
+import emailjs from "@emailjs/browser";
 import { useForm } from "react-hook-form";
 import { FiCheck, FiAlertTriangle, FiLock, FiSend, FiX } from "react-icons/fi";
 
@@ -84,12 +86,22 @@ const VerifyMessage = () => {
       subject: data.subject,
       message: data.message,
       legalAgreement: isChecked,
-      submittedAt: new Date().toISOString(),
+      submittedAt: format(new Date(), "MMM dd, yyyy"),
       companyId: profile._id,
       completed: percent,
       isVerify: "Unverified",
       companyName: profile.companyName,
       email: profile.userEmail,
+    };
+
+    // Data for admin email__
+    const templateParams = {
+      subject: verificationData.subject,
+      message: verificationData.message,
+      companyName: verificationData.companyName,
+      email: verificationData.email,
+      submittedAt: verificationData.submittedAt,
+      completed: verificationData.completed,
     };
 
     setIsLoading(true);
@@ -108,6 +120,23 @@ const VerifyMessage = () => {
                   title: "Verification Request Sent Successfully!",
                   text: "Our admin team will review your profile shortly.",
                 });
+
+                // Send email to admin__
+                emailjs
+                  .send(
+                    import.meta.env.VITE_EMAIL_SERVICE_ID,
+                    import.meta.env.VITE_EMAIL_TEMPLATE_ID,
+                    templateParams,
+                    import.meta.env.VITE_EMAIL_PUBLIC_KEY
+                  )
+                  .then(() => {
+                    jhToastInfo(
+                      "We've sent a verification request to admin for faster processing"
+                    );
+                  })
+                  .catch((err) => {
+                    console.log("Email send failed", err);
+                  });
               },
               onError: () => {
                 setIsLoading(false);
