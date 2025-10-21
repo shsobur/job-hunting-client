@@ -31,7 +31,7 @@ const Banner = () => {
     if (screenSize.width < 640 && !sessionStorage.getItem("mobileAlert")) {
       Swal.fire({
         title: "Hi there! 👋🏻",
-        text: "Welcome! This website looks best on a tablet or desktop💻 for the full experience. Don't worry—our app is coming soon so you can enjoy it on mobile📱 too!",
+        text: "Welcome! This site is optimized for tablet and desktop viewing. Our mobile app will be available soon for an even smoother experience",
         icon: "info",
       });
 
@@ -42,14 +42,6 @@ const Banner = () => {
   return (
     <>
       <section id="main_banner_container">
-        {/* Floating background circles */}
-        <div className="floating_circles">
-          <div className="circle circle_1"></div>
-          <div className="circle circle_2"></div>
-          <div className="circle circle_3"></div>
-          <div className="circle circle_4"></div>
-        </div>
-
         <div className="banner_content_container">
           <div className="banner_content">
             <div className="text_section">
@@ -103,7 +95,7 @@ const Banner = () => {
               <div className="image_container">
                 <div className="main_image_wrapper">
                   <img
-                    src={bannerImage} 
+                    src={bannerImage}
                     alt="Professional Career Success"
                     className="main_image"
                   />
