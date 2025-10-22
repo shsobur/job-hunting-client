@@ -23,10 +23,10 @@
 }
 
 .fj_header-title {
-  font-size: 2.8rem;
+  font-size: 3rem;
   font-weight: 700;
   line-height: 1.2;
-  margin-bottom: 16px;
+  margin-bottom: 30px;
   color: #1a202c;
 }
 
@@ -63,11 +63,11 @@
 }
 
 .fj_job-card {
-  background: rgba(255, 255, 255, 0.95);
+  background: #fffffff2;
   padding: 30px 25px;
   border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.9);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid #ffffffe6;
+  box-shadow: 0 4px 20px #00000014;
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
@@ -79,8 +79,8 @@
 
 .fj_job-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 12px 35px rgba(60, 143, 99, 0.15);
-  border-color: rgba(60, 143, 99, 0.2);
+  box-shadow: 0 12px 35px #3c8f6326;
+  border-color: #3c8f6333;
 }
 
 /* Featured Badge */
@@ -88,12 +88,12 @@
   position: absolute;
   top: 15px;
   right: 15px;
-  background: linear-gradient(135deg, #3c8f63, #2a6b4a);
   color: white;
   padding: 4px 12px;
   border-radius: 20px;
   font-size: 0.75rem;
   font-weight: 600;
+  background: linear-gradient(135deg, #3c8f63, #2a6b4a);
 }
 
 /* Company Info */
@@ -107,7 +107,7 @@
 .fj_company-logo {
   width: 50px;
   height: 50px;
-  background: rgba(60, 143, 99, 0.1);
+  background: #3c8f631a;
   border-radius: 12px;
   display: flex;
   align-items: center;
@@ -138,7 +138,7 @@
 .fj_job-type {
   font-size: 0.8rem;
   color: #3c8f63;
-  background: rgba(60, 143, 99, 0.1);
+  background: #3c8f631a;
   padding: 2px 8px;
   border-radius: 12px;
   font-weight: 500;
@@ -167,12 +167,12 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 0.9rem;
+  font-size: 16px;
   color: #64748b;
 }
 
 .fj_meta-icon {
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   color: #3c8f63;
   flex-shrink: 0;
 }
@@ -328,7 +328,7 @@
     gap: 8px;
   }
   .fj_job-meta {
-    align-items: center;
+    align-items: flex-start;
   }
 }
 

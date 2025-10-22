@@ -1,0 +1,6 @@
+#job_main_container {
+  max-width: 1536px;
+  margin: auto;
+  padding: 0 10px;
+  min-height: 100vh;
+}

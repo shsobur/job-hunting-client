@@ -131,6 +131,19 @@ const Navbar = () => {
               </NavLink>
 
               <NavLink
+                to="/jobs"
+                className={({ isActive }) =>
+                  isActive ? "route_active_style" : "router_none_active_style"
+                }
+              >
+                {userLoading ? (
+                  <div className="h-8 w-14 bg-gray-200 rounded-lg"></div>
+                ) : (
+                  <li>Find Jobs</li>
+                )}
+              </NavLink>
+
+              <NavLink
                 to="/community"
                 className={({ isActive }) =>
                   isActive ? "route_active_style" : "router_none_active_style"
@@ -296,6 +309,19 @@ const Navbar = () => {
                     }
                   >
                     <IoHomeOutline /> Home
+                  </NavLink>
+                </li>
+
+                <li onClick={() => setMenuOpen(!menuOpen)}>
+                  <NavLink
+                    to="/jobs"
+                    className={({ isActive }) =>
+                      isActive
+                        ? "mobile_menu_active_style"
+                        : "mobile_menu_non_active_style"
+                    }
+                  >
+                    <IoHomeOutline /> Find Jobs
                   </NavLink>
                 </li>
 

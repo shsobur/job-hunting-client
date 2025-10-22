@@ -13,6 +13,7 @@ import RecOverview from "../DashboardLayout/Pages/Recruiter/RecOverview/RecOverv
 import { createBrowserRouter } from "react-router-dom";
 import AdminOverview from "../DashboardLayout/Pages/Admin/AdminOverview/AdminOverview";
 import VerifyCompany from "../DashboardLayout/Pages/Admin/VerifyCompany/VerifyCompany";
+import Jobs from "../MainLayout/Pages/Jobs/Jobs";
 
 const router = createBrowserRouter([
   {
@@ -24,15 +25,22 @@ const router = createBrowserRouter([
         element: <HomeLayout></HomeLayout>,
       },
       {
+        path: "/jobs",
+        element: <Jobs></Jobs>,
+      },
+      {
         path: "/recruiter-profile/:email",
         element: <RecruiterProfile></RecruiterProfile>,
-        loader: ({params}) => fetch(`http://localhost:5000/common-api/profile-data/${params.email}`)
+        loader: ({ params }) =>
+          fetch(
+            `http://localhost:5000/common-api/profile-data/${params.email}`
+          ),
       },
       {
         path: "/recruiter-profile",
         element: <RecruiterProfile></RecruiterProfile>,
       },
-      
+
       {
         path: "/user-profile",
         element: <UserProfile></UserProfile>,
@@ -54,7 +62,7 @@ const router = createBrowserRouter([
       // Admin routes__
       {
         path: "/dashboard/admin-overview",
-        element: <AdminOverview></AdminOverview>
+        element: <AdminOverview></AdminOverview>,
       },
       {
         path: "/dashboard/verify-company",
