@@ -14,6 +14,7 @@ import { createBrowserRouter } from "react-router-dom";
 import AdminOverview from "../DashboardLayout/Pages/Admin/AdminOverview/AdminOverview";
 import VerifyCompany from "../DashboardLayout/Pages/Admin/VerifyCompany/VerifyCompany";
 import Jobs from "../MainLayout/Pages/Jobs/Jobs";
+import JobDetails from "../MainLayout/Pages/JobDetails/JobDetails";
 
 const router = createBrowserRouter([
   {
@@ -37,10 +38,13 @@ const router = createBrowserRouter([
           ),
       },
       {
+        path: "/job-details/:id",
+        element: <JobDetails></JobDetails>,
+      },
+      {
         path: "/recruiter-profile",
         element: <RecruiterProfile></RecruiterProfile>,
       },
-
       {
         path: "/user-profile",
         element: <UserProfile></UserProfile>,

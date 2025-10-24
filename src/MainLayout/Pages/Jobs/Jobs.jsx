@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import {
   FaSearch,
   FaFilter,
@@ -11,28 +12,19 @@ import {
   FaSync,
 } from "react-icons/fa";
 import useAxios from "../../../Hooks/Axios";
+import { Link } from "react-router";
 
 const Jobs = () => {
   const api = useAxios();
   const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const [jobs, setJobs] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [searchInput, setSearchInput] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
 
   // Filters state
   const [filters, setFilters] = useState({
     workType: [],
     salaryRange: [0, 200000],
     experienceLevel: [],
-  });
-
-  // Pagination state
-  const [pagination, setPagination] = useState({
-    currentPage: 1,
-    totalPages: 1,
-    totalJobs: 0,
-    hasNext: false,
-    hasPrev: false,
   });
 
   // Filter options
@@ -44,14 +36,20 @@ const Jobs = () => {
     "Executive Level",
   ];
 
-  // Fetch jobs function
-  const fetchJobs = async (page = 1) => {
-    try {
-      setLoading(true);
-
+  // TanStack Query for fetching jobs
+  const {
+    data: jobsData,
+    isLoading,
+    isError,
+    error,
+    refetch,
+    isRefetching,
+  } = useQuery({
+    queryKey: ["jobs", currentPage, searchInput, filters], // Cache key based on all parameters
+    queryFn: async () => {
       // Prepare API parameters
       const params = {
-        page: page,
+        page: currentPage,
         limit: 10,
       };
 
@@ -70,40 +68,36 @@ const Jobs = () => {
         params.experienceLevel = filters.experienceLevel.join(",");
       }
 
-      // Add salary range filter - UPDATED FOR SLIDER
+      // Add salary range filter
       if (filters.salaryRange[0] > 0 || filters.salaryRange[1] < 200000) {
         params.minSalary = filters.salaryRange[0].toString();
         params.maxSalary = filters.salaryRange[1].toString();
       }
 
-      const result = await api.get(
+      const response = await api.get(
         `/common-api/jobs?${new URLSearchParams(params)}`
       );
+      return response.data;
+    },
+    staleTime: 5 * 60 * 1000, // 5 minutes - data stays fresh
+    cacheTime: 10 * 60 * 1000, // 10 minutes - cache duration
+    keepPreviousData: true, // Smooth pagination
+  });
 
-      if (result.statusText) {
-        setJobs(result.data.data);
-        setPagination(result.data.pagination);
-      }
-    } catch (error) {
-      console.error("Error fetching jobs:", error);
-    } finally {
-      setLoading(false);
-    }
+  // Extract data from query result
+  const jobs = jobsData?.data || [];
+  const pagination = jobsData?.pagination || {
+    currentPage: 1,
+    totalPages: 1,
+    totalJobs: 0,
+    hasNext: false,
+    hasPrev: false,
   };
-
-  // Load jobs when component mounts
-  useEffect(() => {
-    fetchJobs(1);
-  }, []);
 
   // Handle search
   const handleSearch = () => {
-    fetchJobs(1);
-  };
-
-  // Refresh jobs
-  const handleRefresh = () => {
-    fetchJobs(1);
+    setCurrentPage(1); // Reset to first page on new search
+    // Query will auto-refetch because queryKey changed
   };
 
   // Handle filter changes
@@ -130,8 +124,9 @@ const Jobs = () => {
 
   // Apply filters
   const applyFilters = () => {
-    fetchJobs(1);
+    setCurrentPage(1); // Reset to first page
     setIsFilterOpen(false);
+    // Query will auto-refetch because filters changed
   };
 
   const clearAllFilters = () => {
@@ -140,13 +135,20 @@ const Jobs = () => {
       salaryRange: [0, 200000],
       experienceLevel: [],
     });
+    // Don't refetch immediately - let user click apply
   };
 
   // Pagination handlers
   const goToPage = (page) => {
     if (page >= 1 && page <= pagination.totalPages) {
-      fetchJobs(page);
+      setCurrentPage(page);
+      // Query will auto-refetch because currentPage changed
     }
+  };
+
+  // Manual refresh
+  const handleRefresh = () => {
+    refetch();
   };
 
   // Format salary display
@@ -158,6 +160,9 @@ const Jobs = () => {
     }
     return "Salary not specified";
   };
+
+  // Combined loading state
+  const loading = isLoading || isRefetching;
 
   return (
     <section className="bg-[#F8FAFC] min-h-screen">
@@ -237,6 +242,21 @@ const Jobs = () => {
                 </button>
               </div>
 
+              {/* Error State */}
+              {isError && (
+                <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+                  <p className="text-red-800">
+                    Error loading jobs: {error.message}
+                  </p>
+                  <button
+                    onClick={() => refetch()}
+                    className="mt-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+                  >
+                    Try Again
+                  </button>
+                </div>
+              )}
+
               {/* Loading State */}
               {loading && (
                 <div className="flex justify-center items-center py-12">
@@ -246,7 +266,7 @@ const Jobs = () => {
               )}
 
               {/* Jobs List */}
-              {!loading && (
+              {!loading && !isError && (
                 <>
                   <div className="space-y-4 mb-8">
                     {jobs.map((job) => (
@@ -277,9 +297,9 @@ const Jobs = () => {
                       {/* Previous Button */}
                       <button
                         onClick={() => goToPage(pagination.currentPage - 1)}
-                        disabled={!pagination.hasPrev}
+                        disabled={!pagination.hasPrev || loading}
                         className={`px-4 py-2 rounded-lg border ${
-                          pagination.hasPrev
+                          pagination.hasPrev && !loading
                             ? "border-gray-300 text-gray-700 hover:bg-gray-50"
                             : "border-gray-200 text-gray-400 cursor-not-allowed"
                         }`}
@@ -294,10 +314,13 @@ const Jobs = () => {
                           <button
                             key={page}
                             onClick={() => goToPage(page)}
+                            disabled={loading}
                             className={`px-4 py-2 rounded-lg border ${
                               pagination.currentPage === page
                                 ? "bg-[#3c8f63] text-white border-[#3c8f63]"
                                 : "border-gray-300 text-gray-700 hover:bg-gray-50"
+                            } ${
+                              loading ? "opacity-50 cursor-not-allowed" : ""
                             }`}
                           >
                             {page}
@@ -308,9 +331,9 @@ const Jobs = () => {
                       {/* Next Button */}
                       <button
                         onClick={() => goToPage(pagination.currentPage + 1)}
-                        disabled={!pagination.hasNext}
+                        disabled={!pagination.hasNext || loading}
                         className={`px-4 py-2 rounded-lg border ${
-                          pagination.hasNext
+                          pagination.hasNext && !loading
                             ? "border-gray-300 text-gray-700 hover:bg-gray-50"
                             : "border-gray-200 text-gray-400 cursor-not-allowed"
                         }`}
@@ -584,9 +607,11 @@ const JobCard = ({ job, formatSalary }) => (
 
       {/* Apply Button */}
       <div className="flex-shrink-0 lg:self-center">
-        <button className="w-full lg:w-auto px-8 py-3 bg-[#3c8f63] text-white rounded-lg font-semibold hover:bg-[#2a6b4a] transition-colors text-base whitespace-nowrap shadow-sm hover:shadow-md">
-          Apply Now
-        </button>
+        <Link to={`/job-details/${job._id}`}>
+          <button className="w-full lg:w-auto px-8 py-3 bg-[#3c8f63] text-white rounded-lg font-semibold hover:bg-[#2a6b4a] transition-colors text-base whitespace-nowrap shadow-sm hover:shadow-md">
+            Apply Now
+          </button>
+        </Link>
       </div>
     </div>
   </div>
