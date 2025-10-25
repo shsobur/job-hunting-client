@@ -41,81 +41,81 @@ const Banner = () => {
 
   return (
     <>
-      <section id="main_banner_container">
-        <div className="banner_content_container">
-          <div className="banner_content">
-            <div className="text_section">
-              <div className="content_wrapper">
-                <div className="badge">
-                  <span className="badge_icon">🚀</span>
+      <section id="hb_main_banner_container">
+        <div className="hb_banner_content_container">
+          <div className="hb_banner_content">
+            <div className="hb_text_section">
+              <div className="hb_content_wrapper">
+                <div className="hb_badge">
+                  <span className="hb_badge_icon">🚀</span>
                   Start Your Journey Today
                 </div>
 
-                <h1 className="banner_title">
+                <h1 className="hb_banner_title">
                   Find The Job That
-                  <span className="highlighted_text"> Fits Your Life</span>
+                  <span className="hb_highlighted_text"> Fits Your Life</span>
                 </h1>
 
-                <p className="description">
+                <p className="hb_description">
                   Join over 10 million professionals who found their dream
                   careers with us. Discover opportunities that match your skills
                   and lifestyle aspirations.
                 </p>
 
-                <div className="cta_section">
-                  <button className="cta_btn primary">
-                    <span className="btn_text">Explore Jobs</span>
-                    <span className="btn_icon">→</span>
+                <div className="hb_cta_section">
+                  <button className="hb_cta_btn hb_primary">
+                    <span className="hb_btn_text">Explore Jobs</span>
+                    <span className="hb_btn_icon">→</span>
                   </button>
-                  <button className="cta_btn secondary">
-                    <span className="btn_text">News Feed</span>
+                  <button className="hb_cta_btn hb_secondary">
+                    <span className="hb_btn_text">News Feed</span>
                   </button>
                 </div>
 
-                <div className="stats_section">
-                  <div className="stat_item">
-                    <div className="stat_number">10M+</div>
-                    <div className="stat_label">Job Seekers</div>
+                <div className="hb_stats_section">
+                  <div className="hb_stat_item">
+                    <div className="hb_stat_number">10M+</div>
+                    <div className="hb_stat_label">Job Seekers</div>
                   </div>
-                  <div className="stat_divider"></div>
-                  <div className="stat_item">
-                    <div className="stat_number">50K+</div>
-                    <div className="stat_label">Companies</div>
+                  <div className="hb_stat_divider"></div>
+                  <div className="hb_stat_item">
+                    <div className="hb_stat_number">50K+</div>
+                    <div className="hb_stat_label">Companies</div>
                   </div>
-                  <div className="stat_divider"></div>
-                  <div className="stat_item">
-                    <div className="stat_number">120+</div>
-                    <div className="stat_label">Countries</div>
+                  <div className="hb_stat_divider"></div>
+                  <div className="hb_stat_item">
+                    <div className="hb_stat_number">120+</div>
+                    <div className="hb_stat_label">Countries</div>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="image_section">
-              <div className="image_container">
-                <div className="main_image_wrapper">
+            <div className="hb_image_section">
+              <div className="hb_image_container">
+                <div className="hb_main_image_wrapper">
                   <img
                     src={bannerImage}
                     alt="Professional Career Success"
-                    className="main_image"
+                    className="hb_main_image"
                   />
-                  <div className="image_overlay"></div>
+                  <div className="hb_image_overlay"></div>
                 </div>
 
                 {/* Floating achievement cards */}
-                <div className="floating_card experience">
-                  <div className="card_icon">⭐</div>
-                  <div className="card_content">
-                    <div className="card_value">95%</div>
-                    <div className="card_label">Success Rate</div>
+                <div className="hb_floating_card hb_experience">
+                  <div className="hb_card_icon">⭐</div>
+                  <div className="hb_card_content">
+                    <div className="hb_card_value">95%</div>
+                    <div className="hb_card_label">Success Rate</div>
                   </div>
                 </div>
 
-                <div className="floating_card jobs">
-                  <div className="card_icon">💼</div>
-                  <div className="card_content">
-                    <div className="card_value">1,234+</div>
-                    <div className="card_label">New Jobs</div>
+                <div className="hb_floating_card hb_jobs">
+                  <div className="hb_card_icon">💼</div>
+                  <div className="hb_card_content">
+                    <div className="hb_card_value">1,234+</div>
+                    <div className="hb_card_label">New Jobs</div>
                   </div>
                 </div>
               </div>

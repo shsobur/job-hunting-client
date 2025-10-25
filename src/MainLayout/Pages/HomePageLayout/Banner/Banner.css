@@ -1,4 +1,4 @@
-#main_banner_container {
+#hb_main_banner_container {
   min-height: calc(100vh - 82px);
   position: relative;
   overflow: hidden;
@@ -8,7 +8,7 @@
   background: transparent;
 }
 
-.banner_content_container {
+.hb_banner_content_container {
   max-width: 1536px;
   width: 100%;
   margin: 0 auto;
@@ -17,7 +17,7 @@
   z-index: 2;
 }
 
-.banner_content {
+.hb_banner_content {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 80px;
@@ -25,15 +25,15 @@
 }
 
 /* Text Section */
-.text_section {
+.hb_text_section {
   padding-right: 40px;
 }
 
-.content_wrapper {
+.hb_content_wrapper {
   max-width: 580px;
 }
 
-.badge {
+.hb_badge {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -45,29 +45,29 @@
   font-weight: 600;
   margin-bottom: 24px;
   border: 1px solid #3c8f6333;
-  animation: slideInDown 0.8s ease-out;
+  animation: hb_slideInDown 0.8s ease-out;
 }
 
-.badge_icon {
+.hb_badge_icon {
   font-size: 16px;
 }
 
-.banner_title {
+.hb_banner_title {
   font-size: 3.5rem;
   font-weight: 800;
   line-height: 1.1;
   margin-bottom: 24px;
   color: #1a202c;
-  animation: slideInUp 0.8s ease-out 0.2s both;
+  animation: hb_slideInUp 0.8s ease-out 0.2s both;
 }
 
-.highlighted_text {
+.hb_highlighted_text {
   color: #3c8f63;
   position: relative;
   display: inline-block;
 }
 
-.highlighted_text::after {
+.hb_highlighted_text::after {
   content: "";
   position: absolute;
   bottom: 2px;
@@ -80,23 +80,23 @@
   border-bottom-right-radius: 4px;
 }
 
-.description {
+.hb_description {
   font-size: 1.25rem;
   line-height: 1.6;
   color: #4a5568;
   margin-bottom: 40px;
-  animation: slideInUp 0.8s ease-out 0.4s both;
+  animation: hb_slideInUp 0.8s ease-out 0.4s both;
 }
 
 /* CTA Section */
-.cta_section {
+.hb_cta_section {
   display: flex;
   gap: 16px;
   margin-bottom: 50px;
-  animation: slideInUp 0.8s ease-out 0.6s both;
+  animation: hb_slideInUp 0.8s ease-out 0.6s both;
 }
 
-.cta_btn {
+.hb_cta_btn {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -111,107 +111,107 @@
   overflow: hidden;
 }
 
-.cta_btn.primary {
+.hb_cta_btn.hb_primary {
   background: #3c8f63;
   color: white;
   box-shadow: 0 4px 14px rgba(60, 143, 99, 0.3);
 }
 
-.cta_btn.primary:hover {
+.hb_cta_btn.hb_primary:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(60, 143, 99, 0.4);
   background: #2a6b4a;
 }
 
-.cta_btn.secondary {
+.hb_cta_btn.hb_secondary {
   background: transparent;
   color: #3c8f63;
   border: 2px solid #3c8f63;
 }
 
-.cta_btn.secondary:hover {
+.hb_cta_btn.hb_secondary:hover {
   background: rgba(60, 143, 99, 0.1);
   transform: translateY(-2px);
 }
 
-.btn_icon {
+.hb_btn_icon {
   transition: transform 0.3s ease;
 }
 
-.cta_btn.primary:hover .btn_icon {
+.hb_cta_btn.hb_primary:hover .hb_btn_icon {
   transform: translateX(4px);
 }
 
 /* Stats Section */
-.stats_section {
+.hb_stats_section {
   display: flex;
   align-items: center;
   gap: 32px;
-  animation: slideInUp 0.8s ease-out 0.8s both;
+  animation: hb_slideInUp 0.8s ease-out 0.8s both;
 }
 
-.stat_item {
+.hb_stat_item {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.stat_number {
+.hb_stat_number {
   font-size: 2rem;
   font-weight: 700;
   color: #3c8f63;
   margin-bottom: 4px;
 }
 
-.stat_label {
+.hb_stat_label {
   font-size: 0.9rem;
   color: #718096;
   font-weight: 500;
 }
 
-.stat_divider {
+.hb_stat_divider {
   width: 1px;
   height: 40px;
   background: #e2e8f0;
 }
 
 /* Image Section */
-.image_section {
+.hb_image_section {
   position: relative;
 }
 
-.image_container {
+.hb_image_container {
   position: relative;
   max-width: 600px;
   margin-left: auto;
 }
 
-.main_image_wrapper {
+.hb_main_image_wrapper {
   position: relative;
   border-radius: 20px;
   overflow: hidden;
   box-shadow: 0 20px 40px #0000001a;
   transform: perspective(1000px) rotateY(-5deg);
   transition: transform 0.5s ease;
-  animation: slideInRight 0.8s ease-out 0.4s both;
+  animation: hb_slideInRight 0.8s ease-out 0.4s both;
 }
 
-.main_image_wrapper:hover {
+.hb_main_image_wrapper:hover {
   transform: perspective(1000px) rotateY(0deg);
 }
 
-.main_image {
+.hb_main_image {
   width: 100%;
   height: auto;
   display: block;
   transition: transform 0.5s ease;
 }
 
-.main_image_wrapper:hover .main_image {
+.hb_main_image_wrapper:hover .hb_main_image {
   transform: scale(1.05);
 }
 
-.image_overlay {
+.hb_image_overlay {
   position: absolute;
   top: 0;
   left: 0;
@@ -222,7 +222,7 @@
 }
 
 /* Floating Cards */
-.floating_card {
+.hb_floating_card {
   position: absolute;
   background: white;
   padding: 16px;
@@ -235,40 +235,40 @@
   border-left: 4px solid #3c8f63;
 }
 
-.floating_card.experience {
+.hb_floating_card.hb_experience {
   top: 20%;
   left: -20px;
   animation-delay: 0.5s;
 }
 
-.floating_card.jobs {
+.hb_floating_card.hb_jobs {
   bottom: 40px;
   right: -20px;
   animation-delay: 1s;
 }
 
-.card_icon {
+.hb_card_icon {
   font-size: 1.5rem;
 }
 
-.card_content {
+.hb_card_content {
   display: flex;
   flex-direction: column;
 }
 
-.card_value {
+.hb_card_value {
   font-size: 1.2rem;
   font-weight: 700;
   color: #1a202c;
 }
 
-.card_label {
+.hb_card_label {
   font-size: 0.8rem;
   color: #718096;
 }
 
 /* Animations */
-@keyframes slideInDown {
+@keyframes hb_slideInDown {
   from {
     opacity: 0;
     transform: translateY(-30px);
@@ -279,7 +279,7 @@
   }
 }
 
-@keyframes slideInUp {
+@keyframes hb_slideInUp {
   from {
     opacity: 0;
     transform: translateY(30px);
@@ -290,7 +290,7 @@
   }
 }
 
-@keyframes slideInRight {
+@keyframes hb_slideInRight {
   from {
     opacity: 0;
     transform: translateX(30px) rotateY(-5deg);
@@ -303,128 +303,128 @@
 
 /* Responsive Design */
 @media screen and (max-width: 1536px) {
-  .banner_content {
+  .hb_banner_content {
     gap: 60px;
   }
 
-  .banner_title {
+  .hb_banner_title {
     font-size: 3.2rem;
   }
 }
 
 @media screen and (max-width: 1280px) {
-  .banner_content {
+  .hb_banner_content {
     gap: 50px;
   }
 
-  .banner_title {
+  .hb_banner_title {
     font-size: 2.8rem;
   }
 
-  .description {
+  .hb_description {
     font-size: 1.1rem;
   }
 
-  .image_container {
+  .hb_image_container {
     max-width: 500px;
   }
 }
 
 @media screen and (max-width: 1024px) {
-  .banner_content {
+  .hb_banner_content {
     grid-template-columns: 1fr;
     gap: 50px;
     text-align: center;
   }
 
-  .text_section {
+  .hb_text_section {
     padding-right: 0;
   }
 
-  .content_wrapper {
+  .hb_content_wrapper {
     max-width: 600px;
     margin: 0 auto;
   }
 
-  .cta_section {
+  .hb_cta_section {
     justify-content: center;
   }
 
-  .stats_section {
+  .hb_stats_section {
     justify-content: center;
   }
 
-  .image_container {
+  .hb_image_container {
     margin: 0 auto;
     max-width: 500px;
   }
 
-  .main_image_wrapper {
+  .hb_main_image_wrapper {
     transform: none;
   }
 
-  .main_image_wrapper:hover {
+  .hb_main_image_wrapper:hover {
     transform: none;
   }
 
-  .floating_card.experience {
+  .hb_floating_card.hb_experience {
     left: 20px;
   }
 
-  .floating_card.jobs {
+  .hb_floating_card.hb_jobs {
     right: 20px;
   }
 }
 
 @media screen and (max-width: 768px) {
-  #main_banner_container {
+  #hb_main_banner_container {
     padding: 50px 0;
     min-height: auto;
   }
 
-  .banner_title {
+  .hb_banner_title {
     font-size: 2.7rem;
   }
 
-  .cta_section {
+  .hb_cta_section {
     flex-direction: column;
     align-items: center;
   }
 
-  .cta_btn {
+  .hb_cta_btn {
     width: 100%;
     padding: 10px 0;
     max-width: 280px;
     justify-content: center;
   }
 
-  .stats_section {
+  .hb_stats_section {
     gap: 24px;
   }
 
-  .stat_number {
+  .hb_stat_number {
     font-size: 1.7rem;
   }
 }
 
 @media screen and (max-width: 640px) {
-  .banner_title {
+  .hb_banner_title {
     font-size: 2.5rem;
   }
 
-  .description {
+  .hb_description {
     font-size: 1rem;
   }
 
-  .stats_section {
+  .hb_stats_section {
     gap: 20px;
   }
 
-  .floating_card {
+  .hb_floating_card {
     display: none;
   }
 
-  .image_container {
+  .hb_image_container {
     display: flex;
     flex-direction: column;
     gap: 16px;
@@ -432,24 +432,24 @@
 }
 
 @media screen and (max-width: 475px) {
-  #main_banner_container {
+  #hb_main_banner_container {
     padding: 20px 0 40px 0;
     min-height: auto;
   }
 
-  .banner_title {
+  .hb_banner_title {
     font-size: 2.3rem;
   }
 
-  .badge {
+  .hb_badge {
     font-size: 0.8rem;
   }
 
-  .stat_divider {
+  .hb_stat_divider {
     display: none;
   }
 
-  .stat_number {
+  .hb_stat_number {
     font-size: 1.5rem;
     margin-bottom: 0;
   }

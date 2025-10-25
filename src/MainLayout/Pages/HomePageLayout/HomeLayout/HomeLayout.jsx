@@ -1,11 +1,14 @@
+// File path__
 import "./HomeLayout.css";
 import Banner from "../Banner/Banner";
-import LoadingScreen from "../../../../Components/LoadingScreen/LoadingScreen";
-import { useContext } from "react";
-import { AuthContext } from "../../../../Context/AuthContext";
 import WhyChooseUs from "../WhyChooseUs/WhyChooseUs";
-import FeaturedJobs from "../FeaturedJobs/FeaturedJobs";
 import Footer from "../../../../Shared/Footer/Footer";
+import FeaturedJobs from "../FeaturedJobs/FeaturedJobs";
+import { AuthContext } from "../../../../Context/AuthContext";
+import LoadingScreen from "../../../../Components/LoadingScreen/LoadingScreen";
+
+// From react__
+import { useContext } from "react";
 
 const HomeLayout = () => {
   const { userLoading } = useContext(AuthContext);
@@ -16,20 +19,20 @@ const HomeLayout = () => {
 
   return (
     <>
-      <div className="main_sections_container">
+      <div className="hl_main_sections_container">
         {/* Background Layer */}
-        <div className="sections_bg_layer">
-          <div className="bg_gradient"></div>
-          <div className="bg_circles">
-            <div className="bg_circle circle1"></div>
-            <div className="bg_circle circle2"></div>
-            <div className="bg_circle circle3"></div>
-            <div className="bg_circle circle4"></div>
+        <div className="hl_sections_bg_layer">
+          <div className="hl_bg_gradient"></div>
+          <div className="hl_bg_circles">
+            <div className="hl_bg_circle hl_circle1"></div>
+            <div className="hl_bg_circle hl_circle2"></div>
+            <div className="hl_bg_circle hl_circle3"></div>
+            <div className="hl_bg_circle hl_circle4"></div>
           </div>
         </div>
 
         {/* Content Layer */}
-        <div className="sections_content_layer">
+        <div className="hl_sections_content_layer">
           <Banner />
           <WhyChooseUs />
           <FeaturedJobs />
@@ -40,4 +43,4 @@ const HomeLayout = () => {
   );
 };
 
-export default HomeLayout;
+export default HomeLayout;  

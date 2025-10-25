@@ -1,11 +1,11 @@
 /* Main Sections Container */
-.main_sections_container {
+.hl_main_sections_container {
   position: relative;
   min-height: 100vh;
 }
 
 /* Background Layer - Fixed */
-.sections_bg_layer {
+.hl_sections_bg_layer {
   position: fixed;
   top: 0;
   left: 0;
@@ -15,7 +15,7 @@
   pointer-events: none;
 }
 
-.bg_gradient {
+.hl_bg_gradient {
   position: absolute;
   top: 0;
   left: 0;
@@ -24,7 +24,7 @@
   background: linear-gradient(180deg, #f8fafc 0%, #ffffff 50%, #f1f5f9 100%);
 }
 
-.bg_circles {
+.hl_bg_circles {
   position: absolute;
   top: 0;
   left: 0;
@@ -32,15 +32,15 @@
   height: 100%;
 }
 
-.bg_circle {
+.hl_bg_circle {
   position: absolute;
   border-radius: 50%;
   background: linear-gradient(135deg, #3c8f63 0%, #2a6b4a 100%);
   opacity: 0.1;
-  animation: circleFloat 6s ease-in-out infinite;
+  animation: hl_circleFloat 6s ease-in-out infinite;
 }
 
-.circle1 {
+.hl_circle1 {
   width: 120px;
   height: 120px;
   top: 15%;
@@ -48,7 +48,7 @@
   animation-delay: 0s;
 }
 
-.circle2 {
+.hl_circle2 {
   width: 80px;
   height: 80px;
   top: 65%;
@@ -56,7 +56,7 @@
   animation-delay: 2s;
 }
 
-.circle3 {
+.hl_circle3 {
   width: 160px;
   height: 160px;
   top: 25%;
@@ -64,7 +64,7 @@
   animation-delay: 4s;
 }
 
-.circle4 {
+.hl_circle4 {
   width: 60px;
   height: 60px;
   top: 75%;
@@ -72,7 +72,7 @@
   animation-delay: 1s;
 }
 
-@keyframes circleFloat {
+@keyframes hl_circleFloat {
   0%,
   100% {
     transform: translateY(0px);
@@ -83,7 +83,7 @@
 }
 
 /* Content Layer - Scrolls over background */
-.sections_content_layer {
+.hl_sections_content_layer {
   position: relative;
   z-index: 2;
   background: transparent;
