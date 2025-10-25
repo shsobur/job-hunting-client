@@ -15,9 +15,9 @@ import { IoIosMenu } from "react-icons/io";
 import { MdOutlineLogout } from "react-icons/md";
 import { HiMiniUserCircle } from "react-icons/hi2";
 import { AiOutlineShopping } from "react-icons/ai";
+import { LuLayoutDashboard } from "react-icons/lu";
 import { PiSignIn, PiSignOut } from "react-icons/pi";
 import { IoChevronDown, IoChevronUp, IoHomeOutline } from "react-icons/io5";
-import { LuLayoutDashboard } from "react-icons/lu";
 
 const Navbar = () => {
   const menuRef = useRef();
@@ -100,27 +100,29 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="main_nav">
+      <nav className="mn_main_nav">
         {/* Desktop layout__ */}
         <div
-          id={isScrollingDown ? "navbar_close" : "navbar_open"}
-          className="main_navbar_container"
+          id={isScrollingDown ? "mn_navbar_close" : "mn_navbar_open"}
+          className="mn_main_navbar_container"
         >
-          <div className="navbar_content_container">
+          <div className="mn_navbar_content_container">
             {userLoading ? (
-              <div className="h-10 w-56 bg-gray-200 round-lg"></div>
+              <div className="h-10 w-60 rounded-lg bg-gray-200 round-lg"></div>
             ) : (
-              <div className="navbar_logo">
+              <div className="mn_navbar_logo">
                 <img src={logo} alt="JobHunting Logo" />
                 <h1>JobHunting</h1>
               </div>
             )}
 
-            <ul className="navbar_routes_container">
+            <ul className="mn_navbar_routes_container">
               <NavLink
                 to="/"
                 className={({ isActive }) =>
-                  isActive ? "route_active_style" : "router_none_active_style"
+                  isActive
+                    ? "mn_route_active_style"
+                    : "mn_router_none_active_style"
                 }
               >
                 {userLoading ? (
@@ -133,7 +135,9 @@ const Navbar = () => {
               <NavLink
                 to="/jobs"
                 className={({ isActive }) =>
-                  isActive ? "route_active_style" : "router_none_active_style"
+                  isActive
+                    ? "mn_route_active_style"
+                    : "mn_router_none_active_style"
                 }
               >
                 {userLoading ? (
@@ -146,7 +150,9 @@ const Navbar = () => {
               <NavLink
                 to="/community"
                 className={({ isActive }) =>
-                  isActive ? "route_active_style" : "router_none_active_style"
+                  isActive
+                    ? "mn_route_active_style"
+                    : "mn_router_none_active_style"
                 }
               >
                 {userLoading ? (
@@ -159,7 +165,9 @@ const Navbar = () => {
               <NavLink
                 to="/about"
                 className={({ isActive }) =>
-                  isActive ? "route_active_style" : "router_none_active_style"
+                  isActive
+                    ? "mn_route_active_style"
+                    : "mn_router_none_active_style"
                 }
               >
                 {userLoading ? (
@@ -175,24 +183,24 @@ const Navbar = () => {
             ) : (
               <>
                 {user ? (
-                  <div className="dropdown_wrapper" ref={menuRef}>
+                  <div className="mn_dropdown_wrapper" ref={menuRef}>
                     <button
-                      className="dropdown_button"
+                      className="mn_dropdown_button"
                       onClick={() => setOpen(!open)}
                     >
-                      <div className="user_info">
+                      <div className="mn_user_info">
                         {profile?.profilePhoto || profile?.companyLogo ? (
                           <img
                             src={profile?.profilePhoto || profile?.companyLogo}
                             alt="Profile"
-                            className="user_avatar"
+                            className="mn_user_avatar"
                           />
                         ) : (
-                          <div className="user_avatar_default">
+                          <div className="mn_user_avatar_default">
                             <HiMiniUserCircle />
                           </div>
                         )}
-                        <span className="user_name">
+                        <span className="mn_user_name">
                           {profile?.userName || profile?.companyName || "User"}
                         </span>
                       </div>
@@ -204,35 +212,35 @@ const Navbar = () => {
                     </button>
 
                     <div
-                      id="dropdown_item_parent_container"
-                      className={`dropdown_menu ${open ? "open" : ""}`}
+                      id="mn_dropdown_item_parent_container"
+                      className={`mn_dropdown_menu ${open ? "mn_open" : ""}`}
                     >
                       {/* User Info Section */}
-                      <div className="user_profile_section">
+                      <div className="mn_user_profile_section">
                         {profile?.profilePhoto || profile?.companyLogo ? (
                           <img
                             src={profile?.profilePhoto || profile?.companyLogo}
                             alt="Profile"
-                            className="profile_image"
+                            className="mn_profile_image"
                           />
                         ) : (
-                          <div className="profile_image_default">
+                          <div className="mn_profile_image_default">
                             <HiMiniUserCircle />
                           </div>
                         )}
-                        <div className="profile_info">
-                          <div className="profile_name">
+                        <div className="mn_profile_info">
+                          <div className="mn_profile_name">
                             {profile?.userName ||
                               profile?.companyName ||
                               "Welcome User"}
                           </div>
-                          <div className="profile_email">
+                          <div className="mn_profile_email">
                             {user?.email || "User"}
                           </div>
                         </div>
                       </div>
 
-                      <div className="dropdown_divider"></div>
+                      <div className="mn_dropdown_divider"></div>
 
                       <NavLink
                         to={
@@ -243,7 +251,7 @@ const Navbar = () => {
                       >
                         <span
                           onClick={() => setOpen(!open)}
-                          className="dropdown_item"
+                          className="mn_dropdown_item"
                         >
                           <ImProfile />
                           My Profile
@@ -261,7 +269,7 @@ const Navbar = () => {
                       >
                         <span
                           onClick={() => setOpen(!open)}
-                          className="dropdown_item"
+                          className="mn_dropdown_item"
                         >
                           <LuLayoutDashboard />
                           Dashboard
@@ -270,7 +278,7 @@ const Navbar = () => {
 
                       <span
                         onClick={handleSignOut}
-                        className="dropdown_item logout_item"
+                        className="mn_dropdown_item mn_logout_item"
                       >
                         <MdOutlineLogout />
                         Sign Out
@@ -279,13 +287,13 @@ const Navbar = () => {
                   </div>
                 ) : (
                   <Link to="/sign-in">
-                    <button className="desktop_signIn_btn">Sign In</button>
+                    <button className="mn_desktop_signIn_btn">Sign In</button>
                   </Link>
                 )}
               </>
             )}
 
-            <div className="mobile_menu_container">
+            <div className="mn_mobile_menu_container">
               <span onClick={() => setMenuOpen(!menuOpen)}>
                 {menuOpen ? <RxCross1 /> : <IoIosMenu />}
               </span>
@@ -294,18 +302,18 @@ const Navbar = () => {
 
           {/* Mobile layout__ */}
           <div
-            id={menuOpen ? "" : "menu_close"}
-            className="main_mobile_menu_container"
+            id={menuOpen ? "" : "mn_menu_close"}
+            className="mn_main_mobile_menu_container"
           >
-            <div className="mobile_menu_routes">
+            <div className="mn_mobile_menu_routes">
               <ul>
                 <li onClick={() => setMenuOpen(!menuOpen)}>
                   <NavLink
                     to="/"
                     className={({ isActive }) =>
                       isActive
-                        ? "mobile_menu_active_style"
-                        : "mobile_menu_non_active_style"
+                        ? "mn_mobile_menu_active_style"
+                        : "mn_mobile_menu_non_active_style"
                     }
                   >
                     <IoHomeOutline /> Home
@@ -317,8 +325,8 @@ const Navbar = () => {
                     to="/jobs"
                     className={({ isActive }) =>
                       isActive
-                        ? "mobile_menu_active_style"
-                        : "mobile_menu_non_active_style"
+                        ? "mn_mobile_menu_active_style"
+                        : "mn_mobile_menu_non_active_style"
                     }
                   >
                     <IoHomeOutline /> Find Jobs
@@ -330,8 +338,8 @@ const Navbar = () => {
                     to="/community"
                     className={({ isActive }) =>
                       isActive
-                        ? "mobile_menu_active_style"
-                        : "mobile_menu_non_active_style"
+                        ? "mn_mobile_menu_active_style"
+                        : "mn_mobile_menu_non_active_style"
                     }
                   >
                     <AiOutlineShopping /> Community
@@ -343,8 +351,8 @@ const Navbar = () => {
                     to="/about"
                     className={({ isActive }) =>
                       isActive
-                        ? "mobile_menu_active_style"
-                        : "mobile_menu_non_active_style"
+                        ? "mn_mobile_menu_active_style"
+                        : "mn_mobile_menu_non_active_style"
                     }
                   >
                     <ImProfile /> About Us
@@ -352,7 +360,7 @@ const Navbar = () => {
                 </li>
               </ul>
 
-              <div className="others_routes_container">
+              <div className="mn_others_routes_container">
                 <ul>
                   {user ? (
                     <>
@@ -368,8 +376,8 @@ const Navbar = () => {
                           }
                           className={({ isActive }) =>
                             isActive
-                              ? "mobile_menu_active_style"
-                              : "mobile_menu_non_active_style"
+                              ? "mn_mobile_menu_active_style"
+                              : "mn_mobile_menu_non_active_style"
                           }
                         >
                           <ImProfile /> Profile
@@ -377,7 +385,7 @@ const Navbar = () => {
                       </li>
                       <li
                         onClick={handleSignOut}
-                        className="mobile_menu_non_active_style"
+                        className="mn_mobile_menu_non_active_style"
                       >
                         <PiSignOut />
                         Sign Out
@@ -389,8 +397,8 @@ const Navbar = () => {
                         to="/sign-in"
                         className={({ isActive }) =>
                           isActive
-                            ? "mobile_menu_active_style"
-                            : "mobile_menu_non_active_style"
+                            ? "mn_mobile_menu_active_style"
+                            : "mn_mobile_menu_non_active_style"
                         }
                       >
                         <PiSignIn />

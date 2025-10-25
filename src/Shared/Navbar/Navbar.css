@@ -1,11 +1,11 @@
-.main_nav {
+.mn_main_nav {
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 82px;
 }
 
-.main_navbar_container {
+.mn_main_navbar_container {
   width: 100%;
   display: flex;
   align-items: center;
@@ -21,19 +21,19 @@
   box-shadow: 0 1px 20px #00000014;
 }
 
-#navbar_close {
+#mn_navbar_close {
   top: -100px;
   transform: translateY(-20px);
   opacity: 0;
 }
 
-#navbar_open {
+#mn_navbar_open {
   top: 0px;
   transform: translateY(0);
   opacity: 1;
 }
 
-.navbar_content_container {
+.mn_navbar_content_container {
   max-width: 1536px;
   width: 100%;
   display: flex;
@@ -44,7 +44,7 @@
 }
 
 /* Logo Design - No Hover Effects */
-.navbar_logo {
+.mn_navbar_logo {
   display: flex;
   align-items: center;
   gap: 5px;
@@ -53,7 +53,7 @@
   border-radius: 12px;
 }
 
-.navbar_logo h1 {
+.mn_navbar_logo h1 {
   font-size: 1.8rem;
   font-weight: 700;
   color: #3c8f63;
@@ -61,7 +61,7 @@
   letter-spacing: -0.5px;
 }
 
-.navbar_logo img {
+.mn_navbar_logo img {
   width: 45px;
   height: 45px;
   object-fit: contain;
@@ -69,7 +69,7 @@
 }
 
 /* Premium Navigation Links */
-.navbar_routes_container {
+.mn_navbar_routes_container {
   display: flex;
   align-items: center;
   gap: 0px;
@@ -82,7 +82,7 @@
   border: 1px solid #3c8f631a;
 }
 
-.router_none_active_style {
+.mn_router_none_active_style {
   color: #4b5563;
   cursor: pointer;
   text-decoration: none;
@@ -96,7 +96,7 @@
   overflow: hidden;
 }
 
-.router_none_active_style::before {
+.mn_router_none_active_style::before {
   content: "";
   position: absolute;
   top: 0;
@@ -107,16 +107,16 @@
   transition: left 0.5s ease;
 }
 
-.router_none_active_style:hover::before {
+.mn_router_none_active_style:hover::before {
   left: 100%;
 }
 
-.router_none_active_style:hover {
+.mn_router_none_active_style:hover {
   color: #3c8f63;
   transform: translateY(-1px);
 }
 
-.route_active_style {
+.mn_route_active_style {
   color: #3c8f63;
   text-decoration: none;
   display: inline-block;
@@ -131,12 +131,12 @@
 }
 
 /* Enhanced User Dropdown */
-.dropdown_wrapper {
+.mn_dropdown_wrapper {
   position: relative;
   display: inline-block;
 }
 
-.dropdown_button {
+.mn_dropdown_button {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -151,19 +151,19 @@
   font-weight: 500;
 }
 
-.dropdown_button:hover {
+.mn_dropdown_button:hover {
   background: #3c8f631a;
   border-color: #3c8f634d;
   transform: translateY(-1px);
 }
 
-.user_info {
+.mn_user_info {
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-.user_avatar {
+.mn_user_avatar {
   width: 32px;
   height: 32px;
   border-radius: 50%;
@@ -171,18 +171,18 @@
   border: 2px solid #3c8f634d;
 }
 
-.user_avatar_default {
+.mn_user_avatar_default {
   font-size: 1.8rem;
   color: #3c8f63;
 }
 
-.user_name {
+.mn_user_name {
   font-weight: 600;
   color: #374151;
 }
 
 /* Enhanced Dropdown Menu */
-.dropdown_menu {
+.mn_dropdown_menu {
   position: absolute;
   top: 125%;
   right: 0;
@@ -203,14 +203,14 @@
   overflow: hidden;
 }
 
-.dropdown_menu.open {
+.mn_dropdown_menu.mn_open {
   opacity: 1;
   transform: translateY(0) scale(1);
   pointer-events: auto;
 }
 
 /* User Profile Section in Dropdown */
-.user_profile_section {
+.mn_user_profile_section {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -223,7 +223,7 @@
   border-bottom: 1px solid rgba(60, 143, 99, 0.1);
 }
 
-.profile_image {
+.mn_profile_image {
   width: 48px;
   height: 48px;
   border-radius: 50%;
@@ -231,36 +231,36 @@
   border: 2px solid rgba(60, 143, 99, 0.3);
 }
 
-.profile_image_default {
+.mn_profile_image_default {
   font-size: 2.5rem;
   color: #3c8f63;
 }
 
-.profile_info {
+.mn_profile_info {
   flex: 1;
 }
 
-.profile_name {
+.mn_profile_name {
   font-size: 15px;
   font-weight: 600;
   color: #1f2937;
   margin-bottom: 2px;
 }
 
-.profile_email {
+.mn_profile_email {
   font-size: 13px;
   color: #6b7280;
   font-weight: 400;
 }
 
-.dropdown_divider {
+.mn_dropdown_divider {
   height: 1px;
   background: rgba(60, 143, 99, 0.1);
   margin: 8px 0;
 }
 
 /* Dropdown Items */
-.dropdown_item {
+.mn_dropdown_item {
   gap: 12px;
   display: flex;
   align-items: center;
@@ -278,25 +278,25 @@
   text-align: left;
 }
 
-.dropdown_item:hover {
+.mn_dropdown_item:hover {
   background: #3c8f6314;
   color: #3c8f63;
 }
 
 /* Fixed Logout Item - No Red Color */
-.logout_item {
+.mn_logout_item {
   color: #6b7280;
   border-top: 1px solid #3c8f631a;
   margin-top: 4px;
 }
 
-.logout_item:hover {
+.mn_logout_item:hover {
   color: #374151;
   background: #6b728014;
 }
 
-/* Enhanced Sign In Button */ 
-.desktop_signIn_btn {
+/* Enhanced Sign In Button */
+.mn_desktop_signIn_btn {
   background: linear-gradient(135deg, #3c8f63 0%, #2a6b4a 100%);
   color: white;
   border: none;
@@ -311,18 +311,18 @@
   box-shadow: 0 4px 15px rgba(60, 143, 99, 0.3);
 }
 
-.desktop_signIn_btn:hover {
+.mn_desktop_signIn_btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(60, 143, 99, 0.4);
 }
 
 /* Mobile menu styles */
-.mobile_menu_container {
+.mn_mobile_menu_container {
   display: none;
   font-size: 1.6rem;
 }
 
-.main_mobile_menu_container {
+.mn_main_mobile_menu_container {
   width: 60%;
   height: calc(100vh - 78.39px);
   padding: 20px;
@@ -336,12 +336,12 @@
   box-shadow: -5px 0 30px #0000001a;
 }
 
-.mobile_menu_routes ul {
+.mn_mobile_menu_routes ul {
   list-style: none;
   width: 100%;
 }
 
-.mobile_menu_routes ul li {
+.mn_mobile_menu_routes ul li {
   margin-bottom: 16px;
   font-size: 18px;
   font-weight: 500;
@@ -350,11 +350,11 @@
   transition: all 0.3s ease;
 }
 
-.mobile_menu_routes ul li:hover {
+.mn_mobile_menu_routes ul li:hover {
   transform: translateX(4px);
 }
 
-.mobile_menu_non_active_style {
+.mn_mobile_menu_non_active_style {
   width: 100%;
   gap: 16px;
   display: flex;
@@ -367,11 +367,11 @@
   text-decoration: none;
 }
 
-.mobile_menu_non_active_style:hover {
+.mn_mobile_menu_non_active_style:hover {
   background: rgba(255, 255, 255, 0.1);
 }
 
-.mobile_menu_active_style {
+.mn_mobile_menu_active_style {
   width: 100%;
   gap: 16px;
   display: flex;
@@ -386,108 +386,108 @@
   text-decoration: none;
 }
 
-.others_routes_container {
+.mn_others_routes_container {
   border-top: 1px solid rgba(255, 255, 255, 0.3);
   margin-top: 24px;
   padding-top: 20px;
 }
 
 /* Menu default style */
-.main_mobile_menu_container {
+.mn_main_mobile_menu_container {
   display: none;
 }
 
-#menu_close {
+#mn_menu_close {
   right: -100%;
 }
 
 /* Responsive styles */
 
 @media screen and (max-width: 1280px) {
-  .main_nav {
+  .mn_main_nav {
     margin-bottom: 81px;
   }
 
-  .navbar_routes_container {
+  .mn_navbar_routes_container {
     gap: 4px;
   }
 
-  .router_none_active_style,
-  .route_active_style {
+  .mn_router_none_active_style,
+  .mn_route_active_style {
     padding: 10px 20px;
     font-size: 14px;
   }
 }
 
 @media screen and (max-width: 1024px) {
-  .main_nav {
+  .mn_main_nav {
     margin-bottom: 79px;
   }
 
-  .navbar_content_container {
+  .mn_navbar_content_container {
     padding: 12px 20px;
   }
 
-  .navbar_logo h1 {
+  .mn_navbar_logo h1 {
     font-size: 1.6rem;
   }
 
-  .navbar_logo img {
+  .mn_navbar_logo img {
     width: 38px;
     height: 38px;
   }
 }
 
 @media screen and (max-width: 768px) {
-  .main_nav {
+  .mn_main_nav {
     margin-bottom: 78.39px;
   }
 
-  .navbar_routes_container {
+  .mn_navbar_routes_container {
     display: none;
   }
 
-  .desktop_signIn_btn {
+  .mn_desktop_signIn_btn {
     display: none;
   }
 
-  .dropdown_wrapper {
+  .mn_dropdown_wrapper {
     display: none;
   }
 
-  .mobile_menu_container {
+  .mn_mobile_menu_container {
     display: block;
   }
 
-  .main_mobile_menu_container {
+  .mn_main_mobile_menu_container {
     display: block;
     top: 78.39px;
     height: calc(100vh - 78.39px);
   }
 
-  #menu_close {
+  #mn_menu_close {
     right: -100%;
   }
 }
 
 @media screen and (max-width: 640px) {
-  .main_nav {
+  .mn_main_nav {
     margin-bottom: 78px;
   }
 
-  .main_mobile_menu_container {
+  .mn_main_mobile_menu_container {
     display: block;
     top: 78px;
     height: calc(100vh - 78px);
   }
 
-  .navbar_logo h1 {
+  .mn_navbar_logo h1 {
     font-size: 1.5rem;
   }
 }
 
 @media screen and (max-width: 475px) {
-  .main_mobile_menu_container {
+  .mn_main_mobile_menu_container {
     width: 100%;
     height: calc(100vh - 78px);
   }
