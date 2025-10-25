@@ -1,19 +1,19 @@
-#recruiter_profile_container {
+#rp_recruiter_profile_container {
   background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
   min-height: 100vh;
   padding: 20px 0;
 }
-.recruiter-container {
+.rp_recruiter-container {
   max-width: 1536px;
   margin: 0 auto;
   padding: 0 20px;
 }
-.recruiter-content {
+.rp_recruiter-content {
   width: 100%;
 }
 
 /* All edit button style */
-.rec-profile-edit-btn {
+.rp_rec-profile-edit-btn {
   background: #3c8f631a;
   border: 1px solid #3c8f6333;
   padding: 10px;
@@ -23,38 +23,38 @@
   flex-shrink: 0;
 }
 
-.rec-profile-edit-btn:hover {
+.rp_rec-profile-edit-btn:hover {
   background: #3c8f63;
   color: #ffffff;
   transform: scale(1.05);
 }
 
 /* Red button styles for Pending status */
-.rec-profile-edit-btn.pending {
+.rp_rec-profile-edit-btn.rp_pending {
   background: #fef2f2;
   border: 1px solid #fecaca;
   color: #dc2626;
 }
 
-.rec-profile-edit-btn.pending:hover {
+.rp_rec-profile-edit-btn.rp_pending:hover {
   background: #dc2626;
   color: #ffffff;
   transform: scale(1.05);
 }
 
-.rec-profile-edit-btn:disabled {
+.rp_rec-profile-edit-btn:disabled {
   cursor: not-allowed;
   opacity: 0.7;
 }
 
-.rec-profile-edit-btn:disabled:hover {
+.rp_rec-profile-edit-btn:disabled:hover {
   transform: none;
   background: #fef2f2;
   color: #dc2626;
 }
 
 /* Header Section */
-.profile-header {
+.rp_profile-header {
   background: #ffffff;
   border-radius: 20px;
   box-shadow: 0 4px 25px #00000014;
@@ -62,16 +62,16 @@
   margin-bottom: 24px;
   border: 1px solid #3c8f631a;
 }
-.header-content {
+.rp_header-content {
   display: flex;
   align-items: flex-start;
   gap: 24px;
   position: relative;
 }
-.company-avatar-container {
+.rp_company-avatar-container {
   flex-shrink: 0;
 }
-.company-avatar {
+.rp_company-avatar {
   width: 120px;
   height: 120px;
   border-radius: 20px;
@@ -80,30 +80,30 @@
   border: 4px solid #ffffff;
   box-shadow: 0 8px 30px #0000001f;
 }
-.company-info {
+.rp_company-info {
   flex: 1;
   min-width: 0;
 }
-.company-name {
+.rp_company-name {
   font-size: 2.25rem;
   font-weight: 800;
   color: #1f2937;
   line-height: 1.2;
   margin-bottom: 8px;
 }
-.company-meta {
+.rp_company-meta {
   font-size: 1.125rem;
   color: #6b7280;
   margin-bottom: 16px;
   line-height: 1.5;
 }
-.status-badges {
+.rp_status-badges {
   display: flex;
   align-items: flex-end;
   gap: 12px;
   flex-wrap: wrap;
 }
-.status-badge {
+.rp_status-badge {
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -116,11 +116,11 @@
   border: 1px solid #3c8f6333;
 }
 
-.badge-icon {
+.rp_badge-icon {
   font-size: 0.875rem;
 }
 
-.header-edit-btn {
+.rp_header-edit-btn {
   position: absolute;
   top: 0;
   right: 0;
@@ -133,36 +133,36 @@
   flex-shrink: 0;
 }
 
-.header-edit-btn:hover {
+.rp_header-edit-btn:hover {
   background: #3c8f63;
   color: #ffffff;
   transform: scale(1.05);
 }
 
-.header-edit-btn.pending {
+.rp_header-edit-btn.rp_pending {
   background: #fef2f2;
   border: 1px solid #fecaca;
   color: #dc2626;
   opacity: 0.7;
 }
 
-.header-edit-btn.pending:hover {
+.rp_header-edit-btn.rp_pending:hover {
   cursor: not-allowed;
 }
 
-.profile_verify_btn {
+.rp_profile_verify_btn {
   color: blue;
   font-weight: 600;
   cursor: pointer;
   border-bottom: 2px solid blue;
 }
 
-.profile_verify_btn:hover {
+.rp_profile_verify_btn:hover {
   color: #4040f7;
 }
 
 /* Navigation */
-.profile-navigation {
+.rp_profile-navigation {
   background: #ffffff;
   border-radius: 16px;
   box-shadow: 0 2px 20px #00000014;
@@ -170,12 +170,12 @@
   border: 1px solid #3c8f631a;
   overflow-x: auto;
 }
-.nav-tabs {
+.rp_nav-tabs {
   display: flex;
   padding: 0 20px;
   min-width: max-content;
 }
-.nav-tab {
+.rp_nav-tab {
   padding: 20px 24px;
   font-weight: 600;
   color: #6b7280;
@@ -184,24 +184,24 @@
   transition: all 0.3s ease;
   white-space: nowrap;
 }
-.nav-tab:hover {
+.rp_nav-tab:hover {
   color: #3c8f63;
 }
-.nav-tab.active {
+.rp_nav-tab.rp_active {
   color: #3c8f63;
   border-bottom-color: #3c8f63;
 } /* Main Grid Layout */
-.profile-main-grid {
+.rp_profile-main-grid {
   display: grid;
   grid-template-columns: 1fr;
   gap: 24px;
 }
-.profile-main-content {
+.rp_profile-main-content {
   display: flex;
   flex-direction: column;
   gap: 24px;
 }
-.profile-sidebar {
+.rp_profile-sidebar {
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -209,26 +209,26 @@
 
 /* Profile Sections */
 
-.profile-section {
+.rp_profile-section {
   background: #ffffff;
   border-radius: 20px;
   box-shadow: 0 4px 25px #00000014;
   padding: 30px;
   border: 1px solid #3c8f631a;
 }
-.section-header {
+.rp_section-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   margin-bottom: 24px;
 }
-.section-title {
+.rp_section-title {
   font-size: 1.75rem;
   font-weight: 700;
   color: #1f2937;
   margin: 0;
 }
-.section-edit-btn {
+.rp_section-edit-btn {
   background: #3c8f631a;
   border: 1px solid #3c8f6333;
   padding: 8px;
@@ -237,33 +237,33 @@
   transition: all 0.3s ease;
   flex-shrink: 0;
 }
-.section-edit-btn:hover {
+.rp_section-edit-btn:hover {
   background: #3c8f63;
   color: #ffffff;
   transform: scale(1.05);
 }
-.edit-icon {
+.rp_edit-icon {
   font-size: 1.125rem;
 } /* About Section */
-.about-description {
+.rp_about-description {
   color: #4b5563;
   font-size: 1.0625rem;
   line-height: 1.7;
   margin-bottom: 24px;
 }
-.mission-vision-grid {
+.rp_mission-vision-grid {
   display: grid;
   grid-template-columns: 1fr;
   gap: 20px;
 }
-.mission-card,
-.vision-card {
+.rp_mission-card,
+.rp_vision-card {
   background: #3c8f630d;
   padding: 24px;
   border-radius: 16px;
   border: 1px solid #3c8f631a;
 }
-.card-icon-container {
+.rp_card-icon-container {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -273,26 +273,26 @@
   border-radius: 12px;
   margin-bottom: 16px;
 }
-.card-icon {
+.rp_card-icon {
   font-size: 1.5rem;
   color: #3c8f63;
 }
-.card-title {
+.rp_card-title {
   font-size: 1.25rem;
   font-weight: 600;
   color: #1f2937;
   margin-bottom: 8px;
 }
-.card-description {
+.rp_card-description {
   color: #4b5563;
   line-height: 1.6;
 } /* Departments Section */
-.departments-grid {
+.rp_departments-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 16px;
 }
-.department-card {
+.rp_department-card {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -302,48 +302,48 @@
   border-radius: 12px;
   transition: all 0.3s ease;
 }
-.department-card:hover {
+.rp_department-card:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 15px #0000001a;
   border-color: #3c8f634d;
 }
-.department-icon {
+.rp_department-icon {
   font-size: 1.5rem;
   color: #3c8f63;
   flex-shrink: 0;
 }
-.department-name {
+.rp_department-name {
   font-weight: 600;
   color: #1f2937;
 } /* Gallery Section */
-.gallery-grid {
+.rp_gallery-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 16px;
 }
-.gallery-item {
+.rp_gallery-item {
   border-radius: 12px;
   overflow: hidden;
   position: relative;
   background: #f3f4f6;
 }
-.gallery-item img {
+.rp_gallery-item img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
 }
-.gallery-item.featured {
+.rp_gallery-item.rp_featured {
   grid-column: 1 / -1;
   aspect-ratio: 2 / 1;
 }
-.gallery-item:not(.featured) {
+.rp_gallery-item:not(.rp_featured) {
   aspect-ratio: 1.5 / 1;
 }
-.gallery-item.more-items {
+.rp_gallery-item.rp_more-items {
   position: relative;
 }
-.more-overlay {
+.rp_more-overlay {
   position: absolute;
   inset: 0;
   background: #00000099;
@@ -351,31 +351,31 @@
   align-items: center;
   justify-content: center;
 }
-.more-text {
+.rp_more-text {
   color: #ffffff;
   font-size: 1.25rem;
   font-weight: 600;
 } /* Sidebar Cards */
-.sidebar-card {
+.rp_sidebar-card {
   background: #ffffff;
   border-radius: 20px;
   box-shadow: 0 4px 25px #00000014;
   padding: 24px;
   border: 1px solid #3c8f631a;
 }
-.card-header {
+.rp_card-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   margin-bottom: 20px;
 }
-.card-title {
+.rp_card-title {
   font-size: 1.25rem;
   font-weight: 700;
   color: #1f2937;
   margin: 0;
 }
-.card-edit-btn {
+.rp_card-edit-btn {
   background: #3c8f631a;
   border: 1px solid #3c8f6333;
   padding: 6px;
@@ -384,59 +384,59 @@
   transition: all 0.3s ease;
   flex-shrink: 0;
 }
-.card-edit-btn:hover {
+.rp_card-edit-btn:hover {
   background: #3c8f63;
   color: #ffffff;
   transform: scale(1.05);
 } /* Details List */
-.details-list {
+.rp_details-list {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
-.detail-item {
+.rp_detail-item {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   padding-bottom: 16px;
   border-bottom: 1px solid #3c8f631a;
 }
-.detail-item:last-child {
+.rp_detail-item:last-child {
   border-bottom: none;
   padding-bottom: 0;
 }
-.detail-label {
+.rp_detail-label {
   color: #6b7280;
   font-size: 0.875rem;
   font-weight: 500;
   flex-shrink: 0;
 }
-.detail-value {
+.rp_detail-value {
   color: #1f2937;
   font-weight: 500;
   text-align: right;
   max-width: 60%;
 }
-.detail-value.link {
+.rp_detail-value.rp_link {
   color: #3c8f63;
   text-decoration: none;
   transition: color 0.3s ease;
 }
-.detail-value.link:hover {
+.rp_detail-value.rp_link:hover {
   color: #2a6b4a;
   text-decoration: underline;
 } /* People List */
-.people-list {
+.rp_people-list {
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
-.person-card {
+.rp_person-card {
   display: flex;
   align-items: center;
   gap: 16px;
 }
-.person-avatar {
+.rp_person-avatar {
   width: 60px;
   height: 60px;
   border-radius: 50%;
@@ -446,25 +446,25 @@
   box-shadow: 0 4px 15px #0000001a;
   flex-shrink: 0;
 }
-.person-info {
+.rp_person-info {
   flex: 1;
   min-width: 0;
 }
-.person-name {
+.rp_person-name {
   font-size: 1.0625rem;
   font-weight: 600;
   color: #1f2937;
   margin-bottom: 4px;
 }
-.person-role {
+.rp_person-role {
   color: #6b7280;
   font-size: 0.875rem;
 } /* Social Links */
-.social-links {
+.rp_social-links {
   display: flex;
   gap: 16px;
 }
-.social-link {
+.rp_social-link {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -478,65 +478,65 @@
   transition: all 0.3s ease;
   text-decoration: none;
 }
-.social-link:hover {
+.rp_social-link:hover {
   background: #3c8f63;
   color: #ffffff;
   transform: translateY(-2px);
 } /* Empty State Styles */
-.empty-state {
+.rp_empty-state {
   text-align: center;
   padding: 3rem 2rem;
   border: 2px dashed #e5e7eb;
   border-radius: 12px;
   background: #f9fafb;
 }
-.empty-state-small {
+.rp_empty-state-small {
   text-align: center;
   padding: 2rem 1rem;
   border: 2px dashed #e5e7eb;
   border-radius: 8px;
   background: #f9fafb;
 }
-.empty-state-icon {
+.rp_empty-state-icon {
   font-size: 3rem;
   color: #9ca3af;
   margin-bottom: 1rem;
 }
-.empty-state-small .empty-state-icon {
+.rp_empty-state-small .rp_empty-state-icon {
   font-size: 2rem;
   margin-bottom: 0.5rem;
 }
-.empty-state-text {
+.rp_empty-state-text {
   font-size: 1.125rem;
   font-weight: 600;
   color: #374151;
   margin-bottom: 0.5rem;
 }
-.empty-state-subtext {
+.rp_empty-state-subtext {
   color: #6b7280;
   font-size: 0.875rem;
 }
-.empty-state-small .empty-state-text {
+.rp_empty-state-small .rp_empty-state-text {
   font-size: 1rem;
 }
-.empty-state-small .empty-state-subtext {
+.rp_empty-state-small .rp_empty-state-subtext {
   font-size: 0.75rem;
 } /* Status Badge Styles */
-.status-badge-unverified {
+.rp_status-badge-unverified {
   background: #fef3c7;
   color: #92400e;
   border: 1px solid #f59e0b;
 }
-.status-badge-unverified .badge-icon {
+.rp_status-badge-unverified .rp_badge-icon {
   color: #d97706;
 } /* Detail Item Styles */
-.detail-item {
+.rp_detail-item {
   display: flex;
   justify-content: between;
   align-items: center;
   margin-bottom: 0.75rem;
 }
-.detail-label {
+.rp_detail-label {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -544,212 +544,215 @@
   color: #374151;
   flex: 1;
 }
-.detail-icon {
+.rp_detail-icon {
   color: #6b7280;
   font-size: 0.875rem;
 }
-.detail-value {
+.rp_detail-value {
   color: #111827;
   font-weight: 400;
 }
-.detail-value.link {
+.rp_detail-value.rp_link {
   color: #3c8f63;
   text-decoration: none;
 }
-.detail-value.link:hover {
+.rp_detail-value.rp_link:hover {
   text-decoration: underline;
 }
-.text-gray-500 {
+.rp_text-gray-500 {
   color: #6b7280;
 }
-.italic {
+.rp_italic {
   font-style: italic;
+}
+.rp_w-full {
+  width: 100%;
 } /* ===== RESPONSIVE DESIGN ===== */ /* 1536px and above - Large Desktop */
 @media screen and (min-width: 1536px) {
-  .recruiter-container {
+  .rp_recruiter-container {
     padding: 0 20px;
   }
 } /* 1280px - Desktop */
 @media screen and (max-width: 1280px) {
-  .profile-header {
+  .rp_profile-header {
     padding: 24px;
   }
-  .company-avatar {
+  .rp_company-avatar {
     width: 100px;
     height: 100px;
   }
-  .company-name {
+  .rp_company-name {
     font-size: 2rem;
   }
-  .profile-section {
+  .rp_profile-section {
     padding: 24px;
   }
 } /* 1024px - Small Desktop / Tablet Landscape */
 @media screen and (min-width: 1024px) {
-  .profile-main-grid {
+  .rp_profile-main-grid {
     grid-template-columns: 2fr 1fr;
     gap: 32px;
   }
-  .mission-vision-grid {
+  .rp_mission-vision-grid {
     grid-template-columns: 1fr 1fr;
   }
 }
 @media screen and (max-width: 1024px) {
-  .recruiter-container {
+  .rp_recruiter-container {
     padding: 0 16px;
   }
-  .header-content {
+  .rp_header-content {
     gap: 20px;
   }
-  .company-avatar {
+  .rp_company-avatar {
     width: 90px;
     height: 90px;
   }
-  .company-name {
+  .rp_company-name {
     font-size: 1.75rem;
   }
-  .company-meta {
+  .rp_company-meta {
     font-size: 1rem;
   }
-  .departments-grid {
+  .rp_departments-grid {
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   }
 } /* 768px - Tablet */
 @media screen and (max-width: 768px) {
-  .profile-header {
+  .rp_profile-header {
     padding: 20px;
     border-radius: 16px;
   }
-  .header-content {
+  .rp_header-content {
     flex-direction: column;
     text-align: center;
     gap: 16px;
   }
-  .company-avatar-container {
+  .rp_company-avatar-container {
     width: 100%;
   }
-  .company-avatar {
+  .rp_company-avatar {
     width: 100px;
     height: 100px;
     margin: 0 auto;
   }
-  .company-info {
+  .rp_company-info {
     width: 100%;
   }
-  .header-edit-btn {
+  .rp_header-edit-btn {
     position: static;
     align-self: flex-end;
     margin-top: -60px;
   }
-  .status-badges {
+  .rp_status-badges {
     justify-content: center;
   }
-  .profile-section {
+  .rp_profile-section {
     padding: 20px;
     border-radius: 16px;
   }
-  .section-header {
+  .rp_section-header {
     flex-direction: column;
     gap: 16px;
     align-items: flex-start;
   }
-  .section-edit-btn {
+  .rp_section-edit-btn {
     align-self: flex-end;
   }
-  .gallery-grid {
+  .rp_gallery-grid {
     grid-template-columns: repeat(3, 1fr);
   }
-  .gallery-item.featured {
+  .rp_gallery-item.rp_featured {
     grid-column: 1;
     aspect-ratio: 1.5 / 1;
   }
-  .sidebar-card {
+  .rp_sidebar-card {
     padding: 20px;
     border-radius: 16px;
   }
-  .card-header {
+  .rp_card-header {
     flex-direction: column;
     gap: 12px;
     align-items: flex-start;
   }
-  .card-edit-btn {
+  .rp_card-edit-btn {
     align-self: flex-end;
   }
 } /* 640px - Large Mobile */
 @media screen and (max-width: 640px) {
-  .recruiter-container {
+  .rp_recruiter-container {
     padding: 0 12px;
   }
-  .profile-header {
+  .rp_profile-header {
     padding: 16px;
   }
-  .company-name {
+  .rp_company-name {
     font-size: 1.5rem;
   }
 
-  .company-meta {
+  .rp_company-meta {
     font-size: 0.95rem;
   }
 
-  .status-badge {
+  .rp_status-badge {
     font-size: 0.8rem;
     padding: 6px 12px;
   }
 
-  .nav-tabs {
+  .rp_nav-tabs {
     padding: 0 16px;
   }
 
-  .nav-tab {
+  .rp_nav-tab {
     padding: 16px 20px;
     font-size: 0.9rem;
   }
 
-  .profile-section {
+  .rp_profile-section {
     padding: 16px;
   }
 
-  .section-title {
+  .rp_section-title {
     font-size: 1.5rem;
   }
 
-  .about-description {
+  .rp_about-description {
     font-size: 1rem;
   }
 
-  .mission-card,
-  .vision-card {
+  .rp_mission-card,
+  .rp_vision-card {
     padding: 20px;
   }
 
-  .departments-grid {
+  .rp_departments-grid {
     grid-template-columns: 1fr;
   }
 
-  .details-list {
+  .rp_details-list {
     gap: 12px;
   }
 
-  .detail-item {
+  .rp_detail-item {
     flex-direction: column;
     gap: 4px;
     align-items: flex-start;
   }
 
-  .detail-value {
+  .rp_detail-value {
     text-align: left;
     max-width: 100%;
   }
 
-  .people-list {
+  .rp_people-list {
     gap: 16px;
   }
 
-  .person-card {
+  .rp_person-card {
     gap: 12px;
   }
 
-  .person-avatar {
+  .rp_person-avatar {
     width: 50px;
     height: 50px;
   }
@@ -757,83 +760,83 @@
 
 /* 475px - Small Mobile */
 @media screen and (max-width: 475px) {
-  .recruiter-container {
+  .rp_recruiter-container {
     padding: 0 8px;
   }
 
-  .profile-header {
+  .rp_profile-header {
     padding: 12px;
     border-radius: 12px;
   }
 
-  .company-avatar {
+  .rp_company-avatar {
     width: 70px;
     height: 70px;
   }
 
-  .company-name {
+  .rp_company-name {
     font-size: 1.375rem;
   }
 
-  .company-meta {
+  .rp_company-meta {
     font-size: 0.9rem;
   }
 
-  .status-badges {
+  .rp_status-badges {
     gap: 8px;
   }
 
-  .status-badge {
+  .rp_status-badge {
     font-size: 0.75rem;
     padding: 4px 10px;
   }
 
-  .nav-tab {
+  .rp_nav-tab {
     padding: 12px 16px;
     font-size: 0.85rem;
   }
 
-  .profile-section {
+  .rp_profile-section {
     padding: 12px;
     border-radius: 12px;
   }
 
-  .section-title {
+  .rp_section-title {
     font-size: 1.375rem;
   }
 
-  .mission-card,
-  .vision-card {
+  .rp_mission-card,
+  .rp_vision-card {
     padding: 16px;
   }
 
-  .card-icon-container {
+  .rp_card-icon-container {
     width: 40px;
     height: 40px;
   }
 
-  .card-icon {
+  .rp_card-icon {
     font-size: 1.25rem;
   }
 
-  .card-title {
+  .rp_card-title {
     font-size: 1.125rem;
   }
 
-  .sidebar-card {
+  .rp_sidebar-card {
     padding: 16px;
     border-radius: 12px;
   }
 
-  .gallery-grid {
+  .rp_gallery-grid {
     gap: 8px;
   }
 
-  .more-text {
+  .rp_more-text {
     font-size: 1rem;
   }
 
-  .social-link {
+  .rp_social-link {
     width: 44px;
     height: 44px;
     font-size: 1.125rem;
@@ -842,32 +845,32 @@
 
 /* Accessibility Improvements */
 @media (prefers-reduced-motion: reduce) {
-  .header-edit-btn,
-  .section-edit-btn,
-  .card-edit-btn,
-  .department-card,
-  .social-link {
+  .rp_header-edit-btn,
+  .rp_section-edit-btn,
+  .rp_card-edit-btn,
+  .rp_department-card,
+  .rp_social-link {
     transition: none;
   }
 
-  .header-edit-btn:hover,
-  .section-edit-btn:hover,
-  .card-edit-btn:hover,
-  .department-card:hover,
-  .social-link:hover {
+  .rp_header-edit-btn:hover,
+  .rp_section-edit-btn:hover,
+  .rp_card-edit-btn:hover,
+  .rp_department-card:hover,
+  .rp_social-link:hover {
     transform: none;
   }
 }
 
 /* High contrast mode support */
 @media (prefers-contrast: high) {
-  .profile-header,
-  .profile-section,
-  .sidebar-card {
+  .rp_profile-header,
+  .rp_profile-section,
+  .rp_sidebar-card {
     border: 2px solid #3c8f63;
   }
 
-  .status-badge {
+  .rp_status-badge {
     border: 2px solid #166534;
   }
 }

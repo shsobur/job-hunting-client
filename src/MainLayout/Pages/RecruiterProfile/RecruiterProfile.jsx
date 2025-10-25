@@ -118,15 +118,15 @@ const RecruiterProfile = () => {
       <SocialLinksModal />
       <VerifyMessage />
 
-      <section id="recruiter_profile_container">
-        <div className="recruiter-container">
-          <div className="recruiter-content">
+      <section id="rp_recruiter_profile_container">
+        <div className="rp_recruiter-container">
+          <div className="rp_recruiter-content">
             {/* Header Section */}
-            <div className="profile-header">
-              <div className="header-content">
-                <div className="company-avatar-container">
+            <div className="rp_profile-header">
+              <div className="rp_header-content">
+                <div className="rp_company-avatar-container">
                   <div
-                    className="company-avatar"
+                    className="rp_company-avatar"
                     style={{
                       backgroundImage: `url("${
                         data?.companyLogo || placeholderImage
@@ -135,31 +135,31 @@ const RecruiterProfile = () => {
                   ></div>
                 </div>
 
-                <div className="company-info">
-                  <h1 className="company-name">
+                <div className="rp_company-info">
+                  <h1 className="rp_company-name">
                     {data?.companyName || "Your Company Name"}
                   </h1>
-                  <p className="company-meta">
+                  <p className="rp_company-meta">
                     {data?.bio || "Add a compelling bio about your company"}
                   </p>
 
-                  <div className="status-badges">
+                  <div className="rp_status-badges">
                     {data?.activeHire && (
-                      <span className="status-badge">
-                        <FaRocket className="badge-icon" />
+                      <span className="rp_status-badge">
+                        <FaRocket className="rp_badge-icon" />
                         Active Hiring
                       </span>
                     )}
 
                     <span
-                      className={`status-badge ${
+                      className={`rp_status-badge ${
                         data?.verified === "Pending" ||
                         data?.verified === "Unverified"
-                          ? "status-badge-unverified"
+                          ? "rp_status-badge-unverified"
                           : ""
                       }`}
                     >
-                      <FaCheckCircle className="badge-icon" />
+                      <FaCheckCircle className="rp_badge-icon" />
                       {data?.verified || "Not Verified"}
                     </span>
 
@@ -170,7 +170,7 @@ const RecruiterProfile = () => {
                             .getElementById("verify_message_modal")
                             .showModal()
                         }
-                        className="profile_verify_btn"
+                        className="rp_profile_verify_btn"
                       >
                         Verify now
                       </span>
@@ -190,42 +190,42 @@ const RecruiterProfile = () => {
                         .getElementById("rec_profile_update_modal")
                         .showModal()
                     }
-                    className={`rec-profile-edit-btn ${
-                      data?.verified === "Pending" ? "pending" : ""
+                    className={`rp_rec-profile-edit-btn ${
+                      data?.verified === "Pending" ? "rp_pending" : ""
                     }`}
                   >
-                    <FiEdit className="edit-icon" />
+                    <FiEdit className="rp_edit-icon" />
                   </button>
                 )}
               </div>
             </div>
 
             {/* Navigation Tabs */}
-            <div className="profile-navigation">
-              <nav className="nav-tabs">
-                <a href="#" className="nav-tab active">
+            <div className="rp_profile-navigation">
+              <nav className="rp_nav-tabs">
+                <a href="#" className="rp_nav-tab rp_active">
                   Overview
                 </a>
-                <a href="#" className="nav-tab">
+                <a href="#" className="rp_nav-tab">
                   Jobs
                 </a>
-                <a href="#" className="nav-tab">
+                <a href="#" className="rp_nav-tab">
                   Candidates
                 </a>
-                <a href="#" className="nav-tab">
+                <a href="#" className="rp_nav-tab">
                   Analytics
                 </a>
               </nav>
             </div>
 
             {/* Main Content Grid */}
-            <div className="profile-main-grid">
+            <div className="rp_profile-main-grid">
               {/* Left Column - Main Content */}
-              <main className="profile-main-content">
+              <main className="rp_profile-main-content">
                 {/* About Us Section */}
-                <section className="profile-section">
-                  <div className="section-header">
-                    <h2 className="section-title">About Us</h2>
+                <section className="rp_profile-section">
+                  <div className="rp_section-header">
+                    <h2 className="rp_section-title">About Us</h2>
                     {canEdit && (
                       <button
                         title={
@@ -238,19 +238,19 @@ const RecruiterProfile = () => {
                             .getElementById("rec_about_update_modal")
                             .showModal()
                         }
-                        className={`rec-profile-edit-btn ${
-                          data?.verified === "Pending" ? "pending" : ""
+                        className={`rp_rec-profile-edit-btn ${
+                          data?.verified === "Pending" ? "rp_pending" : ""
                         }`}
                       >
-                        <FiEdit className="edit-icon" />
+                        <FiEdit className="rp_edit-icon" />
                       </button>
                     )}
                   </div>
 
-                  <div className="about-content">
-                    <p className="about-description">
+                  <div className="rp_about-content">
+                    <p className="rp_about-description">
                       {data?.description || (
-                        <span className="text-gray-500 italic">
+                        <span className="rp_text-gray-500 rp_italic">
                           Tell us about your company's history, values, and what
                           makes it unique. This helps candidates understand your
                           culture and mission.
@@ -258,15 +258,15 @@ const RecruiterProfile = () => {
                       )}
                     </p>
 
-                    <div className="mission-vision-grid">
-                      <div className="mission-card">
-                        <div className="card-icon-container">
-                          <FaFlag className="card-icon" />
+                    <div className="rp_mission-vision-grid">
+                      <div className="rp_mission-card">
+                        <div className="rp_card-icon-container">
+                          <FaFlag className="rp_card-icon" />
                         </div>
-                        <h3 className="card-title">Mission</h3>
-                        <p className="card-description">
+                        <h3 className="rp_card-title">Mission</h3>
+                        <p className="rp_card-description">
                           {data?.mission || (
-                            <span className="text-gray-500 italic">
+                            <span className="rp_text-gray-500 rp_italic">
                               What's your company's core purpose and what it
                               aims to achieve?
                             </span>
@@ -274,14 +274,14 @@ const RecruiterProfile = () => {
                         </p>
                       </div>
 
-                      <div className="vision-card">
-                        <div className="card-icon-container">
-                          <FaEye className="card-icon" />
+                      <div className="rp_vision-card">
+                        <div className="rp_card-icon-container">
+                          <FaEye className="rp_card-icon" />
                         </div>
-                        <h3 className="card-title">Vision</h3>
-                        <p className="card-description">
+                        <h3 className="rp_card-title">Vision</h3>
+                        <p className="rp_card-description">
                           {data?.vision || (
-                            <span className="text-gray-500 italic">
+                            <span className="rp_text-gray-500 rp_italic">
                               Describe the future your company aspires to
                               create.
                             </span>
@@ -293,9 +293,9 @@ const RecruiterProfile = () => {
                 </section>
 
                 {/* Departments Section */}
-                <section className="profile-section">
-                  <div className="section-header">
-                    <h2 className="section-title">
+                <section className="rp_profile-section">
+                  <div className="rp_section-header">
+                    <h2 className="rp_section-title">
                       Departments{" "}
                       {data?.departments?.length
                         ? `(${data.departments.length})`
@@ -314,31 +314,33 @@ const RecruiterProfile = () => {
                             .getElementById("rec_department_update_modal")
                             .showModal()
                         }
-                        className={`rec-profile-edit-btn ${
-                          data?.verified === "Pending" ? "pending" : ""
+                        className={`rp_rec-profile-edit-btn ${
+                          data?.verified === "Pending" ? "rp_pending" : ""
                         }`}
                       >
-                        <FiEdit className="edit-icon" />
+                        <FiEdit className="rp_edit-icon" />
                       </button>
                     )}
                   </div>
 
                   {data?.departments?.length > 0 ? (
-                    <div className="departments-grid">
+                    <div className="rp_departments-grid">
                       {data.departments.map((department, index) => (
-                        <div key={index} className="department-card">
+                        <div key={index} className="rp_department-card">
                           {getDepartmentIcon(department)}
-                          <span className="department-name">{department}</span>
+                          <span className="rp_department-name">
+                            {department}
+                          </span>
                         </div>
                       ))}
                     </div>
                   ) : (
-                    <div className="empty-state">
-                      <FaBuilding className="empty-state-icon w-full" />
-                      <p className="empty-state-text">
+                    <div className="rp_empty-state">
+                      <FaBuilding className="rp_empty-state-icon rp_w-full" />
+                      <p className="rp_empty-state-text">
                         No departments added yet
                       </p>
-                      <p className="empty-state-subtext">
+                      <p className="rp_empty-state-subtext">
                         Add your company departments to show candidates your
                         organizational structure
                       </p>
@@ -347,9 +349,9 @@ const RecruiterProfile = () => {
                 </section>
 
                 {/* Gallery Section */}
-                <section className="profile-section">
-                  <div className="section-header">
-                    <h2 className="section-title">Company Gallery</h2>
+                <section className="rp_profile-section">
+                  <div className="rp_section-header">
+                    <h2 className="rp_section-title">Company Gallery</h2>
                     {canEdit && (
                       <button
                         title={
@@ -362,19 +364,19 @@ const RecruiterProfile = () => {
                             .getElementById("rec_picture_update_modal")
                             .showModal()
                         }
-                        className={`rec-profile-edit-btn ${
-                          data?.verified === "Pending" ? "pending" : ""
+                        className={`rp_rec-profile-edit-btn ${
+                          data?.verified === "Pending" ? "rp_pending" : ""
                         }`}
                       >
-                        <FiEdit className="edit-icon" />
+                        <FiEdit className="rp_edit-icon" />
                       </button>
                     )}
                   </div>
 
-                  <div className="empty-state">
-                    <FaEye className="empty-state-icon w-full" />
-                    <p className="empty-state-text">Gallery coming soon</p>
-                    <p className="empty-state-subtext">
+                  <div className="rp_empty-state">
+                    <FaEye className="rp_empty-state-icon rp_w-full" />
+                    <p className="rp_empty-state-text">Gallery coming soon</p>
+                    <p className="rp_empty-state-subtext">
                       Showcase your workplace and company culture through photos
                     </p>
                   </div>
@@ -382,11 +384,11 @@ const RecruiterProfile = () => {
               </main>
 
               {/* Right Column - Sidebar */}
-              <aside className="profile-sidebar">
+              <aside className="rp_profile-sidebar">
                 {/* Company Details Card */}
-                <div className="sidebar-card">
-                  <div className="card-header">
-                    <h3 className="card-title">Company Details</h3>
+                <div className="rp_sidebar-card">
+                  <div className="rp_card-header">
+                    <h3 className="rp_card-title">Company Details</h3>
                     {canEdit && (
                       <button
                         title={
@@ -399,19 +401,19 @@ const RecruiterProfile = () => {
                             .getElementById("res_company_details_modal")
                             .showModal()
                         }
-                        className={`rec-profile-edit-btn ${
-                          data?.verified === "Pending" ? "pending" : ""
+                        className={`rp_rec-profile-edit-btn ${
+                          data?.verified === "Pending" ? "rp_pending" : ""
                         }`}
                       >
-                        <FiEdit className="edit-icon" />
+                        <FiEdit className="rp_edit-icon" />
                       </button>
                     )}
                   </div>
 
-                  <div className="details-list">
-                    <div className="detail-item">
-                      <span className="detail-label">
-                        <FaGlobe className="detail-icon" />
+                  <div className="rp_details-list">
+                    <div className="rp_detail-item">
+                      <span className="rp_detail-label">
+                        <FaGlobe className="rp_detail-icon" />
                         Website
                       </span>
                       {data?.companyWebsite ? (
@@ -419,54 +421,54 @@ const RecruiterProfile = () => {
                           href={data.companyWebsite}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="detail-value link"
+                          className="rp_detail-value rp_link"
                         >
                           {data.companyWebsite.replace(/^https?:\/\//, "")}
                         </a>
                       ) : (
-                        <span className="detail-value text-gray-500">
+                        <span className="rp_detail-value rp_text-gray-500">
                           Not added
                         </span>
                       )}
                     </div>
 
-                    <div className="detail-item">
-                      <span className="detail-label">
-                        <FaBuilding className="detail-icon" />
+                    <div className="rp_detail-item">
+                      <span className="rp_detail-label">
+                        <FaBuilding className="rp_detail-icon" />
                         Industry
                       </span>
-                      <span className="detail-value">
+                      <span className="rp_detail-value">
                         {data?.industry || "Not specified"}
                       </span>
                     </div>
 
-                    <div className="detail-item">
-                      <span className="detail-label">
-                        <FaUsers className="detail-icon" />
+                    <div className="rp_detail-item">
+                      <span className="rp_detail-label">
+                        <FaUsers className="rp_detail-icon" />
                         Company size
                       </span>
-                      <span className="detail-value">
+                      <span className="rp_detail-value">
                         {data?.companySize?.currentEmployees || "0"} /{" "}
                         {data?.companySize?.sizeRange || "0"}
                       </span>
                     </div>
 
-                    <div className="detail-item">
-                      <span className="detail-label">
-                        <FaCalendar className="detail-icon" />
+                    <div className="rp_detail-item">
+                      <span className="rp_detail-label">
+                        <FaCalendar className="rp_detail-icon" />
                         Founded
                       </span>
-                      <span className="detail-value">
+                      <span className="rp_detail-value">
                         {data?.foundedYear || "Not specified"}
                       </span>
                     </div>
 
-                    <div className="detail-item">
-                      <span className="detail-label">
-                        <FaMapMarkerAlt className="detail-icon" />
+                    <div className="rp_detail-item">
+                      <span className="rp_detail-label">
+                        <FaMapMarkerAlt className="rp_detail-icon" />
                         Headquarters
                       </span>
-                      <span className="detail-value">
+                      <span className="rp_detail-value">
                         {data?.headquarters ? (
                           <>
                             {data.headquarters.country} /{" "}
@@ -478,20 +480,20 @@ const RecruiterProfile = () => {
                       </span>
                     </div>
 
-                    <div className="detail-item">
-                      <span className="detail-label">
-                        <FaCodeBranch className="detail-icon" />
+                    <div className="rp_detail-item">
+                      <span className="rp_detail-label">
+                        <FaCodeBranch className="rp_detail-icon" />
                         Branches
                       </span>
-                      <span className="detail-value">No Branch</span>
+                      <span className="rp_detail-value">No Branch</span>
                     </div>
                   </div>
                 </div>
 
                 {/* Key People Card */}
-                <div className="sidebar-card">
-                  <div className="card-header">
-                    <h3 className="card-title">
+                <div className="rp_sidebar-card">
+                  <div className="rp_card-header">
+                    <h3 className="rp_card-title">
                       Key People{" "}
                       {data?.keyPeople?.length
                         ? `(${data.keyPeople.length})`
@@ -510,32 +512,32 @@ const RecruiterProfile = () => {
                             .getElementById("rec_key_people_modal")
                             .showModal()
                         }
-                        className={`rec-profile-edit-btn ${
-                          data?.verified === "Pending" ? "pending" : ""
+                        className={`rp_rec-profile-edit-btn ${
+                          data?.verified === "Pending" ? "rp_pending" : ""
                         }`}
                       >
-                        <FiEdit className="edit-icon" />
+                        <FiEdit className="rp_edit-icon" />
                       </button>
                     )}
                   </div>
 
                   {data?.keyPeople?.length > 0 ? (
-                    <div className="people-list">
+                    <div className="rp_people-list">
                       {data.keyPeople.map((person, index) => (
-                        <div key={index} className="person-card">
+                        <div key={index} className="rp_person-card">
                           <div
-                            className="person-avatar"
+                            className="rp_person-avatar"
                             style={{
                               backgroundImage: `url("${
                                 person?.image || placeholderImage
                               }")`,
                             }}
                           ></div>
-                          <div className="person-info">
-                            <h4 className="person-name">
+                          <div className="rp_person-info">
+                            <h4 className="rp_person-name">
                               {person?.name || "Unknown"}
                             </h4>
-                            <p className="person-role">
+                            <p className="rp_person-role">
                               {person?.position || "No position"}
                             </p>
                           </div>
@@ -543,10 +545,10 @@ const RecruiterProfile = () => {
                       ))}
                     </div>
                   ) : (
-                    <div className="empty-state-small">
-                      <FaUsers className="empty-state-icon w-full" />
-                      <p className="empty-state-text">No key people added</p>
-                      <p className="empty-state-subtext">
+                    <div className="rp_empty-state-small">
+                      <FaUsers className="rp_empty-state-icon rp_w-full" />
+                      <p className="rp_empty-state-text">No key people added</p>
+                      <p className="rp_empty-state-subtext">
                         Add your leadership team members
                       </p>
                     </div>
@@ -554,9 +556,9 @@ const RecruiterProfile = () => {
                 </div>
 
                 {/* Social Links Card */}
-                <div className="sidebar-card">
-                  <div className="card-header">
-                    <h3 className="card-title">Social Links</h3>
+                <div className="rp_sidebar-card">
+                  <div className="rp_card-header">
+                    <h3 className="rp_card-title">Social Links</h3>
 
                     {canEdit && (
                       <button
@@ -570,23 +572,23 @@ const RecruiterProfile = () => {
                             .getElementById("res_social_links_modal")
                             .showModal()
                         }
-                        className={`rec-profile-edit-btn ${
-                          data?.verified === "Pending" ? "pending" : ""
+                        className={`rp_rec-profile-edit-btn ${
+                          data?.verified === "Pending" ? "rp_pending" : ""
                         }`}
                       >
-                        <FiEdit className="edit-icon" />
+                        <FiEdit className="rp_edit-icon" />
                       </button>
                     )}
                   </div>
 
                   {hasSocialLinks ? (
-                    <div className="social-links">
+                    <div className="rp_social-links">
                       {data?.social?.linkedin && (
                         <a
                           href={data.social.linkedin}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="social-link"
+                          className="rp_social-link"
                           aria-label="LinkedIn"
                         >
                           <FaLinkedin />
@@ -597,7 +599,7 @@ const RecruiterProfile = () => {
                           href={data.social.x}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="social-link"
+                          className="rp_social-link"
                           aria-label="Twitter"
                         >
                           <FaTwitter />
@@ -611,7 +613,7 @@ const RecruiterProfile = () => {
                               href={url}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="social-link"
+                              className="rp_social-link"
                               aria-label={platform}
                             >
                               <FaLink />
@@ -620,10 +622,10 @@ const RecruiterProfile = () => {
                       )}
                     </div>
                   ) : (
-                    <div className="empty-state-small">
-                      <FaLinkedin className="empty-state-icon w-full" />
-                      <p className="empty-state-text">No social links</p>
-                      <p className="empty-state-subtext">
+                    <div className="rp_empty-state-small">
+                      <FaLinkedin className="rp_empty-state-icon rp_w-full" />
+                      <p className="rp_empty-state-text">No social links</p>
+                      <p className="rp_empty-state-subtext">
                         Add your social media profiles
                       </p>
                     </div>
