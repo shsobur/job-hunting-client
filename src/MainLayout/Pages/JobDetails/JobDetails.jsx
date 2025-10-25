@@ -105,12 +105,14 @@ const JobDetails = () => {
                 <span className="btn-icon">→</span>
               </button>
               <div className="secondary-actions">
-                <button className="action-btn company-profile-btn">
-                  <span className="action-icon">
-                    <RiProfileLine />
-                  </span>
-                  <span className="action-text">Company Profile</span>
-                </button>
+                <Link to={`/recruiter-profile/${jobData.companyEmail}`}>
+                  <button className="action-btn company-profile-btn">
+                    <span className="action-icon">
+                      <RiProfileLine />
+                    </span>
+                    <span className="action-text">Company Profile</span>
+                  </button>
+                </Link>
                 <a
                   href={jobData?.companyWebsite || "#"}
                   className="action-btn website-btn"

@@ -26,6 +26,50 @@ const RecPostJob = () => {
   const { profile } = useUserData();
   const [currentStep, setCurrentStep] = useState(1);
   const [postLoading, setPostLoading] = useState(false);
+  const currencies = [
+    "AED",
+    "AUD",
+    "BHD",
+    "BDT",
+    "BRL",
+    "CAD",
+    "CHF",
+    "CNY",
+    "CZK",
+    "DKK",
+    "EGP",
+    "EUR",
+    "GBP",
+    "HKD",
+    "HUF",
+    "IDR",
+    "INR",
+    "IRR",
+    "JPY",
+    "KRW",
+    "KWD",
+    "LKR",
+    "MMK",
+    "MYR",
+    "NGN",
+    "NOK",
+    "NPR",
+    "NZD",
+    "OMR",
+    "PHP",
+    "PKR",
+    "PLN",
+    "QAR",
+    "RUB",
+    "SAR",
+    "SEK",
+    "SGD",
+    "THB",
+    "TRY",
+    "USD",
+    "VND",
+    "ZAR",
+  ];
 
   // Professional state management for chips/tags__
   const [chips, setChips] = useState({
@@ -65,7 +109,7 @@ const RecPostJob = () => {
       area: "",
       department: "",
       position: "",
-      experienceLevel: "Mid Level",
+      experienceLevel: "Intermediate Level",
       salaryRange: {
         min: "",
         max: "",
@@ -178,12 +222,11 @@ const RecPostJob = () => {
       isExpired: false,
       totalApply: 0,
       companyID: profile._id,
+      companyEmail: profile.userEmail,
       companyName: profile.companyName,
       companyLogo: profile.companyLogo,
       companyWebsite: profile.companyWebsite,
     };
-
-    console.log(completeJobData);
 
     setPostLoading(true);
     await api
@@ -495,7 +538,11 @@ const RecPostJob = () => {
                     </button>
 
                     <button className="flex-1 border-2 border-gray-300 text-gray-700 py-3 px-6 rounded-xl font-semibold text-lg hover:bg-gray-50 transition-all duration-200 ">
-                      <a href="https://portfolio-2-c48ba.web.app/" target="main" className="flex items-center justify-center gap-2">
+                      <a
+                        href="https://portfolio-2-c48ba.web.app/"
+                        target="main"
+                        className="flex items-center justify-center gap-2"
+                      >
                         <MdOutlineInfo size={20} />
                         Learn More
                       </a>
@@ -824,10 +871,14 @@ const RecPostJob = () => {
                             required: "Experience level is required",
                           })}
                         >
-                          <option value="Entry Level">Entry Level</option>
-                          <option value="Mid Level">Mid Level</option>
+                          <option value="Junior Level">Junior Level</option>
+                          <option value="Intermediate Level">
+                            Intermediate Level
+                          </option>
                           <option value="Senior Level">Senior Level</option>
-                          <option value="Executive">Executive</option>
+                          <option value="Executive Level">
+                            Executive Level
+                          </option>
                         </select>
                         {errors.experienceLevel && (
                           <p className="text-red-500 text-sm mt-1">
@@ -917,9 +968,11 @@ const RecPostJob = () => {
                               required: "Currency is required",
                             })}
                           >
-                            <option value="USD">USD</option>
-                            <option value="EUR">EUR</option>
-                            <option value="GBP">GBP</option>
+                            {currencies.map((code) => (
+                              <option key={code} value={code}>
+                                {code}
+                              </option>
+                            ))}
                           </select>
 
                           <select
@@ -928,9 +981,10 @@ const RecPostJob = () => {
                               required: "Period is required",
                             })}
                           >
-                            <option value="year">per year</option>
-                            <option value="month">per month</option>
-                            <option value="hour">per hour</option>
+                            <option value="Year">Per Year</option>
+                            <option value="Month">Per Month</option>
+                            <option value="Hour">Per Hour</option>
+                            <option value="Contact">Contact</option>
                           </select>
                         </div>
                       </div>
