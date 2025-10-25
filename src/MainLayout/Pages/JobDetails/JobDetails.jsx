@@ -57,24 +57,24 @@ const JobDetails = () => {
   };
 
   return (
-    <section className="job-details-section">
-      <div className="job-details-container">
+    <section className="jd_job-details-section">
+      <div className="jd_job-details-container">
         {/* Breadcrumb */}
-        <div className="job-breadcrumb">
-          <Link to="/jobs" className="breadcrumb-link">
+        <div className="jd_job-breadcrumb">
+          <Link to="/jobs" className="jd_breadcrumb-link">
             Jobs
           </Link>
-          <span className="breadcrumb-separator">/</span>
-          <span className="breadcrumb-current">
+          <span className="jd_breadcrumb-separator">/</span>
+          <span className="jd_breadcrumb-current">
             {jobData?.jobTitle || "Job Details"}
           </span>
         </div>
 
         {/* Main Job Card */}
-        <div className="job-main-card">
-          <div className="job-header">
-            <div className="company-info">
-              <div className="company-logo">
+        <div className="jd_job-main-card">
+          <div className="jd_job-header">
+            <div className="jd_company-info">
+              <div className="jd_company-logo">
                 <img
                   src={jobData?.companyLogo || "/default-company-logo.png"}
                   alt={jobData?.companyName || "Company Logo"}
@@ -83,15 +83,15 @@ const JobDetails = () => {
                   }}
                 />
               </div>
-              <div className="company-details">
-                <h1 className="job-title">
+              <div className="jd_company-details">
+                <h1 className="jd_job-title">
                   {jobData?.jobTitle || "Job Title Not Available"}
                 </h1>
-                <div className="company-name">
+                <div className="jd_company-name">
                   {jobData?.companyName || "Company Name Not Available"}
                 </div>
-                <div className="job-location">
-                  <span className="location-icon">
+                <div className="jd_job-location">
+                  <span className="jd_location-icon">
                     <IoLocationOutline size={25} />
                   </span>
                   {formatLocation(jobData)}
@@ -99,193 +99,201 @@ const JobDetails = () => {
               </div>
             </div>
 
-            <div className="job-actions">
-              <button className="apply-btn primary-btn">
-                <span className="btn-text">Apply Now</span>
-                <span className="btn-icon">→</span>
+            <div className="jd_job-actions">
+              <button className="jd_apply-btn jd_primary-btn">
+                <span className="jd_btn-text">Apply Now</span>
+                <span className="jd_btn-icon">→</span>
               </button>
-              <div className="secondary-actions">
+              <div className="jd_secondary-actions">
                 <Link to={`/recruiter-profile/${jobData.companyEmail}`}>
-                  <button className="action-btn company-profile-btn">
-                    <span className="action-icon">
+                  <button className="jd_action-btn jd_company-profile-btn">
+                    <span className="jd_action-icon">
                       <RiProfileLine />
                     </span>
-                    <span className="action-text">Company Profile</span>
+                    <span className="jd_action-text">Company Profile</span>
                   </button>
                 </Link>
                 <a
                   href={jobData?.companyWebsite || "#"}
-                  className="action-btn website-btn"
+                  className="jd_action-btn jd_website-btn"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <span className="action-icon">
+                  <span className="jd_action-icon">
                     <TfiWorld />
                   </span>
-                  <span className="action-text">Visit Website</span>
+                  <span className="jd_action-text">Visit Website</span>
                 </a>
               </div>
             </div>
           </div>
 
           {/* Job Meta Info */}
-          <div className="job-meta-grid">
-            <div className="meta-item">
-              <div className="meta-label">Job Type</div>
-              <div className="meta-value badge">
+          <div className="jd_job-meta-grid">
+            <div className="jd_meta-item">
+              <div className="jd_meta-label">Job Type</div>
+              <div className="jd_meta-value jd_badge">
                 {jobData?.jobType || "Not specified"}
               </div>
             </div>
-            <div className="meta-item">
-              <div className="meta-label">Workplace</div>
-              <div className="meta-value badge">
+            <div className="jd_meta-item">
+              <div className="jd_meta-label">Workplace</div>
+              <div className="jd_meta-value jd_badge">
                 {jobData?.workplaceType || "Not specified"}
               </div>
             </div>
-            <div className="meta-item">
-              <div className="meta-label">Experience</div>
-              <div className="meta-value">
+            <div className="jd_meta-item">
+              <div className="jd_meta-label">Experience</div>
+              <div className="jd_meta-value">
                 {jobData?.experienceLevel || "Experience not specified"}
               </div>
             </div>
-            <div className="meta-item">
-              <div className="meta-label">Salary</div>
-              <div className="meta-value salary">
+            <div className="jd_meta-item">
+              <div className="jd_meta-label">Salary</div>
+              <div className="jd_meta-value jd_salary">
                 {formatSalary(jobData?.salaryRange)}
               </div>
             </div>
-            <div className="meta-item">
-              <div className="meta-label">Deadline</div>
-              <div className="meta-value deadline">
+            <div className="jd_meta-item">
+              <div className="jd_meta-label">Deadline</div>
+              <div className="jd_meta-value jd_deadline">
                 {formatDate(jobData?.applicationDeadline)}
               </div>
             </div>
-            <div className="meta-item">
-              <div className="meta-label">Open Positions</div>
-              <div className="meta-value">
+            <div className="jd_meta-item">
+              <div className="jd_meta-label">Open Positions</div>
+              <div className="jd_meta-value">
                 {jobData?.openPositions || 0} Position
                 {jobData?.openPositions !== 1 ? "s" : ""}
               </div>
             </div>
             {/* Total Apply - New Section */}
-            <div className="meta-item">
-              <div className="meta-label">Total Applications</div>
-              <div className="meta-value apply-count">
+            <div className="jd_meta-item">
+              <div className="jd_meta-label">Total Applications</div>
+              <div className="jd_meta-value jd_apply-count">
                 {formatTotalApply(jobData?.totalApply)}
               </div>
             </div>
           </div>
 
           {/* Job Description */}
-          <div className="job-content">
-            <div className="content-section">
-              <h3 className="section-title">Job Description</h3>
-              <p className="section-text">
+          <div className="jd_job-content">
+            <div className="jd_content-section">
+              <h3 className="jd_section-title">Job Description</h3>
+              <p className="jd_section-text">
                 {jobData?.jobDescription || "No job description available."}
               </p>
             </div>
 
             {/* Responsibilities */}
-            <div className="content-section">
-              <h3 className="section-title">Key Responsibilities</h3>
+            <div className="jd_content-section">
+              <h3 className="jd_section-title">Key Responsibilities</h3>
               {jobData?.responsibilities?.length > 0 ? (
-                <ul className="section-list">
+                <ul className="jd_section-list">
                   {jobData.responsibilities.map((item, index) => (
-                    <li key={index} className="list-item">
-                      <span className="list-icon">✓</span>
+                    <li key={index} className="jd_list-item">
+                      <span className="jd_list-icon">✓</span>
                       {item || "Responsibility not specified"}
                     </li>
                   ))}
                 </ul>
               ) : (
-                <p className="section-text">No responsibilities listed.</p>
+                <p className="jd_section-text">No responsibilities listed.</p>
               )}
             </div>
 
             {/* Requirements */}
-            <div className="content-section">
-              <h3 className="section-title">Required Skills</h3>
-              <div className="skills-container">
-                <div className="skills-header">
-                  <p className="skills-description">
+            <div className="jd_content-section">
+              <h3 className="jd_section-title">Required Skills</h3>
+              <div className="jd_skills-container">
+                <div className="jd_skills-header">
+                  <p className="jd_skills-description">
                     Essential technical and professional skills required for
                     this position
                   </p>
                 </div>
                 {jobData?.requirementSkills?.length > 0 ? (
-                  <div className="skills-grid">
+                  <div className="jd_skills-grid">
                     {jobData.requirementSkills.map((skill, index) => (
-                      <div key={index} className="skill-badge primary-skill">
+                      <div
+                        key={index}
+                        className="jd_skill-badge jd_primary-skill"
+                      >
                         {skill || "Skill not specified"}
                       </div>
                     ))}
                   </div>
                 ) : (
-                  <p className="section-text">No required skills listed.</p>
+                  <p className="jd_section-text">No required skills listed.</p>
                 )}
               </div>
             </div>
 
             {/* Nice to Have */}
-            <div className="content-section">
-              <h3 className="section-title">Nice to Have</h3>
+            <div className="jd_content-section">
+              <h3 className="jd_section-title">Nice to Have</h3>
               {jobData?.niceToHave?.length > 0 ? (
-                <div className="skills-grid">
+                <div className="jd_skills-grid">
                   {jobData.niceToHave.map((skill, index) => (
-                    <div key={index} className="skill-badge secondary-skill">
+                    <div
+                      key={index}
+                      className="jd_skill-badge jd_secondary-skill"
+                    >
                       {skill || "Skill not specified"}
                     </div>
                   ))}
                 </div>
               ) : (
-                <p className="section-text">No additional skills listed.</p>
+                <p className="jd_section-text">No additional skills listed.</p>
               )}
             </div>
 
             {/* Who Can Apply */}
-            <div className="content-section">
-              <h3 className="section-title">Who Can Apply</h3>
+            <div className="jd_content-section">
+              <h3 className="jd_section-title">Who Can Apply</h3>
               {jobData?.whoCanApply?.length > 0 ? (
-                <ul className="section-list">
+                <ul className="jd_section-list">
                   {jobData.whoCanApply.map((item, index) => (
-                    <li key={index} className="list-item">
-                      <span className="list-icon">•</span>
+                    <li key={index} className="jd_list-item">
+                      <span className="jd_list-icon">•</span>
                       {item || "Requirement not specified"}
                     </li>
                   ))}
                 </ul>
               ) : (
-                <p className="section-text">No specific requirements listed.</p>
+                <p className="jd_section-text">
+                  No specific requirements listed.
+                </p>
               )}
             </div>
 
             {/* Benefits */}
-            <div className="content-section">
-              <h3 className="section-title">Benefits & Perks</h3>
+            <div className="jd_content-section">
+              <h3 className="jd_section-title">Benefits & Perks</h3>
               {jobData?.benefits?.length > 0 ? (
-                <div className="benefits-grid">
+                <div className="jd_benefits-grid">
                   {jobData.benefits.map((benefit, index) => (
-                    <div key={index} className="benefit-item">
+                    <div key={index} className="jd_benefit-item">
                       <div>
                         <FcMindMap size={25} />
                       </div>
-                      <span className="benefit-text">
+                      <span className="jd_benefit-text">
                         {benefit || "Benefit not specified"}
                       </span>
                     </div>
                   ))}
                 </div>
               ) : (
-                <p className="section-text">No benefits listed.</p>
+                <p className="jd_section-text">No benefits listed.</p>
               )}
             </div>
           </div>
 
           {/* Bottom CTA */}
-          <div className="job-cta">
-            <div className="cta-content">
-              <h3 className="cta-title">Ready to Apply?</h3>
-              <p className="cta-description">
+          <div className="jd_job-cta">
+            <div className="jd_cta-content">
+              <h3 className="jd_cta-title">Ready to Apply?</h3>
+              <p className="jd_cta-description">
                 {jobData?.openPositions > 0
                   ? `Don't miss this opportunity to join ${
                       jobData?.companyName || "this company"
@@ -294,15 +302,15 @@ const JobDetails = () => {
               </p>
             </div>
             <button
-              className="apply-btn-large primary-btn"
+              className="jd_apply-btn-large jd_primary-btn"
               disabled={!jobData?.openPositions || jobData?.openPositions === 0}
             >
-              <span className="btn-text">
+              <span className="jd_btn-text">
                 {jobData?.openPositions > 0
                   ? "Apply for This Position"
                   : "No Open Positions"}
               </span>
-              <span className="btn-icon">→</span>
+              <span className="jd_btn-icon">→</span>
             </button>
           </div>
         </div>
