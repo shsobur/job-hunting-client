@@ -1,5 +1,9 @@
+import { RiProfileLine } from "react-icons/ri";
+import { TfiWorld } from "react-icons/tfi";
 import "./JobDetails.css";
 import { Link } from "react-router";
+import { IoLocationOutline } from "react-icons/io5";
+import { FcMindMap } from "react-icons/fc";
 
 const JobDetails = () => {
   return (
@@ -28,7 +32,7 @@ const JobDetails = () => {
                 <h1 className="job-title">Digital Marketing Manager</h1>
                 <div className="company-name">LogIc Nactor</div>
                 <div className="job-location">
-                  <span className="location-icon">📍</span>
+                  <span className="location-icon"><IoLocationOutline size={25} /></span>
                   Mirpur 12, Dhaka, Bangladesh
                 </div>
               </div>
@@ -41,7 +45,7 @@ const JobDetails = () => {
               </button>
               <div className="secondary-actions">
                 <button className="action-btn company-profile-btn">
-                  <span className="action-icon">🏢</span>
+                  <span className="action-icon"><RiProfileLine /></span>
                   <span className="action-text">Company Profile</span>
                 </button>
                 <a
@@ -49,7 +53,7 @@ const JobDetails = () => {
                   className="action-btn website-btn"
                   target="_blank"
                 >
-                  <span className="action-icon">🌐</span>
+                  <span className="action-icon"><TfiWorld /></span>
                   <span className="action-text">Visit Website</span>
                 </a>
               </div>
@@ -192,7 +196,7 @@ const JobDetails = () => {
                   "Modern office space",
                 ].map((benefit, index) => (
                   <div key={index} className="benefit-item">
-                    <div className="benefit-dot"></div>
+                    <div><FcMindMap size={25} /></div>
                     <span className="benefit-text">{benefit}</span>
                   </div>
                 ))}
