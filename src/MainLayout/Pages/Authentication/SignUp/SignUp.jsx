@@ -199,90 +199,90 @@ const SignUp = () => {
 
   return (
     <>
-      <section id="main_signUp_container">
-        <div className="signUp_container">
+      <section id="su_main_signUp_container">
+        <div className="su_signUp_container">
           {/* Progress Bar - Compact Version */}
-          <div className="progress_container">
-            <div className="step_indicators">
+          <div className="su_progress_container">
+            <div className="su_step_indicators">
               {[1, 2, 3, 4].map((stepNum) => (
-                <div key={stepNum} className="step_indicator_wrapper">
+                <div key={stepNum} className="su_step_indicator_wrapper">
                   <div
-                    className={`step_indicator ${
-                      step >= stepNum ? "active" : ""
+                    className={`su_step_indicator ${
+                      step >= stepNum ? "su_active" : ""
                     }`}
                   >
                     {step >= stepNum && (
-                      <FaCheckCircle className="step_check_icon" />
+                      <FaCheckCircle className="su_step_check_icon" />
                     )}
                   </div>
                   {stepNum < 4 && (
                     <div
-                      className={`step_connector ${
-                        step > stepNum ? "active" : ""
+                      className={`su_step_connector ${
+                        step > stepNum ? "su_active" : ""
                       }`}
                     ></div>
                   )}
                 </div>
               ))}
             </div>
-            <div className="step_labels">
-              <span className={step >= 1 ? "active" : ""}>Method</span>
-              <span className={step >= 2 ? "active" : ""}>Discovery</span>
-              <span className={step >= 3 ? "active" : ""}>Role</span>
-              <span className={step >= 4 ? "active" : ""}>Account</span>
+            <div className="su_step_labels">
+              <span className={step >= 1 ? "su_active" : ""}>Method</span>
+              <span className={step >= 2 ? "su_active" : ""}>Discovery</span>
+              <span className={step >= 3 ? "su_active" : ""}>Role</span>
+              <span className={step >= 4 ? "su_active" : ""}>Account</span>
             </div>
           </div>
 
-          <div className="signUp_content_wrapper">
-            <div className="signUp_form_section">
+          <div className="su_signUp_content_wrapper">
+            <div className="su_signUp_form_section">
               <div
-                className="form_slider"
+                className="su_form_slider"
                 style={{ transform: `translateX(-${(step - 1) * 100}%)` }}
               >
                 {/* Step 1: Sign Up Method */}
-                <div className="form_step">
-                  <div className="step_content_centered">
+                <div className="su_form_step">
+                  <div className="su_step_content_centered">
                     <h1>Join JobHunting</h1>
                     <p>Choose your preferred sign up method</p>
 
-                    <div className="signup_methods_compact">
+                    <div className="su_signup_methods_compact">
                       <button
                         type="button"
                         disabled={googleBtnOff}
                         onClick={handleGoogleLogin}
-                        className="method_btn_compact google_btn"
+                        className="su_method_btn_compact su_google_btn"
                       >
-                        <FcGoogle className="method_icon" />
+                        <FcGoogle className="su_method_icon" />
                         <span>Continue with Google</span>
                         {googleBtnOff && (
-                          <div className="loading_spinner small"></div>
+                          <div className="su_loading_spinner su_small"></div>
                         )}
                       </button>
 
-                      <div className="divider_compact">
+                      <div className="su_divider_compact">
                         <span>or</span>
                       </div>
 
                       <button
                         type="button"
                         onClick={handleNext}
-                        className="method_btn_compact email_btn"
+                        className="su_method_btn_compact su_email_btn"
                       >
                         <span>Continue with Email</span>
-                        <FaArrowRight className="arrow_icon" />
+                        <FaArrowRight className="su_arrow_icon" />
                       </button>
                     </div>
 
-                    <div className="step_tips_compact">
-                      <div className="tip_item">
-                        <HiOutlineInformationCircle className="tip_icon" />
+                    <div className="su_step_tips_compact">
+                      <div className="su_tip_item">
+                        <HiOutlineInformationCircle className="su_tip_icon" />
                         <span>
                           <strong>Job Seekers:</strong> Sign up to apply for
                           jobs and track applications
                         </span>
                       </div>
-                      <div className="tip_item">
-                        <HiOutlineInformationCircle className="tip_icon" />
+                      <div className="su_tip_item">
+                        <HiOutlineInformationCircle className="su_tip_icon" />
                         <span>
                           <strong>Recruiters:</strong> Choose recruiter role
                           when signing up with email
@@ -293,24 +293,24 @@ const SignUp = () => {
                 </div>
 
                 {/* Step 2: How did you hear about us */}
-                <div className="form_step">
-                  <div className="step_content_centered">
+                <div className="su_form_step">
+                  <div className="su_step_content_centered">
                     <h1>How did you find us?</h1>
                     <p>Tell us how you discovered JobHunting</p>
 
-                    <div className="options_grid_compact">
+                    <div className="su_options_grid_compact">
                       {options.map((option) => (
                         <button
                           key={option}
                           type="button"
-                          className={`option_btn ${
-                            selected === option ? "selected" : ""
+                          className={`su_option_btn ${
+                            selected === option ? "su_selected" : ""
                           }`}
                           onClick={() => setSelected(option)}
                         >
                           <span>{option}</span>
                           {selected === option && (
-                            <FcCheckmark className="check_icon" />
+                            <FcCheckmark className="su_check_icon" />
                           )}
                         </button>
                       ))}
@@ -319,31 +319,31 @@ const SignUp = () => {
                 </div>
 
                 {/* Step 3: Choose Role */}
-                <div className="form_step">
-                  <div className="step_content_centered">
+                <div className="su_form_step">
+                  <div className="su_step_content_centered">
                     <h1>Choose Your Role</h1>
                     <p>Select how you'll be using JobHunting</p>
 
-                    <div className="role_selection_compact">
+                    <div className="su_role_selection_compact">
                       {roles.map((role) => {
                         const RoleIcon = role.icon;
                         return (
                           <button
                             key={role.name}
                             type="button"
-                            className={`role_btn ${
-                              selectedRole === role.name ? "selected" : ""
+                            className={`su_role_btn ${
+                              selectedRole === role.name ? "su_selected" : ""
                             }`}
                             onClick={() => setSelectedRole(role.name)}
                           >
-                            <div className="role_btn_content">
-                              <RoleIcon className="role_btn_icon" />
-                              <div className="role_btn_text">
+                            <div className="su_role_btn_content">
+                              <RoleIcon className="su_role_btn_icon" />
+                              <div className="su_role_btn_text">
                                 <strong>{role.name}</strong>
                                 <span>{role.tip}</span>
                               </div>
                               {selectedRole === role.name && (
-                                <FcCheckmark className="role_check_icon" />
+                                <FcCheckmark className="su_role_check_icon" />
                               )}
                             </div>
                           </button>
@@ -354,21 +354,21 @@ const SignUp = () => {
                 </div>
 
                 {/* Step 4: Email & Password */}
-                <div className="form_step">
-                  <div className="step_content_centered">
+                <div className="su_form_step">
+                  <div className="su_step_content_centered">
                     <form
                       onSubmit={handleSubmit(onSubmit)}
-                      className="final_form_compact"
+                      className="su_final_form_compact"
                     >
                       <h1>Create Your Account</h1>
                       <p>Enter your email and secure password</p>
 
-                      <div className="form_inputs_compact">
-                        <div className="input_group">
+                      <div className="su_form_inputs_compact">
+                        <div className="su_input_group">
                           <input
                             type="email"
                             placeholder="Enter your email address"
-                            className="form_input"
+                            className="su_form_input"
                             {...register("email", {
                               required: "Email is required",
                               pattern: {
@@ -379,17 +379,17 @@ const SignUp = () => {
                             })}
                           />
                           {errors.email && (
-                            <span className="error_message">
+                            <span className="su_error_message">
                               {errors.email.message}
                             </span>
                           )}
                         </div>
 
-                        <div className="input_group">
+                        <div className="su_input_group">
                           <input
                             type="password"
                             placeholder="Create a strong password"
-                            className="form_input"
+                            className="su_form_input"
                             {...register("password", {
                               required: "Password is required",
                               minLength: {
@@ -405,17 +405,17 @@ const SignUp = () => {
                             })}
                           />
                           {errors.password && (
-                            <span className="error_message">
+                            <span className="su_error_message">
                               {errors.password.message}
                             </span>
                           )}
                         </div>
 
-                        <div className="input_group">
+                        <div className="su_input_group">
                           <input
                             type="password"
                             placeholder="Confirm your password"
-                            className="form_input"
+                            className="su_form_input"
                             {...register("confirmPassword", {
                               required: "Please confirm your password",
                               validate: (value) => {
@@ -426,42 +426,44 @@ const SignUp = () => {
                             })}
                           />
                           {errors.confirmPassword && (
-                            <span className="error_message">
+                            <span className="su_error_message">
                               {errors.confirmPassword.message}
                             </span>
                           )}
                         </div>
 
-                        <div className="captcha_container">
+                        <div className="su_captcha_container">
                           <ReCAPTCHA
                             sitekey={import.meta.env.VITE_SITE_KEY}
                             onChange={handleCaptcha}
                           />
                           {robotError && (
-                            <span className="error_message">{robotError}</span>
+                            <span className="su_error_message">
+                              {robotError}
+                            </span>
                           )}
                         </div>
 
-                        <div className="terms_container">
-                          <label className="terms_checkbox">
+                        <div className="su_terms_container">
+                          <label className="su_terms_checkbox">
                             <input
                               type="checkbox"
                               {...register("terms", {
                                 required:
                                   "You must accept the terms and conditions",
                               })}
-                              className="checkbox_input"
+                              className="su_checkbox_input"
                             />
-                            <span className="custom_checkbox"></span>
-                            <span className="terms_text">
+                            <span className="su_custom_checkbox"></span>
+                            <span className="su_terms_text">
                               I agree to the{" "}
-                              <a href="#" className="terms_link">
+                              <a href="#" className="su_terms_link">
                                 Terms & Conditions
                               </a>
                             </span>
                           </label>
                           {errors.terms && (
-                            <span className="error_message">
+                            <span className="su_error_message">
                               {errors.terms.message}
                             </span>
                           )}
@@ -470,11 +472,11 @@ const SignUp = () => {
                         <button
                           type="submit"
                           disabled={firebaseLoading}
-                          className="submit_btn"
+                          className="su_submit_btn"
                         >
                           {firebaseLoading ? (
                             <>
-                              <div className="loading_spinner"></div>
+                              <div className="su_loading_spinner"></div>
                               Creating Account...
                             </>
                           ) : (
@@ -489,45 +491,49 @@ const SignUp = () => {
             </div>
 
             {/* Redesigned Sidebar */}
-            <div className="signUp_sidebar">
-              <div className="sidebar_content_centered">
-                <div className="sidebar_header">
-                  <img src={logo} alt="JobHunting" className="sidebar_logo" />
+            <div className="su_signUp_sidebar">
+              <div className="su_sidebar_content_centered">
+                <div className="su_sidebar_header">
+                  <img
+                    src={logo}
+                    alt="JobHunting"
+                    className="su_sidebar_logo"
+                  />
                   <h3>Start Your Journey Today</h3>
                 </div>
-                <div className="sidebar_features">
-                  <div className="feature_item">
-                    <FaCheckCircle className="feature_icon" />
-                    <div className="feature_content">
+                <div className="su_sidebar_features">
+                  <div className="su_feature_item">
+                    <FaCheckCircle className="su_feature_icon" />
+                    <div className="su_feature_content">
                       <strong>Smart Job Matching</strong>
                       <span>Find opportunities that match your skills</span>
                     </div>
                   </div>
-                  <div className="feature_item">
-                    <FaCheckCircle className="feature_icon" />
-                    <div className="feature_content">
+                  <div className="su_feature_item">
+                    <FaCheckCircle className="su_feature_icon" />
+                    <div className="su_feature_content">
                       <strong>Secure Platform</strong>
                       <span>Your data is protected and private</span>
                     </div>
                   </div>
-                  <div className="feature_item">
-                    <FaCheckCircle className="feature_icon" />
-                    <div className="feature_content">
+                  <div className="su_feature_item">
+                    <FaCheckCircle className="su_feature_icon" />
+                    <div className="su_feature_content">
                       <strong>Instant Updates</strong>
                       <span>Get notified about relevant opportunities</span>
                     </div>
                   </div>
                 </div>
-                <div className="sidebar_stats">
-                  <div className="stat_item">
+                <div className="su_sidebar_stats">
+                  <div className="su_stat_item">
                     <strong>10K+</strong>
                     <span>Jobs Posted</span>
                   </div>
-                  <div className="stat_item">
+                  <div className="su_stat_item">
                     <strong>5K+</strong>
                     <span>Companies</span>
                   </div>
-                  <div className="stat_item">
+                  <div className="su_stat_item">
                     <strong>50K+</strong>
                     <span>Professionals</span>
                   </div>
@@ -537,14 +543,14 @@ const SignUp = () => {
           </div>
 
           {/* Navigation Buttons */}
-          <div className="navigation_buttons">
+          <div className="su_navigation_buttons">
             <button
               type="button"
               disabled={step === 1}
               onClick={handleBack}
-              className="nav_btn back_btn"
+              className="su_nav_btn su_back_btn"
             >
-              <FaArrowLeft className="nav_icon" />
+              <FaArrowLeft className="su_nav_icon" />
               Previous
             </button>
 
@@ -556,10 +562,10 @@ const SignUp = () => {
                   (step === 3 && selectedRole === "")
                 }
                 onClick={handleNext}
-                className="nav_btn next_btn"
+                className="su_nav_btn su_next_btn"
               >
                 Next
-                <FaArrowRight className="nav_icon" />
+                <FaArrowRight className="su_nav_icon" />
               </button>
             )}
           </div>
