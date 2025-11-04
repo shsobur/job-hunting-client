@@ -12,7 +12,6 @@ import Swal from "sweetalert2";
 import {
   FaRegLightbulb,
   FaRegBuilding,
-  FaRegMap,
   FaMobileAlt,
   FaKey,
   FaLinkedin,

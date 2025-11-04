@@ -1,9 +1,14 @@
-import { useEffect, useState } from "react";
+// File path__
 import useAxios from "../../../../Hooks/Axios";
-import { GrShieldSecurity } from "react-icons/gr";
-import AdminTableSkeleton from "../../../../Components/AdminTableSkeleton/AdminTableSkeleton";
-import { Link } from "react-router-dom";
 import CompanyMessage from "../../../../Components/CompanyMessage/CompanyMessage";
+import AdminTableSkeleton from "../../../../Components/AdminTableSkeleton/AdminTableSkeleton";
+
+// From react__
+import { useEffect, useState } from "react";
+
+// Package__
+import { Link } from "react-router-dom";
+import { GrShieldSecurity } from "react-icons/gr";
 
 const VerifyCompany = () => {
   const api = useAxios();
