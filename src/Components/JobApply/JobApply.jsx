@@ -1,3 +1,4 @@
+import { useContext, useState } from "react";
 import {
   FaTimes,
   FaRegLightbulb,
@@ -8,11 +9,90 @@ import {
   FaLaptop,
   FaDollarSign,
 } from "react-icons/fa";
+import { AuthContext } from "../../Context/AuthContext";
+import { jhConfirm, jhError, jhSuccess, jhWarning } from "../../utils";
+import { useNavigate } from "react-router";
+import useUserData from "../../Hooks/userData";
+import useAxios from "../../Hooks/Axios";
 
-const JobApply = () => {
+const JobApply = ({ jobData }) => {
+  const api = useAxios();
+  const { profile } = useUserData();
+  const { user, logOut } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const [submitLoading, setSubmitLoading] = useState(false);
+
+  const handleApplyJob = async () => {
+    if (!user) {
+      handleCloseModal();
+
+      jhConfirm({
+        title: "Opps! You are not logged in",
+        text: "Would you like to logged in now?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, Log in",
+        cancelButtonText: "Later",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigate("/sign-in");
+        }
+        document.getElementById("job_apply_modal").showModal();
+      });
+
+      return;
+    }
+
+    const applyData = {
+      jobPostId: jobData._id,
+      seekerId: profile._id,
+      applicantEmail: user.email,
+      companyEmail: jobData.companyEmail,
+    };
+
+    setSubmitLoading(true);
+    const res = await api.post(`/user-api/apply-job/${user.email}`, applyData);
+    console.log(res.data);
+    if (res.data.insertedId) {
+      jhSuccess({
+        title: "Success!",
+        text: "Job apply successfully",
+      });
+
+      navigate("/jobs");
+      setSubmitLoading(false);
+    } else if (res.data.status === 402) {
+      setSubmitLoading(false);
+
+      jhWarning({
+        title: "Warning!",
+        text: "We find some illegal actions. Please login again",
+      });
+
+      logOut()
+        .then(() => {
+          navigate("/sign-in");
+        })
+        .catch(() => {
+          jhError({
+            title: "Error!",
+            text: "Failed to log out. Please try again.",
+          });
+        });
+    }
+  };
+
+  const handleCloseModal = () => {
+    const modal = document.getElementById("job_apply_modal");
+    modal.close();
+  };
+
   return (
     <>
-      <dialog id="job_apply_modal" className="modal flex items-center justify-center">
+      <dialog
+        id="job_apply_modal"
+        className="modal flex items-center justify-center"
+      >
         <div className="modal-box max-w-[1024px] max-h-[95vh] flex flex-col p-0">
           {/* Header */}
           <div className="border-b border-gray-200 px-6 py-4">
@@ -44,19 +124,23 @@ const JobApply = () => {
                   <div className="flex items-center justify-between">
                     <div>
                       <h4 className="text-lg font-bold text-gray-900">
-                        Senior Frontend Developer
+                        {jobData?.position}
                       </h4>
-                      <p className="text-gray-700 font-medium">LogIc Nactor</p>
+                      <p className="text-gray-700 font-medium">
+                        {jobData?.companyName}
+                      </p>
                     </div>
                     <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
-                      Remote
+                      {jobData?.workplaceType}
                     </span>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
                     <div className="flex items-center gap-2 text-gray-600">
                       <FaMapMarkerAlt className="text-gray-500" />
-                      <span>Bay Area, San Francisco, United States</span>
+                      <span>
+                        {jobData?.country}, {jobData?.city}, {jobData?.area}
+                      </span>
                     </div>
                     <div className="flex items-center gap-2 text-gray-600">
                       <FaBriefcase className="text-gray-500" />
@@ -68,7 +152,12 @@ const JobApply = () => {
                     </div>
                     <div className="flex items-center gap-2 text-gray-600">
                       <FaDollarSign className="text-gray-500" />
-                      <span>120,000 - 160,000 USD / year</span>
+                      <span>
+                        {jobData?.salaryRange?.min} -{" "}
+                        {jobData?.salaryRange?.max}{" "}
+                        {jobData?.salaryRange?.currency} /{" "}
+                        {jobData?.salaryRange?.period}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -115,8 +204,8 @@ const JobApply = () => {
                         shareable link here.
                         <strong>
                           {" "}
-                          Make sure the link is set to <b>"Anyone with the link can
-                          view</b>"
+                          Make sure the link is set to{" "}
+                          <b>"Anyone with the link can view</b>"
                         </strong>
                       </p>
                     </div>
@@ -184,9 +273,11 @@ const JobApply = () => {
 
               <button
                 type="submit"
+                disabled={submitLoading}
+                onClick={handleApplyJob}
                 className="btn h-[50px] px-6 text-base bg-[#3C8F63] border-[#3C8F63] hover:bg-[#2d7a52] text-white"
               >
-                Submit Application
+                {submitLoading ? "Submitting" : "Submit Application"}
               </button>
             </div>
           </div>

@@ -11,6 +11,7 @@ import JobApply from "../../../Components/JobApply/JobApply";
 
 const JobDetails = () => {
   const jobData = useLoaderData();
+  console.log(jobData);
 
   // Format total apply count__
   const formatTotalApply = (count) => {
@@ -59,7 +60,7 @@ const JobDetails = () => {
 
   return (
     <>
-      <JobApply></JobApply>
+      <JobApply jobData={jobData}></JobApply>
       <section className="jd_job-details-section">
         <div className="jd_job-details-container">
           {/* Breadcrumb */}
