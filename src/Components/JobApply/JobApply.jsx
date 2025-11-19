@@ -20,6 +20,7 @@ const JobApply = ({ jobData }) => {
   const { profile } = useUserData();
   const { user, logOut } = useContext(AuthContext);
   const navigate = useNavigate();
+  const [resumeLink, setResumeLink] = useState("");
   const [submitLoading, setSubmitLoading] = useState(false);
 
   const handleApplyJob = async () => {
@@ -46,21 +47,30 @@ const JobApply = ({ jobData }) => {
     const applyData = {
       jobPostId: jobData._id,
       seekerId: profile._id,
+      resumeLink: resumeLink === "" ? "No link provide" : resumeLink,
       applicantEmail: user.email,
       companyEmail: jobData.companyEmail,
     };
 
+    const seekerId = profile._id;
+
     setSubmitLoading(true);
     const res = await api.post(`/user-api/apply-job/${user.email}`, applyData);
-    console.log(res.data);
+
     if (res.data.insertedId) {
       jhSuccess({
         title: "Success!",
         text: "Job apply successfully",
       });
 
-      navigate("/jobs");
-      setSubmitLoading(false);
+      const res2 = await api.patch(
+        `/user-api/update-job-details/${jobData._id}`,
+        { seekerId }
+      );
+      if (res2.data.modifiedCount > 0) {
+        navigate("/jobs");
+        setSubmitLoading(false);
+      }
     } else if (res.data.status === 402) {
       setSubmitLoading(false);
 
@@ -196,6 +206,8 @@ const JobApply = ({ jobData }) => {
                     <div className="space-y-2">
                       <input
                         type="url"
+                        value={resumeLink}
+                        onChange={(e) => setResumeLink(e.target.value)}
                         placeholder="https://drive.google.com/file/d/your-file-id/view"
                         className="input input-bordered w-full h-[55px] text-base border-2 border-gray-300 focus:border-[#3C8F63] focus:outline-none rounded-lg"
                       />
