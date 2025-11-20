@@ -6,6 +6,7 @@ import {
   FiSearch,
   FiX,
 } from "react-icons/fi";
+import { MdOutlineContactPage } from "react-icons/md";
 import { NavLink } from "react-router";
 
 const SidebarNav = ({
@@ -58,6 +59,12 @@ const SidebarNav = ({
           path: "/dashboard/recruiter-post-job",
           label: "Post A Job",
           icon: <FiBriefcase size={20} />,
+        },
+        {
+          id: "job-applications",
+          path: "/dashboard/recruiter-job-applications",
+          label: "Application",
+          icon: <MdOutlineContactPage size={22} />
         },
       ],
       "Job Seeker": [

@@ -15,6 +15,7 @@ import AdminOverview from "../DashboardLayout/Pages/Admin/AdminOverview/AdminOve
 import VerifyCompany from "../DashboardLayout/Pages/Admin/VerifyCompany/VerifyCompany";
 import Jobs from "../MainLayout/Pages/Jobs/Jobs";
 import JobDetails from "../MainLayout/Pages/JobDetails/JobDetails";
+import RecApplications from "../DashboardLayout/Pages/Recruiter/RecApplications/RecApplications";
 
 const router = createBrowserRouter([
   {
@@ -85,6 +86,10 @@ const router = createBrowserRouter([
       {
         path: "/dashboard/recruiter-post-job",
         element: <RecPostJob></RecPostJob>,
+      },
+      {
+        path: "/dashboard/recruiter-job-applications",
+        element: <RecApplications></RecApplications>
       },
     ],
   },
