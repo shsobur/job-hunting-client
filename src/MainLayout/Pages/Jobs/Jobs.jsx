@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import {
   FaSearch,
@@ -13,9 +13,13 @@ import {
 } from "react-icons/fa";
 import useAxios from "../../../Hooks/Axios";
 import { Link } from "react-router";
+import { AuthContext } from "../../../Context/AuthContext";
+import useUserData from "../../../Hooks/userData";
 
 const Jobs = () => {
   const api = useAxios();
+  const { user } = useContext(AuthContext);
+  const { profile } = useUserData();
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [searchInput, setSearchInput] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -63,15 +67,20 @@ const Jobs = () => {
         params.workType = filters.workType.join(",");
       }
 
-      // Add experience level filter
+      // Add experience level filter__
       if (filters.experienceLevel.length > 0) {
         params.experienceLevel = filters.experienceLevel.join(",");
       }
 
-      // Add salary range filter
+      // Add salary range filter__
       if (filters.salaryRange[0] > 0 || filters.salaryRange[1] < 200000) {
         params.minSalary = filters.salaryRange[0].toString();
         params.maxSalary = filters.salaryRange[1].toString();
+      }
+
+      // Add user id__
+      if (user) {
+        params.userId = profile._id;
       }
 
       const response = await api.get(
@@ -84,7 +93,7 @@ const Jobs = () => {
     keepPreviousData: true, // Smooth pagination
   });
 
-  // Extract data from query result
+  // Extract data from query result__
   const jobs = jobsData?.data || [];
   const pagination = jobsData?.pagination || {
     currentPage: 1,
@@ -94,7 +103,7 @@ const Jobs = () => {
     hasPrev: false,
   };
 
-  // Handle search
+  // Handle search__
   const handleSearch = () => {
     setCurrentPage(1); // Reset to first page on new search
     // Query will auto-refetch because queryKey changed
