@@ -75,7 +75,7 @@
 }
 
 .ra_application-card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-1.5px);
   box-shadow: 0 12px 35px #3c8f6326;
   border-color: #3c8f6333;
 }
@@ -127,11 +127,6 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-}
-
-.ra_avatar-icon {
-  font-size: 1.5rem;
-  color: #3c8f63;
 }
 
 .ra_candidate-details {

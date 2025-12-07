@@ -1,13 +1,8 @@
+import "./RecApplications.css";
 import { useEffect, useState } from "react";
 import useAxios from "../../../../Hooks/Axios";
-import "./RecApplications.css";
-import {
-  FaUser,
-  FaMapMarkerAlt,
-  FaBriefcase,
-  FaClock,
-  FaEye,
-} from "react-icons/fa";
+import { FaMapMarkerAlt, FaBriefcase, FaClock, FaEye } from "react-icons/fa";
+import DigitalResume from "../../../../Components/DigitalResume/DigitalResume";
 
 const RecApplications = () => {
   const api = useAxios();
@@ -45,83 +40,97 @@ const RecApplications = () => {
   };
 
   return (
-    <section className="ra_section">
-      <div className="ra_container">
-        {/* Section Header */}
-        <div className="ra_header">
-          <h2 className="ra_header-title">
-            Recent <span className="ra_highlighted-text">Applications</span>
-          </h2>
-          <p className="ra_header-description">
-            Review and manage job applications from candidates. Stay updated
-            with new submissions.
-          </p>
-        </div>
+    <>
+      <DigitalResume></DigitalResume>
+      <section className="ra_section">
+        <div className="ra_container">
+          {/* Section Header */}
+          <div className="ra_header">
+            <h2 className="ra_header-title">
+              Recent <span className="ra_highlighted-text">Applications</span>
+            </h2>
+            <p className="ra_header-description">
+              Review and manage job applications from candidates. Stay updated
+              with new submissions.
+            </p>
+          </div>
 
-        {/* Applications List */}
-        <div className="ra_applications-list">
-          {applications.map((app) => (
-            <div key={app._id} className="ra_application-card">
-              {/* Status Badge */}
-              {/* <div className={`ra_status-badge ra_status-${app?.status}`}>
+          {/* Applications List */}
+          <div className="ra_applications-list">
+            {applications.map((app) => (
+              <div key={app._id} className="ra_application-card">
+                {/* Status Badge */}
+                {/* <div className={`ra_status-badge ra_status-${app?.status}`}>
                 {app?.status?.charAt(0)?.toUpperCase() + app?.status?.slice(1)}
               </div> */}
 
-              {/* Card Header - Candidate Info */}
-              <div className="ra_candidate-info">
-                <div className="ra_candidate-avatar">
-                  <img src={app.seekerImage} alt="image" className="rounded-md" />
+                {/* Card Header - Candidate Info */}
+                <div className="ra_candidate-info">
+                  <div className="ra_candidate-avatar">
+                    <img
+                      src={app.seekerImage}
+                      alt="image"
+                      className="rounded-md"
+                    />
+                  </div>
+                  <div className="ra_candidate-details">
+                    <h3 className="ra_candidate-name">{app?.seekerName}</h3>
+                    <div className="ra_candidate-meta">
+                      <span className="ra_candidate-title">
+                        <b>{app?.seekerProject}</b> Project Added
+                      </span>
+                      <span className="ra_candidate-experience">
+                        {app?.seekerExp} Experience Added
+                      </span>
+                    </div>
+                  </div>
                 </div>
-                <div className="ra_candidate-details">
-                  <h3 className="ra_candidate-name">{app?.seekerName}</h3>
-                  <div className="ra_candidate-meta">
-                    <span className="ra_candidate-title">
-                      <b>{app?.seekerProject}</b> Project Added
+
+                {/* Applied Job Info */}
+                <div className="ra_job-applied">
+                  <h4 className="ra_applied-job-title">
+                    <FaBriefcase className="ra_job-icon" />
+                    Applied for: {app?.positionName}
+                  </h4>
+                </div>
+
+                {/* Application Details */}
+                <div className="ra_application-details">
+                  <div className="ra_detail-item">
+                    <FaMapMarkerAlt className="ra_detail-icon" />
+                    <span>
+                      {app?.seekerLocation.city}, {app?.seekerLocation.country}
                     </span>
-                    <span className="ra_candidate-experience">
-                      {app?.seekerExp} Experience Added
+                  </div>
+                  <div className="ra_detail-item">
+                    <FaClock className="ra_detail-icon" />
+                    <span>{timeAgo(app.applyTime)}</span>
+                  </div>
+                  <div className="ra_detail-item">
+                    <span className="py-1 px-2 bg-red-500 text-white rounded-lg font-bold">
+                      New
                     </span>
                   </div>
                 </div>
-              </div>
 
-              {/* Applied Job Info */}
-              <div className="ra_job-applied">
-                <h4 className="ra_applied-job-title">
-                  <FaBriefcase className="ra_job-icon" />
-                  Applied for: {app?.positionName}
-                </h4>
-              </div>
-
-              {/* Application Details */}
-              <div className="ra_application-details">
-                <div className="ra_detail-item">
-                  <FaMapMarkerAlt className="ra_detail-icon" />
-                  <span>
-                    {app?.seekerLocation.city}, {app?.seekerLocation.country}
-                  </span>
-                </div>
-                <div className="ra_detail-item">
-                  <FaClock className="ra_detail-icon" />
-                  <span>{timeAgo(app.applyTime)}</span>
-                </div>
-                <div className="ra_detail-item">
-                  <span className="py-1 px-2 bg-red-500 text-white rounded-lg font-bold">New</span>
+                {/* Action Button */}
+                <div className="ra_card-footer">
+                  <button
+                    onClick={() =>
+                      document.getElementById("rec_digital_Resume").showModal()
+                    }
+                    className="ra_view-btn"
+                  >
+                    View Full Application
+                    <FaEye className="ra_btn-icon" />
+                  </button>
                 </div>
               </div>
-
-              {/* Action Button */}
-              <div className="ra_card-footer">
-                <button className="ra_view-btn">
-                  View Full Application
-                  <FaEye className="ra_btn-icon" />
-                </button>
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 };
 
