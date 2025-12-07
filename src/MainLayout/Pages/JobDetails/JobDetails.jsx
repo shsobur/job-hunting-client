@@ -8,10 +8,11 @@ import { RiProfileLine } from "react-icons/ri";
 import { Link, useLoaderData } from "react-router";
 import { IoLocationOutline } from "react-icons/io5";
 import JobApply from "../../../Components/JobApply/JobApply";
+import useUserData from "../../../Hooks/userData";
 
 const JobDetails = () => {
   const jobData = useLoaderData();
-  console.log(jobData);
+  const { profile } = useUserData();
 
   // Format total apply count__
   const formatTotalApply = (count) => {
@@ -105,12 +106,18 @@ const JobDetails = () => {
 
               <div className="jd_job-actions">
                 <button
+                  disabled={profile.userRole !== "Job Seeker"}
                   onClick={() =>
                     document.getElementById("job_apply_modal").showModal()
                   }
                   className="jd_apply-btn jd_primary-btn"
                 >
-                  <span className="jd_btn-text">Apply Now</span>
+                  <span className="jd_btn-text">
+                    {" "}
+                    {profile.userRole !== "Job Seeker"
+                      ? "Not Allowed"
+                      : "Apply Now"}
+                  </span>
                   <span className="jd_btn-icon">→</span>
                 </button>
                 <div className="jd_secondary-actions">
@@ -315,9 +322,14 @@ const JobDetails = () => {
                 </p>
               </div>
               <button
+                onClick={() =>
+                  document.getElementById("job_apply_modal").showModal()
+                }
                 className="jd_apply-btn-large jd_primary-btn"
                 disabled={
-                  !jobData?.openPositions || jobData?.openPositions === 0
+                  !jobData?.openPositions ||
+                  jobData?.openPositions === 0 ||
+                  profile.userRole !== "Job Seeker"
                 }
               >
                 <span className="jd_btn-text">

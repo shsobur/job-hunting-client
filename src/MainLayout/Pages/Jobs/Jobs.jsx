@@ -40,7 +40,7 @@ const Jobs = () => {
     "Executive Level",
   ];
 
-  // TanStack Query for fetching jobs
+  // TanStack Query for fetching jobs__
   const {
     data: jobsData,
     isLoading,
@@ -558,72 +558,80 @@ const FilterSidebar = ({
 };
 
 // JobCard Component__
-const JobCard = ({ job, formatSalary }) => (
-  <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-lg transition-all duration-300 hover:border-[#3c8f63] hover:border-opacity-30">
-    <div className="flex flex-col lg:flex-row lg:items-start gap-4 lg:gap-6">
-      {/* Company Logo and Basic Info */}
-      <div className="flex items-start gap-4 flex-1 min-w-0">
-        <div className="flex-shrink-0 w-16 h-16 bg-[#3c8f63] bg-opacity-10 rounded-xl flex items-center justify-center">
-          {job.companyLogo ? (
-            <img
-              src={job.companyLogo}
-              alt={job.companyName}
-              className="w-10 h-10 rounded-lg object-cover"
-            />
-          ) : (
-            <span className="text-2xl">💼</span>
-          )}
+const JobCard = ({ job, formatSalary }) => {
+  const { profile } = useUserData();
+
+  return (
+    <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-lg transition-all duration-300 hover:border-[#3c8f63] hover:border-opacity-30">
+      <div className="flex flex-col lg:flex-row lg:items-start gap-4 lg:gap-6">
+        {/* Company Logo and Basic Info */}
+        <div className="flex items-start gap-4 flex-1 min-w-0">
+          <div className="flex-shrink-0 w-16 h-16 bg-[#3c8f63] bg-opacity-10 rounded-xl flex items-center justify-center">
+            {job.companyLogo ? (
+              <img
+                src={job.companyLogo}
+                alt={job.companyName}
+                className="w-10 h-10 rounded-lg object-cover"
+              />
+            ) : (
+              <span className="text-2xl">💼</span>
+            )}
+          </div>
+
+          {/* Job Details */}
+          <div className="flex-1 min-w-0">
+            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-3">
+              <div className="flex-1 min-w-0">
+                <h3 className="text-xl font-bold text-gray-900 mb-1 line-clamp-1">
+                  {job.jobTitle}
+                </h3>
+                <p className="text-lg text-gray-700 font-medium mb-2">
+                  {job.companyName}
+                </p>
+              </div>
+            </div>
+
+            {/* Job Meta */}
+            <div className="flex flex-wrap gap-4 mb-4">
+              <div className="flex items-center gap-2 text-gray-700">
+                <FaBriefcase className="text-[#3c8f63] text-base" />
+                <span className="text-base font-medium">
+                  {job.workplaceType}
+                </span>
+              </div>
+              <div className="flex items-center gap-2 text-gray-700">
+                <FaStar className="text-[#3c8f63] text-base" />
+                <span className="text-base font-medium">
+                  {job.experienceLevel}
+                </span>
+              </div>
+              <div className="flex items-center gap-2 text-gray-700">
+                <FaMoneyBillWave className="text-[#3c8f63] text-base" />
+                <span className="text-base font-medium">
+                  {formatSalary(job)}
+                </span>
+              </div>
+            </div>
+
+            {/* Posted Date */}
+            <div className="flex items-center gap-2 text-gray-500 text-base">
+              <FaClock className="text-sm" />
+              <span>Posted {new Date(job.createdAt).toLocaleDateString()}</span>
+            </div>
+          </div>
         </div>
 
-        {/* Job Details */}
-        <div className="flex-1 min-w-0">
-          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-3">
-            <div className="flex-1 min-w-0">
-              <h3 className="text-xl font-bold text-gray-900 mb-1 line-clamp-1">
-                {job.jobTitle}
-              </h3>
-              <p className="text-lg text-gray-700 font-medium mb-2">
-                {job.companyName}
-              </p>
-            </div>
-          </div>
-
-          {/* Job Meta */}
-          <div className="flex flex-wrap gap-4 mb-4">
-            <div className="flex items-center gap-2 text-gray-700">
-              <FaBriefcase className="text-[#3c8f63] text-base" />
-              <span className="text-base font-medium">{job.workplaceType}</span>
-            </div>
-            <div className="flex items-center gap-2 text-gray-700">
-              <FaStar className="text-[#3c8f63] text-base" />
-              <span className="text-base font-medium">
-                {job.experienceLevel}
-              </span>
-            </div>
-            <div className="flex items-center gap-2 text-gray-700">
-              <FaMoneyBillWave className="text-[#3c8f63] text-base" />
-              <span className="text-base font-medium">{formatSalary(job)}</span>
-            </div>
-          </div>
-
-          {/* Posted Date */}
-          <div className="flex items-center gap-2 text-gray-500 text-base">
-            <FaClock className="text-sm" />
-            <span>Posted {new Date(job.createdAt).toLocaleDateString()}</span>
-          </div>
+        {/* Apply Button */}
+        <div className="flex-shrink-0 lg:self-center">
+          <Link to={`/job-details/${job._id}`}>
+            <button className="w-full lg:w-auto px-8 py-3 bg-[#3c8f63] text-white rounded-lg font-semibold hover:bg-[#2a6b4a] transition-colors text-base whitespace-nowrap shadow-sm hover:shadow-md">
+              {profile.userRole === "Job Seeker" ? "Apply Now" : "View"}
+            </button>
+          </Link>
         </div>
-      </div>
-
-      {/* Apply Button */}
-      <div className="flex-shrink-0 lg:self-center">
-        <Link to={`/job-details/${job._id}`}>
-          <button className="w-full lg:w-auto px-8 py-3 bg-[#3c8f63] text-white rounded-lg font-semibold hover:bg-[#2a6b4a] transition-colors text-base whitespace-nowrap shadow-sm hover:shadow-md">
-            Apply Now
-          </button>
-        </Link>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default Jobs;
