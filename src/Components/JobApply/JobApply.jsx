@@ -10,10 +10,10 @@ import {
   FaDollarSign,
 } from "react-icons/fa";
 import { AuthContext } from "../../Context/AuthContext";
-import { jhConfirm, jhError, jhSuccess, jhWarning } from "../../utils";
 import { useNavigate } from "react-router";
 import useUserData from "../../Hooks/userData";
 import useAxios from "../../Hooks/Axios";
+import { jhConfirm, jhError, jhSuccess, jhWarning } from "../../utils";
 
 const JobApply = ({ jobData }) => {
   const api = useAxios();
@@ -45,11 +45,18 @@ const JobApply = ({ jobData }) => {
     }
 
     const applyData = {
+      applyTime: new Date(),
       jobPostId: jobData._id,
-      seekerId: profile._id,
       resumeLink: resumeLink === "" ? "No link provide" : resumeLink,
-      applicantEmail: user.email,
       companyEmail: jobData.companyEmail,
+      applicantEmail: user.email,
+      positionName: jobData.position,
+      seekerId: profile._id,
+      seekerImage: profile.profilePhoto,
+      seekerName: profile.userName,
+      seekerExp: profile.experience.length,
+      seekerProject: profile.projects.length,
+      seekerLocation: profile.location
     };
 
     const seekerId = profile._id;

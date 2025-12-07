@@ -49,7 +49,7 @@ const Jobs = () => {
     refetch,
     isRefetching,
   } = useQuery({
-    queryKey: ["jobs", currentPage, searchInput, filters], // Cache key based on all parameters
+    queryKey: ["jobs", currentPage, searchInput, filters], // Cache key based on all parameters__
     queryFn: async () => {
       // Prepare API parameters
       const params = {
@@ -109,7 +109,7 @@ const Jobs = () => {
     // Query will auto-refetch because queryKey changed
   };
 
-  // Handle filter changes
+  // Handle filter changes__
   const handleWorkTypeChange = (type) => {
     const newWorkTypes = filters.workType.includes(type)
       ? filters.workType.filter((t) => t !== type)
@@ -126,12 +126,12 @@ const Jobs = () => {
     setFilters((prev) => ({ ...prev, experienceLevel: newExperienceLevels }));
   };
 
-  // Handle salary slider change
+  // Handle salary slider change__
   const handleSalaryChange = (newRange) => {
     setFilters((prev) => ({ ...prev, salaryRange: newRange }));
   };
 
-  // Apply filters
+  // Apply filters__
   const applyFilters = () => {
     setCurrentPage(1); // Reset to first page
     setIsFilterOpen(false);
@@ -147,7 +147,7 @@ const Jobs = () => {
     // Don't refetch immediately - let user click apply
   };
 
-  // Pagination handlers
+  // Pagination handlers__
   const goToPage = (page) => {
     if (page >= 1 && page <= pagination.totalPages) {
       setCurrentPage(page);
@@ -155,12 +155,12 @@ const Jobs = () => {
     }
   };
 
-  // Manual refresh
+  // Manual refresh__
   const handleRefresh = () => {
     refetch();
   };
 
-  // Format salary display
+  // Format salary display__
   const formatSalary = (job) => {
     if (job.salaryRange) {
       return `$${job.salaryRange.min.toLocaleString()} - $${job.salaryRange.max.toLocaleString()}/${
@@ -170,7 +170,7 @@ const Jobs = () => {
     return "Salary not specified";
   };
 
-  // Combined loading state
+  // Combined loading state__
   const loading = isLoading || isRefetching;
 
   return (
@@ -625,7 +625,7 @@ const JobCard = ({ job, formatSalary }) => {
         <div className="flex-shrink-0 lg:self-center">
           <Link to={`/job-details/${job._id}`}>
             <button className="w-full lg:w-auto px-8 py-3 bg-[#3c8f63] text-white rounded-lg font-semibold hover:bg-[#2a6b4a] transition-colors text-base whitespace-nowrap shadow-sm hover:shadow-md">
-              {profile.userRole === "Job Seeker" ? "Apply Now" : "View"}
+              {profile?.userRole === "Job Seeker" ? "Apply Now" : "View"}
             </button>
           </Link>
         </div>

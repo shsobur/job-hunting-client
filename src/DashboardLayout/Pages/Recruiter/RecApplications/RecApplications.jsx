@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+import useAxios from "../../../../Hooks/Axios";
 import "./RecApplications.css";
 import {
   FaUser,
@@ -8,53 +10,38 @@ import {
 } from "react-icons/fa";
 
 const RecApplications = () => {
-  // Mock data with different statuses and timestamps__
-  const applications = [
-    {
-      id: 1,
-      seekerName: "Alex Johnson",
-      seekerTitle: "Senior Frontend Developer",
-      seekerLocation: "San Francisco, CA",
-      appliedToJob: "Lead React Developer",
-      appliedTime: "2023-10-27T14:30:00Z",
-      status: "new",
-      experience: "8 years",
-      noticePeriod: "15 days",
-    },
-    {
-      id: 2,
-      seekerName: "Sam Rivera",
-      seekerTitle: "UX/UI Designer",
-      seekerLocation: "Remote",
-      appliedToJob: "Product Designer",
-      appliedTime: "2023-10-25T09:15:00Z",
-      status: "reviewed",
-      experience: "5 years",
-      noticePeriod: "30 days",
-    },
-    {
-      id: 3,
-      seekerName: "Morgan Lee",
-      seekerTitle: "Full Stack Engineer",
-      seekerLocation: "New York, NY",
-      appliedToJob: "Senior Software Engineer",
-      appliedTime: "2023-10-20T11:45:00Z",
-      status: "shortlisted",
-      experience: "6 years",
-      noticePeriod: "Immediate",
-    },
-  ];
+  const api = useAxios();
+  const [applications, setApplications] = useState([]);
 
-  // Helper to format time
-  const timeSince = (dateString) => {
-    const appliedDate = new Date(dateString);
+  useEffect(() => {
+    const applicationsData = async () => {
+      const res = await api.get("/recruiter-api/job-applications");
+      setApplications(res.data);
+    };
+    applicationsData();
+  }, [api]);
+
+  // Format time__
+  const timeAgo = (timestamp) => {
     const now = new Date();
-    const diffInHours = Math.floor((now - appliedDate) / (1000 * 60 * 60));
+    const past = new Date(timestamp);
 
-    if (diffInHours < 1) return "Just now";
-    if (diffInHours < 24) return `${diffInHours} hours ago`;
-    const diffInDays = Math.floor(diffInHours / 24);
-    return `${diffInDays} days ago`;
+    const seconds = Math.floor((now - past) / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+    const weeks = Math.floor(days / 7);
+    const months = Math.floor(days / 30);
+    const years = Math.floor(days / 365);
+
+    if (seconds < 60) return `${seconds} sec ago`;
+    if (minutes < 60) return `${minutes} min ago`;
+    if (hours < 24) return `${hours} hours ago`;
+    if (days < 7) return `${days} days ago`;
+    if (weeks < 4) return `${weeks} weeks ago`;
+    if (months < 12) return `${months} months ago`;
+
+    return `${years} years ago`;
   };
 
   return (
@@ -74,25 +61,25 @@ const RecApplications = () => {
         {/* Applications List */}
         <div className="ra_applications-list">
           {applications.map((app) => (
-            <div key={app.id} className="ra_application-card">
+            <div key={app._id} className="ra_application-card">
               {/* Status Badge */}
-              <div className={`ra_status-badge ra_status-${app.status}`}>
-                {app.status.charAt(0).toUpperCase() + app.status.slice(1)}
-              </div>
+              {/* <div className={`ra_status-badge ra_status-${app?.status}`}>
+                {app?.status?.charAt(0)?.toUpperCase() + app?.status?.slice(1)}
+              </div> */}
 
               {/* Card Header - Candidate Info */}
               <div className="ra_candidate-info">
                 <div className="ra_candidate-avatar">
-                  <FaUser className="ra_avatar-icon" />
+                  <img src={app.seekerImage} alt="image" className="rounded-md" />
                 </div>
                 <div className="ra_candidate-details">
-                  <h3 className="ra_candidate-name">{app.seekerName}</h3>
+                  <h3 className="ra_candidate-name">{app?.seekerName}</h3>
                   <div className="ra_candidate-meta">
                     <span className="ra_candidate-title">
-                      {app.seekerTitle}
+                      <b>{app?.seekerProject}</b> Project Added
                     </span>
                     <span className="ra_candidate-experience">
-                      {app.experience} experience
+                      {app?.seekerExp} Experience Added
                     </span>
                   </div>
                 </div>
@@ -102,7 +89,7 @@ const RecApplications = () => {
               <div className="ra_job-applied">
                 <h4 className="ra_applied-job-title">
                   <FaBriefcase className="ra_job-icon" />
-                  Applied for: {app.appliedToJob}
+                  Applied for: {app?.positionName}
                 </h4>
               </div>
 
@@ -110,15 +97,16 @@ const RecApplications = () => {
               <div className="ra_application-details">
                 <div className="ra_detail-item">
                   <FaMapMarkerAlt className="ra_detail-icon" />
-                  <span>{app.seekerLocation}</span>
+                  <span>
+                    {app?.seekerLocation.city}, {app?.seekerLocation.country}
+                  </span>
                 </div>
                 <div className="ra_detail-item">
                   <FaClock className="ra_detail-icon" />
-                  <span>{timeSince(app.appliedTime)}</span>
+                  <span>{timeAgo(app.applyTime)}</span>
                 </div>
                 <div className="ra_detail-item">
-                  <span className="ra_detail-label">Notice Period:</span>
-                  <span className="ra_detail-value">{app.noticePeriod}</span>
+                  <span className="py-1 px-2 bg-red-500 text-white rounded-lg font-bold">New</span>
                 </div>
               </div>
 
@@ -131,14 +119,6 @@ const RecApplications = () => {
               </div>
             </div>
           ))}
-        </div>
-
-        {/* Optional: View All CTA */}
-        <div className="ra_cta">
-          <button className="ra_view-all-btn">
-            View All Applications
-            <FaEye className="ra_btn-icon" />
-          </button>
         </div>
       </div>
     </section>
