@@ -1,98 +1,70 @@
 import { MdDescription, MdFlag, MdVisibility } from "react-icons/md";
 import SeekerModalHeader from "../../Shared/SeekerModalHeader/SeekerModalHeader";
+import { FaCheck, FaTimes } from "react-icons/fa";
+import DigitalResumeContent from "../DigitalResumeContent/DigitalResumeContent";
 
 const DigitalResume = () => {
+  const handleCloseModal = () => {
+    const modal = document.getElementById("rec_digital_Resume");
+    modal.close();
+  };
+
   return (
     <>
       <div>
         <dialog id="rec_digital_Resume" className="modal">
           <div className="modal-box max-w-[1024px] max-h-[95vh] flex flex-col p-0">
-            {/* Header */}
-            <SeekerModalHeader title="Update About Information" />
+            {/* Header - Standard Modal Header */}
+            <SeekerModalHeader
+              title="Digital Resume"
+              handleCloseModal={handleCloseModal}
+            />
 
-            {/* Scrollable Content */}
+            {/* Scrollable Content Area */}
             <div className="flex-1 overflow-y-auto">
-              <div className="px-6 py-4 space-y-6">
-                {/* About Us Section */}
-                <div className="space-y-4">
-                  <h3 className="flex items-center gap-3 text-xl font-semibold text-gray-800">
-                    About Your Company
-                  </h3>
+              {/* Main Content - Digital Resume will go here */}
+              <div className="p-6">
+                {/* Digital Resume Content Area */}
 
-                  <div className="space-y-2">
-                    <label className="flex items-center gap-2 font-medium text-gray-700 text-lg">
-                      <MdDescription className="text-gray-500" />
-                      Company Description
-                    </label>
-                    <textarea
-                      name="description"
-                      placeholder="Describe your company's history, values, and what makes it unique..."
-                      rows="9"
-                      className="textarea textarea-bordered w-full text-base border-2 border-gray-300 focus:border-[#3C8F63] focus:outline-none rounded-lg resize-none"
-                      maxLength={650}
-                    />
-                  </div>
+                <div className="mb-8">
+                  <DigitalResumeContent></DigitalResumeContent>
                 </div>
 
-                {/* Mission Section */}
-                <div className="space-y-4">
-                  <div className="space-y-2">
-                    <label className="flex items-center gap-2 font-medium text-gray-700 text-lg">
-                      <MdFlag className="text-gray-500" />
-                      Company Mission
-                    </label>
-                    <textarea
-                      name="mission"
-                      placeholder="State your company's core purpose and what it aims to achieve..."
-                      rows="3"
-                      className="textarea textarea-bordered w-full text-base border-2 border-gray-300 focus:border-[#3C8F63] focus:outline-none rounded-lg resize-none"
-                      maxLength={300}
-                    />
-                  </div>
-                </div>
-
-                {/* Vision Section */}
-                <div className="space-y-4">
-                  <div className="space-y-2">
-                    <label className="flex items-center gap-2 font-medium text-gray-700 text-lg">
-                      <MdVisibility className="text-gray-500" />
-                      Company Vision
-                    </label>
-                    <textarea
-                      name="vision"
-                      placeholder="Describe the future your company aspires to create..."
-                      rows="3"
-                      className="textarea textarea-bordered w-full text-base border-2 border-gray-300 focus:border-[#3C8F63] focus:outline-none rounded-lg resize-none"
-                      maxLength={300}
-                    />
-                  </div>
-                </div>
-
-                {/* Tip Box */}
+                {/* Standard Tip Box - Exactly as you provided */}
                 <div className="bg-green-50 border border-green-200 rounded-xl p-4">
                   <div className="flex items-start gap-3">
                     <MdDescription className="text-green-600 text-xl mt-0.5" />
                     <div className="text-green-800 text-base">
-                      <span className="font-semibold">Tip:</span> A compelling
-                      about section helps candidates understand your company
-                      culture and values. Keep it authentic and focused on what
-                      makes your company unique.
+                      <span className="font-semibold">Tip:</span> Review the
+                      candidate's resume thoroughly before making a decision.
+                      Check for relevant experience, skills, and qualifications
+                      that match your job requirements.
                     </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Action Buttons - Fixed at bottom */}
+            {/* Action Buttons Only */}
             <div className="border-t bg-gray-50 px-6 py-4">
               <div className="flex justify-end gap-3">
-                {/* Buttons_hear__ */}
+                {/* Reject Button */}
+                <button className="px-5 py-2.5 border border-gray-300 rounded-lg font-medium text-gray-700 hover:bg-red-50 hover:text-red-600 hover:border-red-200 active:bg-red-100 transition-all duration-200 flex items-center gap-2">
+                  <FaTimes className="h-4 w-4" />
+                  <span>Reject</span>
+                </button>
+
+                {/* Accept Button */}
+                <button className="px-5 py-2.5 bg-emerald-500 text-white rounded-lg font-medium hover:bg-emerald-600 active:bg-emerald-700 transition-all duration-200 flex items-center gap-2">
+                  <FaCheck className="h-4 w-4" />
+                  <span>Accept</span>
+                </button>
               </div>
             </div>
           </div>
 
-          {/* DaisyUI Modal Backdrop - Click to Close */}
-          <form method="dialog">
+          {/* Modal backdrop click to close */}
+          <form method="dialog" className="modal-backdrop">
             <button>close</button>
           </form>
         </dialog>
