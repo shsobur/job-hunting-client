@@ -55,7 +55,7 @@ const DigitalResume = () => {
                 </button>
 
                 {/* Accept Button */}
-                <button className="px-5 py-2.5 bg-emerald-500 text-white rounded-lg font-medium hover:bg-emerald-600 active:bg-emerald-700 transition-all duration-200 flex items-center gap-2">
+                <button className="px-5 py-2.5 bg-[#3c8f63] text-white rounded-lg font-medium hover:bg-emerald-600 active:bg-emerald-700 transition-all duration-200 flex items-center gap-2">
                   <FaCheck className="h-4 w-4" />
                   <span>Accept</span>
                 </button>

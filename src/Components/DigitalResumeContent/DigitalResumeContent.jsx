@@ -15,7 +15,7 @@ import {
   FaCode,
   FaFilePdf,
 } from "react-icons/fa";
-import { MdLanguage, MdVerified, MdDescription } from "react-icons/md";
+import { MdLanguage, MdVerified } from "react-icons/md";
 
 const DigitalResumeContent = ({ userData }) => {
   // State for expandable sections__
@@ -119,7 +119,7 @@ const DigitalResumeContent = ({ userData }) => {
     customResumeLink: "https://drive.google.com/file/d/example/view",
   };
 
-  // Helper functions
+  // Helper functions__
   const hasData = (data) => data && data.length > 0;
   const toggleProject = (index) => {
     setExpandedProjects((prev) => ({
@@ -129,11 +129,12 @@ const DigitalResumeContent = ({ userData }) => {
   };
 
   return (
-    <div className="digital-resume p-6 max-w-4xl mx-auto">
+    <div className="digital-resume p-2 max-w-4xl mx-auto">
       {/* Header Section with Bigger Image */}
       <div className="resume-header text-center mb-8 pb-8 border-b border-gray-200">
         <div className="flex flex-col items-center">
-          <div className="w-40 h-40 rounded-full overflow-hidden border-4 border-white shadow-xl mb-6">
+
+          <div className="w-52 h-52 rounded-full overflow-hidden border-4 border-white shadow-xl mb-6">
             <img
               src={resumeData.image}
               alt={resumeData.name}
@@ -148,19 +149,23 @@ const DigitalResumeContent = ({ userData }) => {
           </p>
 
           {/* Contact Info Row */}
-          <div className="flex flex-wrap justify-center gap-6 mt-4">
+          <div className="flex flex-wrap justify-center gap-8 mt-4">
+
             <div className="flex items-center gap-2 text-gray-600">
               <FaMapMarkerAlt className="text-[#3c8f63]" />
               <span>{resumeData.location}</span>
             </div>
+
             <div className="flex items-center gap-2 text-gray-600">
               <FaEnvelope className="text-[#3c8f63]" />
               <span>{resumeData.email}</span>
             </div>
+
             <div className="flex items-center gap-2 text-gray-600">
               <FaPhone className="text-[#3c8f63]" />
               <span>{resumeData.phone}</span>
             </div>
+
           </div>
 
           {/* Social Links */}
@@ -205,7 +210,7 @@ const DigitalResumeContent = ({ userData }) => {
       {/* Single Column Content */}
       <div className="space-y-8">
         {/* About Section */}
-        <section className="bg-gray-50 rounded-xl p-6">
+        <section className="bg-gray-100 rounded-xl p-3">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
               <MdVerified className="text-[#3c8f63]" />
@@ -298,7 +303,7 @@ const DigitalResumeContent = ({ userData }) => {
         {/* Skills & Languages Row */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Skills */}
-          <section className="bg-gray-50 rounded-xl p-6">
+          <section className="bg-gray-100 rounded-xl p-3">
             <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2 mb-4">
               <FaCode className="text-[#3c8f63]" />
               Skills
@@ -324,7 +329,7 @@ const DigitalResumeContent = ({ userData }) => {
           {/* Languages & Education */}
           <div className="space-y-6">
             {/* Languages */}
-            <section className="bg-gray-50 rounded-xl p-6">
+            <section className="bg-gray-100 rounded-xl p-3">
               <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2 mb-4">
                 <MdLanguage className="text-[#3c8f63]" />
                 Languages
@@ -353,7 +358,7 @@ const DigitalResumeContent = ({ userData }) => {
             </section>
 
             {/* Education */}
-            <section className="bg-gray-50 rounded-xl p-6">
+            <section className="bg-gray-100 rounded-xl p-3">
               <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2 mb-4">
                 <FaGraduationCap className="text-[#3c8f63]" />
                 Education
@@ -396,7 +401,7 @@ const DigitalResumeContent = ({ userData }) => {
               {resumeData.projects.map((project, index) => (
                 <div
                   key={index}
-                  className="border border-gray-200 rounded-xl p-6 hover:border-[#3c8f63] transition-colors"
+                  className="border border-gray-200 rounded-xl p-3 hover:border-[#3c8f63] transition-colors"
                 >
                   <div className="flex justify-between items-start mb-4">
                     <h3 className="text-lg font-semibold text-gray-900">
@@ -435,6 +440,7 @@ const DigitalResumeContent = ({ userData }) => {
                       ))}
                     </div>
                   )}
+                  <p className="mt-4 text-[#3c8f63] cursor-pointer"><u>Live Link</u> {"-->"}</p>
                 </div>
               ))}
             </div>
