@@ -3,11 +3,16 @@ import { useEffect, useState } from "react";
 import useAxios from "../../../../Hooks/Axios";
 import { FaMapMarkerAlt, FaBriefcase, FaClock, FaEye } from "react-icons/fa";
 import DigitalResume from "../../../../Components/DigitalResume/DigitalResume";
+import { jhToastError } from "../../../../utils";
 
 const RecApplications = () => {
   const api = useAxios();
   const [applications, setApplications] = useState([]);
+  const [clickedApp, setClickedApp] = useState([]);
+  const [appDataloading, setAppDataLoading] = useState(false);
+  console.log(applications);
 
+  // Get applications__
   useEffect(() => {
     const applicationsData = async () => {
       const res = await api.get("/recruiter-api/job-applications");
@@ -39,9 +44,26 @@ const RecApplications = () => {
     return `${years} years ago`;
   };
 
+  // Handle seeker data__
+  const handleSeekerData = async (seekerId) => {
+    setAppDataLoading(true);
+
+    if (!seekerId) {
+      jhToastError("This application have some problem!");
+      return
+    }
+
+    const res = await api.get(`/recruiter-api/resume-data/${seekerId}`)
+    if(res.status === 200) {
+      setClickedApp(res.data);
+      setAppDataLoading(false);
+      document.getElementById("rec_digital_Resume").showModal();
+    }
+  };
+
   return (
     <>
-      <DigitalResume></DigitalResume>
+      <DigitalResume clickedApp={clickedApp} resumeLink={applications.resumeLink}></DigitalResume>
       <section className="ra_section">
         <div className="ra_container">
           {/* Section Header */}
@@ -116,12 +138,12 @@ const RecApplications = () => {
                 {/* Action Button */}
                 <div className="ra_card-footer">
                   <button
-                    onClick={() =>
-                      document.getElementById("rec_digital_Resume").showModal()
-                    }
+                    disabled={appDataloading}
+                    onClick={() => handleSeekerData(app.seekerId)}
                     className="ra_view-btn"
                   >
-                    View Full Application
+                    {appDataloading ? "Prosing..." : "View Full Application"}
+
                     <FaEye className="ra_btn-icon" />
                   </button>
                 </div>

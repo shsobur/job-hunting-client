@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   FaMapMarkerAlt,
   FaEnvelope,
@@ -14,113 +14,23 @@ import {
   FaGraduationCap,
   FaCode,
   FaFilePdf,
+  FaLink,
 } from "react-icons/fa";
-import { MdLanguage, MdVerified } from "react-icons/md";
+import { MdLanguage, MdVerified, MdDescription } from "react-icons/md";
 
-const DigitalResumeContent = ({ userData }) => {
+const DigitalResumeContent = ({ clickedApp, resumeLink }) => {
   // State for expandable sections__
   const [expandedAbout, setExpandedAbout] = useState(false);
   const [expandedProjects, setExpandedProjects] = useState({});
 
-  // Mock data - Replace with actual props__
-  const resumeData = userData || {
-    // Personal Info
-    name: "Alex Johnson",
-    title: "Senior Frontend Developer",
-    image:
-      "https://res.cloudinary.com/dmfsmcy2y/image/upload/v1759741106/Job%20Hunting/udfo2zthr1rydxzvekfb.jpg",
-    about:
-      "Passionate frontend developer with 5+ years of experience building responsive web applications. Specialized in React, TypeScript, and modern JavaScript. Strong advocate for clean code, UX best practices, and collaborative development. Always eager to learn new technologies and tackle challenging problems.",
-
-    // Contact Info
-    location: "San Francisco, CA, USA",
-    email: "alex.johnson@example.com",
-    phone: "+1 (555) 123-4567",
-
-    // Social Links
-    social: {
-      linkedin: "https://linkedin.com/in/alexjohnson",
-      github: "https://github.com/alexjohnson",
-      portfolio: "https://alexjohnson.dev",
-    },
-
-    // Languages
-    languages: ["English (Fluent)", "Spanish (Intermediate)", "French (Basic)"],
-
-    // Experience
-    experience: [
-      {
-        company: "Ollyo",
-        position: "Front End Developer",
-        isCurrent: true,
-        startDate: "2021",
-        endDate: "Present",
-        location: "Bangladesh, Dhaka, Mirpur 12",
-        description:
-          "Leading frontend development for multiple client projects. Implementing responsive designs, optimizing performance, and mentoring junior developers.",
-      },
-      {
-        company: "Suck",
-        position: "Jr. Front End Developer",
-        isCurrent: false,
-        startDate: "2019",
-        endDate: "2020",
-        location: "Bangladesh, Dhaka, Bonani",
-        description:
-          "Developed and maintained client websites using React and Node.js. Collaborated with design team to implement pixel-perfect UI components.",
-      },
-    ],
-
-    // Education
-    education: [
-      {
-        institution: "PDB Secondary High School",
-        degree: "Science",
-        startYear: "2012",
-        endYear: "2021",
-      },
-    ],
-
-    // Skills
-    skills: [
-      "React",
-      "TypeScript",
-      "JavaScript",
-      "Node.js",
-      "HTML5",
-      "CSS3",
-      "Tailwind CSS",
-      "MongoDB",
-      "Git",
-    ],
-
-    // Projects
-    projects: [
-      {
-        name: "Study Group Platform",
-        description:
-          "A collaborative learning platform for students to create and join study groups. Features real-time chat, resource sharing, and scheduling.",
-        techStack: ["React", "Node.js", "Express.js", "MongoDB", "Socket.io"],
-        fullDescription:
-          "Uniquely simplify emerging sources for long-term high-impact applications. Conveniently harness multimedia based technologies after maintainable communities. Continually evisculate global products through frictionless solutions. Appropriately negotiate.",
-      },
-    ],
-
-    // Certifications
-    certifications: [
-      {
-        name: "AWS Certified Developer",
-        issuer: "Amazon Web Services",
-        year: "2022",
-      },
-    ],
-
-    // Custom Resume Link
-    customResumeLink: "https://drive.google.com/file/d/example/view",
+  // Helper functions__
+  const hasData = (data) => {
+    if (Array.isArray(data)) return data && data.length > 0;
+    if (typeof data === "object") return data && Object.keys(data).length > 0;
+    if (typeof data === "string") return data && data.trim().length > 0;
+    return !!data;
   };
 
-  // Helper functions__
-  const hasData = (data) => data && data.length > 0;
   const toggleProject = (index) => {
     setExpandedProjects((prev) => ({
       ...prev,
@@ -128,48 +38,167 @@ const DigitalResumeContent = ({ userData }) => {
     }));
   };
 
+  // If no data passed, show empty state
+  if (!clickedApp || !clickedApp._id) {
+    return (
+      <div className="digital-resume p-2 max-w-4xl mx-auto">
+        <div className="text-center py-16">
+          <MdVerified className="text-6xl text-gray-300 mx-auto mb-4" />
+          <h3 className="text-xl font-semibold text-gray-600 mb-2">
+            No Resume Data Available
+          </h3>
+          <p className="text-gray-500">Candidate data could not be loaded.</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Map the JSON data to our component structure
+  const userData = clickedApp;
+
+  // Extract and transform data
+  const resumeData = {
+    // Personal Info
+    name: userData.userName || "Not Provided",
+    title: userData.bio || userData.headline?.split("\n")[0] || "Job Seeker",
+    image: userData.profilePhoto || "https://via.placeholder.com/150",
+    about: userData.headline || userData.bio || "",
+
+    // Contact Info
+    location: userData.location
+      ? `${userData.location.city || ""}, ${userData.location.country || ""}`
+          .trim()
+          .replace(/^, |, $/g, "")
+      : "Location not specified",
+    email: userData.userEmail || "Email not provided",
+    phone: userData.number || "Phone not provided",
+
+    // Social Links
+    social: userData.social || {},
+
+    // Languages - Transform array of objects to display strings
+    languages: userData.languages
+      ? userData.languages.map((lang) =>
+          `${lang.name || ""} (${lang.proficiency || ""})`.trim()
+        )
+      : [],
+
+    // Experience - Use experience array if available
+    experience: userData.experience || userData.expData || [],
+
+    // Education
+    education: userData.education || [],
+
+    // Skills
+    skills: userData.skills || [],
+
+    // Projects
+    projects: userData.projects
+      ? userData.projects.map((proj) => ({
+          name: proj.title || "Untitled Project",
+          description: proj.description || "",
+          fullDescription: proj.description || "",
+          techStack: proj.skills || [],
+          projectLink: proj.projectLink || "",
+        }))
+      : [],
+
+    // Certifications
+    certifications: userData.certifications || [],
+
+    // Custom Resume Link (if any - you might need to add this field)
+    customResumeLink: resumeLink === "No link provide" ? "" : resumeLink,
+  };
+
+  // Calculate experience years
+  const calculateExperienceYears = () => {
+    if (!hasData(resumeData.experience)) return "0";
+
+    try {
+      const years = resumeData.experience
+        .map((exp) => {
+          const start = parseInt(exp.startDate) || new Date().getFullYear();
+          const end =
+            exp.endDate === "Present"
+              ? new Date().getFullYear()
+              : parseInt(exp.endDate) || new Date().getFullYear();
+          return end - start;
+        })
+        .reduce((acc, val) => acc + val, 0);
+
+      return Math.max(1, years);
+    } catch {
+      return "several";
+    }
+  };
+
+  // Format date range
+  const formatDateRange = (start, end) => {
+    if (!start && !end) return "Date not specified";
+    if (end === "Present") return `${start || ""} - Present`;
+    return `${start || ""} - ${end || ""}`;
+  };
+
   return (
     <div className="digital-resume p-2 max-w-4xl mx-auto">
       {/* Header Section with Bigger Image */}
       <div className="resume-header text-center mb-8 pb-8 border-b border-gray-200">
         <div className="flex flex-col items-center">
-
-          <div className="w-52 h-52 rounded-full overflow-hidden border-4 border-white shadow-xl mb-6">
+          {/* Profile Image */}
+          <div className="w-52 h-52 rounded-full overflow-hidden border-4 border-white shadow-xl mb-6 bg-gray-100">
             <img
               src={resumeData.image}
               alt={resumeData.name}
               className="w-full h-full object-cover"
+              onError={(e) => {
+                e.target.src = "https://via.placeholder.com/150";
+              }}
             />
           </div>
+
+          {/* Name and Title */}
           <h1 className="text-3xl font-bold text-gray-900">
             {resumeData.name}
           </h1>
           <p className="text-xl text-[#3c8f63] font-semibold mt-2">
             {resumeData.title}
           </p>
+          <p className="text-gray-500 text-sm mt-1">
+            {calculateExperienceYears()}+ years experience
+          </p>
 
           {/* Contact Info Row */}
           <div className="flex flex-wrap justify-center gap-8 mt-4">
+            {/* Location */}
+            {hasData(resumeData.location) &&
+              resumeData.location !== "Location not specified" && (
+                <div className="flex items-center gap-2 text-gray-600">
+                  <FaMapMarkerAlt className="text-[#3c8f63]" />
+                  <span>{resumeData.location}</span>
+                </div>
+              )}
 
-            <div className="flex items-center gap-2 text-gray-600">
-              <FaMapMarkerAlt className="text-[#3c8f63]" />
-              <span>{resumeData.location}</span>
-            </div>
+            {/* Email */}
+            {hasData(resumeData.email) &&
+              resumeData.email !== "Email not provided" && (
+                <div className="flex items-center gap-2 text-gray-600">
+                  <FaEnvelope className="text-[#3c8f63]" />
+                  <span>{resumeData.email}</span>
+                </div>
+              )}
 
-            <div className="flex items-center gap-2 text-gray-600">
-              <FaEnvelope className="text-[#3c8f63]" />
-              <span>{resumeData.email}</span>
-            </div>
-
-            <div className="flex items-center gap-2 text-gray-600">
-              <FaPhone className="text-[#3c8f63]" />
-              <span>{resumeData.phone}</span>
-            </div>
-
+            {/* Phone */}
+            {hasData(resumeData.phone) &&
+              resumeData.phone !== "Phone not provided" && (
+                <div className="flex items-center gap-2 text-gray-600">
+                  <FaPhone className="text-[#3c8f63]" />
+                  <span>{resumeData.phone}</span>
+                </div>
+              )}
           </div>
 
           {/* Social Links */}
-          <div className="flex justify-center gap-4 mt-4">
+          <div className="flex justify-center gap-4 mt-4 flex-wrap">
             {resumeData.social.linkedin && (
               <a
                 href={resumeData.social.linkedin}
@@ -209,14 +238,14 @@ const DigitalResumeContent = ({ userData }) => {
 
       {/* Single Column Content */}
       <div className="space-y-8">
-        {/* About Section */}
+        {/* About/Summary Section */}
         <section className="bg-gray-100 rounded-xl p-3">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
               <MdVerified className="text-[#3c8f63]" />
               Professional Summary
             </h2>
-            {resumeData.about && resumeData.about.length > 200 && (
+            {hasData(resumeData.about) && resumeData.about.length > 200 && (
               <button
                 onClick={() => setExpandedAbout(!expandedAbout)}
                 className="text-sm text-[#3c8f63] hover:text-[#2a6b4a] flex items-center gap-1"
@@ -230,20 +259,22 @@ const DigitalResumeContent = ({ userData }) => {
               </button>
             )}
           </div>
-          {resumeData.about ? (
-            <p className="text-gray-700 leading-relaxed">
+          {hasData(resumeData.about) ? (
+            <div className="text-gray-700 leading-relaxed whitespace-pre-line">
               {expandedAbout || resumeData.about.length <= 200
                 ? resumeData.about
                 : `${resumeData.about.substring(0, 200)}...`}
-            </p>
+            </div>
           ) : (
-            <p className="text-gray-500 italic">
-              No summary provided by the candidate.
-            </p>
+            <div className="text-center py-4">
+              <p className="text-gray-500 italic">
+                No professional summary provided.
+              </p>
+            </div>
           )}
         </section>
 
-        {/* Experience */}
+        {/* Experience Section */}
         <section>
           <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2 mb-6">
             <FaBriefcase className="text-[#3c8f63]" />
@@ -260,33 +291,43 @@ const DigitalResumeContent = ({ userData }) => {
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-2">
                     <div>
                       <h3 className="text-lg font-semibold text-gray-900">
-                        {exp.position}
+                        {exp.position || "Position not specified"}
                       </h3>
-                      <p className="text-gray-700 font-medium">{exp.company}</p>
+                      <p className="text-gray-700 font-medium">
+                        {exp.company || "Company not specified"}
+                      </p>
                     </div>
-                    <span
-                      className={`px-3 py-1 rounded-full text-sm font-medium mt-2 sm:mt-0 ${
-                        exp.isCurrent
-                          ? "bg-green-100 text-green-800"
-                          : "bg-gray-100 text-gray-800"
-                      }`}
-                    >
-                      {exp.isCurrent ? "Current" : "Previous"}
-                    </span>
+                    {exp.isCurrent !== undefined && (
+                      <span
+                        className={`px-3 py-1 rounded-full text-sm font-medium mt-2 sm:mt-0 ${
+                          exp.isCurrent
+                            ? "bg-green-100 text-green-800"
+                            : "bg-gray-100 text-gray-800"
+                        }`}
+                      >
+                        {exp.isCurrent ? "Current" : "Previous"}
+                      </span>
+                    )}
                   </div>
 
                   <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500 mt-2">
                     <span className="flex items-center gap-1">
                       <FaCalendar className="text-xs" />
-                      {exp.startDate} - {exp.endDate}
+                      {formatDateRange(exp.startDate, exp.endDate)}
                     </span>
-                    <span className="flex items-center gap-1">
-                      <FaMapMarkerAlt className="text-xs" />
-                      {exp.location}
-                    </span>
+                    {exp.location && (
+                      <span className="flex items-center gap-1">
+                        <FaMapMarkerAlt className="text-xs" />
+                        {exp.location}
+                      </span>
+                    )}
                   </div>
 
-                  <p className="text-gray-600 mt-4">{exp.description}</p>
+                  {hasData(exp.description) && (
+                    <p className="text-gray-600 mt-4 whitespace-pre-line">
+                      {exp.description}
+                    </p>
+                  )}
                 </div>
               ))}
             </div>
@@ -302,7 +343,7 @@ const DigitalResumeContent = ({ userData }) => {
 
         {/* Skills & Languages Row */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Skills */}
+          {/* Skills Section */}
           <section className="bg-gray-100 rounded-xl p-3">
             <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2 mb-4">
               <FaCode className="text-[#3c8f63]" />
@@ -320,15 +361,17 @@ const DigitalResumeContent = ({ userData }) => {
                 ))}
               </div>
             ) : (
-              <p className="text-gray-500 italic">
-                No skills information provided.
-              </p>
+              <div className="text-center py-4">
+                <p className="text-gray-500 italic">
+                  No skills information provided.
+                </p>
+              </div>
             )}
           </section>
 
-          {/* Languages & Education */}
+          {/* Languages & Education Column */}
           <div className="space-y-6">
-            {/* Languages */}
+            {/* Languages Section */}
             <section className="bg-gray-100 rounded-xl p-3">
               <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2 mb-4">
                 <MdLanguage className="text-[#3c8f63]" />
@@ -342,7 +385,7 @@ const DigitalResumeContent = ({ userData }) => {
                       className="flex items-center justify-between"
                     >
                       <span className="text-gray-700">
-                        {lang.split("(")[0].trim()}
+                        {lang.split("(")[0].trim() || "Language"}
                       </span>
                       <span className="text-sm text-gray-500">
                         {lang.match(/\(([^)]+)\)/)?.[1] || ""}
@@ -351,13 +394,15 @@ const DigitalResumeContent = ({ userData }) => {
                   ))}
                 </div>
               ) : (
-                <p className="text-gray-500 italic">
-                  No languages information provided.
-                </p>
+                <div className="text-center py-4">
+                  <p className="text-gray-500 italic">
+                    No languages information provided.
+                  </p>
+                </div>
               )}
             </section>
 
-            {/* Education */}
+            {/* Education Section */}
             <section className="bg-gray-100 rounded-xl p-3">
               <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2 mb-4">
                 <FaGraduationCap className="text-[#3c8f63]" />
@@ -368,28 +413,37 @@ const DigitalResumeContent = ({ userData }) => {
                   {resumeData.education.map((edu, index) => (
                     <div key={index}>
                       <h3 className="font-semibold text-gray-900">
-                        {edu.institution}
+                        {edu.institute || "Institution not specified"}
                       </h3>
-                      <p className="text-gray-700">{edu.degree}</p>
+                      <p className="text-gray-700">
+                        {edu.department || "Field of study not specified"}
+                      </p>
                       <div className="flex items-center gap-2 text-sm text-gray-500 mt-1">
                         <FaCalendar className="text-xs" />
                         <span>
-                          {edu.startYear} - {edu.endYear}
+                          {formatDateRange(edu.startYear, edu.endYear)}
                         </span>
+                        {edu.level && (
+                          <span className="ml-2 px-2 py-0.5 bg-gray-200 rounded text-xs">
+                            {edu.level}
+                          </span>
+                        )}
                       </div>
                     </div>
                   ))}
                 </div>
               ) : (
-                <p className="text-gray-500 italic">
-                  No education information provided.
-                </p>
+                <div className="text-center py-4">
+                  <p className="text-gray-500 italic">
+                    No education information provided.
+                  </p>
+                </div>
               )}
             </section>
           </div>
         </div>
 
-        {/* Projects */}
+        {/* Projects Section */}
         <section>
           <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2 mb-6">
             <FaCode className="text-[#3c8f63]" />
@@ -407,24 +461,30 @@ const DigitalResumeContent = ({ userData }) => {
                     <h3 className="text-lg font-semibold text-gray-900">
                       {project.name}
                     </h3>
-                    <button
-                      onClick={() => toggleProject(index)}
-                      className="text-sm text-[#3c8f63] hover:text-[#2a6b4a] flex items-center gap-1"
-                    >
-                      {expandedProjects[index] ? "Show Less" : "Show Details"}
-                      {expandedProjects[index] ? (
-                        <FaChevronUp className="text-xs" />
-                      ) : (
-                        <FaChevronDown className="text-xs" />
+                    {hasData(project.description) &&
+                      project.description.length > 150 && (
+                        <button
+                          onClick={() => toggleProject(index)}
+                          className="text-sm text-[#3c8f63] hover:text-[#2a6b4a] flex items-center gap-1"
+                        >
+                          {expandedProjects[index]
+                            ? "Show Less"
+                            : "Show Details"}
+                          {expandedProjects[index] ? (
+                            <FaChevronUp className="text-xs" />
+                          ) : (
+                            <FaChevronDown className="text-xs" />
+                          )}
+                        </button>
                       )}
-                    </button>
                   </div>
 
-                  <p className="text-gray-700 mb-4">{project.description}</p>
-
-                  {expandedProjects[index] && project.fullDescription && (
-                    <div className="mt-4 pt-4 border-t border-gray-200">
-                      <p className="text-gray-600">{project.fullDescription}</p>
+                  {hasData(project.description) && (
+                    <div className="text-gray-700 mb-4 whitespace-pre-line">
+                      {expandedProjects[index] ||
+                      project.description.length <= 150
+                        ? project.description
+                        : `${project.description.substring(0, 150)}...`}
                     </div>
                   )}
 
@@ -440,7 +500,19 @@ const DigitalResumeContent = ({ userData }) => {
                       ))}
                     </div>
                   )}
-                  <p className="mt-4 text-[#3c8f63] cursor-pointer"><u>Live Link</u> {"-->"}</p>
+
+                  {project.projectLink && (
+                    <a
+                      href={project.projectLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-4 flex items-center gap-2 text-[#3c8f63] hover:text-[#2a6b4a] cursor-pointer"
+                    >
+                      <FaLink className="text-sm" />
+                      <span className="underline">Live Link</span>
+                      <FaExternalLinkAlt className="text-xs" />
+                    </a>
+                  )}
                 </div>
               ))}
             </div>
@@ -452,7 +524,7 @@ const DigitalResumeContent = ({ userData }) => {
           )}
         </section>
 
-        {/* Certifications */}
+        {/* Certifications Section */}
         <section>
           <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2 mb-6">
             <MdVerified className="text-[#3c8f63]" />
@@ -470,19 +542,26 @@ const DigitalResumeContent = ({ userData }) => {
                     <MdVerified className="text-[#3c8f63] text-2xl" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-900">{cert.name}</h4>
-                    <p className="text-gray-600">{cert.issuer}</p>
-                    <p className="text-sm text-gray-500 mt-1">
-                      Issued {cert.year}
-                    </p>
+                    <h4 className="font-semibold text-gray-900">
+                      {cert.name || "Certification"}
+                    </h4>
+                    {cert.issuer && (
+                      <p className="text-gray-600">{cert.issuer}</p>
+                    )}
+                    {cert.year && (
+                      <p className="text-sm text-gray-500 mt-1">
+                        Issued {cert.year}
+                      </p>
+                    )}
                   </div>
                 </div>
               ))}
             </div>
           ) : (
-            <p className="text-gray-500 italic text-center py-4">
-              No certifications provided.
-            </p>
+            <div className="text-center py-8 border-2 border-dashed border-gray-200 rounded-xl">
+              <MdVerified className="text-4xl text-gray-300 mx-auto mb-3" />
+              <p className="text-gray-500">No certifications provided.</p>
+            </div>
           )}
         </section>
 
@@ -500,7 +579,7 @@ const DigitalResumeContent = ({ userData }) => {
                 </p>
               </div>
 
-              {resumeData.customResumeLink ? (
+              {hasData(resumeData.customResumeLink) ? (
                 <a
                   href={resumeData.customResumeLink}
                   target="_blank"

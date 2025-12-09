@@ -3,7 +3,8 @@ import SeekerModalHeader from "../../Shared/SeekerModalHeader/SeekerModalHeader"
 import { FaCheck, FaTimes } from "react-icons/fa";
 import DigitalResumeContent from "../DigitalResumeContent/DigitalResumeContent";
 
-const DigitalResume = () => {
+const DigitalResume = ({clickedApp, resumeLink}) => {
+
   const handleCloseModal = () => {
     const modal = document.getElementById("rec_digital_Resume");
     modal.close();
@@ -27,7 +28,7 @@ const DigitalResume = () => {
                 {/* Digital Resume Content Area */}
 
                 <div className="mb-8">
-                  <DigitalResumeContent></DigitalResumeContent>
+                  <DigitalResumeContent clickedApp={clickedApp} resumeLink={resumeLink}></DigitalResumeContent>
                 </div>
 
                 {/* Standard Tip Box - Exactly as you provided */}
