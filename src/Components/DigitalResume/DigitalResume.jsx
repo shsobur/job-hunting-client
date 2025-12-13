@@ -1,4 +1,4 @@
-import { MdDescription, MdFlag, MdVisibility } from "react-icons/md";
+import { MdDescription } from "react-icons/md";
 import SeekerModalHeader from "../../Shared/SeekerModalHeader/SeekerModalHeader";
 import { FaCheck, FaTimes } from "react-icons/fa";
 import DigitalResumeContent from "../DigitalResumeContent/DigitalResumeContent";

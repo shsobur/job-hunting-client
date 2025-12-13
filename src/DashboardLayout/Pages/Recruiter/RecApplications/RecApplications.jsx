@@ -10,7 +10,6 @@ const RecApplications = () => {
   const [applications, setApplications] = useState([]);
   const [clickedApp, setClickedApp] = useState([]);
   const [appDataloading, setAppDataLoading] = useState(false);
-  console.log(applications);
 
   // Get applications__
   useEffect(() => {

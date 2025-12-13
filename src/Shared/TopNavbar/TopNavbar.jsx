@@ -2,12 +2,12 @@ import {
   FiUser,
   FiBell,
   FiMenu,
-  FiBarChart2,
   FiLogOut,
   FiChevronUp,
   FiChevronDown,
 } from "react-icons/fi";
-import { NavLink } from "react-router";
+import { Link, NavLink } from "react-router";
+import { TbMessage } from "react-icons/tb";
 
 const TopNavbar = ({
   profile,
@@ -15,11 +15,14 @@ const TopNavbar = ({
   dropdownRef,
   sidebarOpen,
   setSidebarOpen,
-  notificationOpen,
-  setNotificationOpen,
   profileDropdownOpen,
   setProfileDropdownOpen,
 }) => {
+  const role = profile?.userRole;
+  const recTo = "/dashboard/recruiter-chat";
+  const adminTo = "/dashboard/admin-chat";
+  const userTo = "/dashboard/user-chat";
+
   return (
     <>
       {/* TOP NAVBAR - Like your main site navbar */}
@@ -69,30 +72,34 @@ const TopNavbar = ({
                 // Skeleton for notification button
                 <div className="w-10 h-10 bg-gray-200 rounded-xl animate-pulse"></div>
               ) : (
-                <button
-                  onClick={() => setNotificationOpen(!notificationOpen)}
-                  className="p-2 text-gray-600 hover:text-[#3C8F63] rounded-xl hover:bg-gray-50 relative transition-colors duration-200 border-2 border-gray-200"
+                <NavLink
+                  to={
+                    role === "Admin"
+                      ? adminTo
+                      : role === "Recruiter"
+                      ? recTo
+                      : role === "Job Seeker"
+                      ? userTo
+                      : ""
+                  }
                 >
-                  <FiBell size={20} />
-                  <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-white"></span>
-                </button>
-              )}
-
-              {notificationOpen && (
-                <div className="absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-lg border-2 border-gray-200 py-2 z-50">
-                  <div className="px-4 py-3 border-b-2 border-gray-100">
-                    <h3 className="text-sm font-semibold text-gray-700">
-                      Notifications
-                    </h3>
-                  </div>
-                  <div className="py-2">
-                    <div className="px-4 py-3 hover:bg-gray-50 border-b-2 border-gray-100">
-                      <p className="text-sm text-gray-700">
-                        No new notifications
-                      </p>
-                    </div>
-                  </div>
-                </div>
+                  {({ isActive }) => (
+                    <button
+                      className={`
+      p-2 rounded-xl relative transition-all duration-200 border-2 ease-in-out
+      flex items-center justify-center
+      ${
+        isActive
+          ? "text-white bg-[#3C8F63] border-[#3C8F63] shadow-md"
+          : "text-gray-600 border-gray-200 hover:text-[#3C8F63] hover:border-[#3C8F63] hover:bg-gray-50"
+      }
+    `}
+                    >
+                      <TbMessage size={20} />
+                      <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-white"></span>
+                    </button>
+                  )}
+                </NavLink>
               )}
             </div>
 

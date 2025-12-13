@@ -16,6 +16,8 @@ import VerifyCompany from "../DashboardLayout/Pages/Admin/VerifyCompany/VerifyCo
 import Jobs from "../MainLayout/Pages/Jobs/Jobs";
 import JobDetails from "../MainLayout/Pages/JobDetails/JobDetails";
 import RecApplications from "../DashboardLayout/Pages/Recruiter/RecApplications/RecApplications";
+import Chat from "../DashboardLayout/Pages/Chat/Chat";
+import UserOverview from "../DashboardLayout/Pages/JobSeeker/UserOverview/UserOverview";
 
 const router = createBrowserRouter([
   {
@@ -42,9 +44,7 @@ const router = createBrowserRouter([
         path: "/job-details/:id",
         element: <JobDetails></JobDetails>,
         loader: ({ params }) =>
-          fetch(
-            `http://localhost:5000/common-api/job-details/${params.id}`
-          ),
+          fetch(`http://localhost:5000/common-api/job-details/${params.id}`),
       },
       {
         path: "/recruiter-profile",
@@ -78,7 +78,12 @@ const router = createBrowserRouter([
         element: <VerifyCompany></VerifyCompany>,
       },
 
-      // Recruiter__
+      {
+        path: "/dashboard/admin-chat",
+        element: <Chat></Chat>,
+      },
+
+      // Recruiter routes__
       {
         path: "/dashboard/recruiter-overview",
         element: <RecOverview></RecOverview>,
@@ -89,7 +94,20 @@ const router = createBrowserRouter([
       },
       {
         path: "/dashboard/recruiter-job-applications",
-        element: <RecApplications></RecApplications>
+        element: <RecApplications></RecApplications>,
+      },
+      {
+        path: "/dashboard/recruiter-chat",
+        element: <Chat></Chat>,
+      },
+      // User route__
+      {
+        path: "/dashboard/user-overview",
+        element: <UserOverview></UserOverview>,
+      },
+      {
+        path: "/dashboard/user-chat",
+        element: <Chat></Chat>,
       },
     ],
   },

@@ -3,7 +3,6 @@ import {
   FiBriefcase,
   FiSettings,
   FiUsers,
-  FiSearch,
   FiX,
 } from "react-icons/fi";
 import { MdOutlineContactPage } from "react-icons/md";
@@ -72,6 +71,12 @@ const SidebarNav = ({
           id: "overview",
           path: "/dashboard/user-overview",
           label: "Overview",
+          icon: <FiHome size={20} />,
+        },
+        {
+          id: "application",
+          path: "/dashboard/user-applications",
+          label: "My Applications",
           icon: <FiHome size={20} />,
         },
       ],

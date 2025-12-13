@@ -16,7 +16,7 @@ import {
   FaFilePdf,
   FaLink,
 } from "react-icons/fa";
-import { MdLanguage, MdVerified, MdDescription } from "react-icons/md";
+import { MdLanguage, MdVerified } from "react-icons/md";
 
 const DigitalResumeContent = ({ clickedApp, resumeLink }) => {
   // State for expandable sections__
@@ -38,7 +38,7 @@ const DigitalResumeContent = ({ clickedApp, resumeLink }) => {
     }));
   };
 
-  // If no data passed, show empty state
+  // If no data passed, show empty state__
   if (!clickedApp || !clickedApp._id) {
     return (
       <div className="digital-resume p-2 max-w-4xl mx-auto">
