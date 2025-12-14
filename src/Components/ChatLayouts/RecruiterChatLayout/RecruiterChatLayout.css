@@ -1,0 +1,454 @@
+/* Recruiter Chat Layout Container */
+.rcl-container {
+  display: flex;
+  height: 700px;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Sidebar Styles */
+.rcl-sidebar {
+  width: 350px;
+  border-right: 1px solid #e1e5e9;
+  display: flex;
+  flex-direction: column;
+}
+
+.rcl-sidebar-header {
+  padding: 20px;
+  border-bottom: 1px solid #e1e5e9;
+}
+
+.rcl-title {
+  color: #2d3748;
+  margin-bottom: 10px;
+  font-size: 1.5rem;
+}
+
+.rcl-stats {
+  display: flex;
+  gap: 15px;
+}
+
+.rcl-stat-item {
+  padding: 5px 12px;
+  background: #edf2f7;
+  color: #4a5568;
+  border-radius: 15px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* Applicants List */
+.rcl-applicants-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
+}
+
+.rcl-applicant-card {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid transparent;
+}
+
+.rcl-applicant-card:hover {
+  background: #f7fafc;
+}
+
+.rcl-applicant-card.rcl-selected {
+  background: #f0fff4;
+  border-color: #48bb78;
+}
+
+.rcl-applicant-avatar {
+  width: 50px;
+  height: 50px;
+  background: #4a5568;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  margin-right: 15px;
+  flex-shrink: 0;
+}
+
+.rcl-applicant-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.rcl-applicant-name {
+  color: #2d3748;
+  font-size: 1rem;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rcl-applicant-job {
+  color: #718096;
+  font-size: 0.9rem;
+  margin-bottom: 6px;
+}
+
+.rcl-applicant-meta {
+  display: flex;
+  gap: 10px;
+}
+
+.rcl-applicant-skills {
+  background: #ebf8ff;
+  color: #2b6cb0;
+  padding: 3px 8px;
+  border-radius: 10px;
+  font-size: 0.75rem;
+}
+
+.rcl-applicant-experience {
+  background: #fefcbf;
+  color: #975a16;
+  padding: 3px 8px;
+  border-radius: 10px;
+  font-size: 0.75rem;
+}
+
+.rcl-applicant-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.rcl-accept-btn {
+  padding: 6px 15px;
+  background: #48bb78;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.rcl-accept-btn:hover {
+  background: #38a169;
+}
+
+.rcl-unread-count {
+  background: #e53e3e;
+  color: white;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: bold;
+}
+
+/* Chat Area */
+.rcl-chat-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.rcl-chat-header {
+  padding: 20px;
+  border-bottom: 1px solid #e1e5e9;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.rcl-chat-applicant {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.rcl-chat-avatar {
+  width: 55px;
+  height: 55px;
+  background: #2d3748;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.rcl-chat-name {
+  color: #2d3748;
+  font-size: 1.3rem;
+  margin-bottom: 4px;
+}
+
+.rcl-chat-job {
+  color: #718096;
+  font-size: 0.95rem;
+}
+
+.rcl-chat-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.rcl-status-dot {
+  width: 10px;
+  height: 10px;
+  background: #e53e3e;
+  border-radius: 50%;
+}
+
+.rcl-status-text {
+  color: #718096;
+  font-size: 0.9rem;
+}
+
+/* Auto Message Section */
+.rcl-auto-message-section {
+  padding: 20px;
+  border-bottom: 1px solid #e1e5e9;
+  background: #f8f9fa;
+}
+
+.rcl-auto-title {
+  color: #2d3748;
+  margin-bottom: 10px;
+  font-size: 1.1rem;
+}
+
+.rcl-auto-message-preview {
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  border-left: 4px solid #4299e1;
+  margin-bottom: 15px;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #4a5568;
+}
+
+.rcl-send-auto-btn {
+  padding: 10px 25px;
+  background: #4299e1;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.rcl-send-auto-btn:hover {
+  background: #3182ce;
+}
+
+/* Messages Container */
+.rcl-messages-container {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  background: #f8f9fa;
+}
+
+.rcl-no-messages {
+  text-align: center;
+  color: #a0aec0;
+  padding: 40px 20px;
+  font-style: italic;
+}
+
+/* Input Area */
+.rcl-input-area {
+  padding: 20px;
+  border-top: 1px solid #e1e5e9;
+  display: flex;
+  gap: 10px;
+}
+
+.rcl-message-input {
+  flex: 1;
+  padding: 12px 18px;
+  border: 1px solid #cbd5e0;
+  border-radius: 24px;
+  font-size: 1rem;
+}
+
+.rcl-message-input:focus {
+  outline: none;
+  border-color: #4299e1;
+}
+
+.rcl-send-btn {
+  padding: 12px 30px;
+  background: #4299e1;
+  color: white;
+  border: none;
+  border-radius: 24px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.rcl-send-btn:hover {
+  background: #3182ce;
+}
+
+/* ========== RESPONSIVE DESIGN ========== */
+
+/* Tablet (768px - 1024px) */
+@media (max-width: 1024px) {
+  .rcl-container {
+    height: 600px;
+  }
+  
+  .rcl-sidebar {
+    width: 300px;
+  }
+  
+  .rcl-title {
+    font-size: 1.3rem;
+  }
+  
+  .rcl-chat-name {
+    font-size: 1.1rem;
+  }
+  
+  .rcl-applicant-avatar {
+    width: 45px;
+    height: 45px;
+    margin-right: 12px;
+  }
+}
+
+/* Mobile (576px - 768px) */
+@media (max-width: 768px) {
+  .rcl-container {
+    flex-direction: column;
+    height: 100vh;
+    border-radius: 0;
+  }
+  
+  .rcl-sidebar {
+    width: 100%;
+    height: 45%;
+    border-right: none;
+    border-bottom: 1px solid #e1e5e9;
+  }
+  
+  .rcl-chat-area {
+    height: 55%;
+  }
+  
+  .rcl-chat-header {
+    padding: 15px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .rcl-auto-message-section {
+    padding: 15px;
+  }
+  
+  .rcl-messages-container {
+    padding: 15px;
+  }
+  
+  .rcl-input-area {
+    padding: 15px;
+  }
+}
+
+/* Small Mobile (under 576px) */
+@media (max-width: 576px) {
+  .rcl-sidebar-header {
+    padding: 15px;
+  }
+  
+  .rcl-applicant-card {
+    padding: 12px;
+    flex-wrap: wrap;
+  }
+  
+  .rcl-applicant-info {
+    min-width: 150px;
+  }
+  
+  .rcl-applicant-actions {
+    flex-direction: row;
+    width: 100%;
+    margin-top: 10px;
+    justify-content: space-between;
+  }
+  
+  .rcl-chat-applicant {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .rcl-chat-avatar {
+    width: 45px;
+    height: 45px;
+    font-size: 1rem;
+  }
+  
+  .rcl-auto-message-preview {
+    padding: 12px;
+    font-size: 0.9rem;
+  }
+  
+  .rcl-message-input {
+    padding: 10px 15px;
+  }
+  
+  .rcl-send-btn {
+    padding: 10px 20px;
+  }
+}
+
+/* Extra Small (under 400px) */
+@media (max-width: 400px) {
+  .rcl-title {
+    font-size: 1.1rem;
+  }
+  
+  .rcl-applicant-name {
+    font-size: 0.9rem;
+  }
+  
+  .rcl-applicant-job {
+    font-size: 0.8rem;
+  }
+  
+  .rcl-chat-name {
+    font-size: 1.1rem;
+  }
+  
+  .rcl-auto-title {
+    font-size: 1rem;
+  }
+  
+  .rcl-send-auto-btn {
+    padding: 8px 20px;
+    font-size: 0.9rem;
+  }
+}

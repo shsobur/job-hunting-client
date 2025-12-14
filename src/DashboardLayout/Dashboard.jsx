@@ -12,9 +12,8 @@ const Dashboard = () => {
   const { profile } = useUserData();
   const { user, userLoading } = useContext(AuthContext);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [notificationOpen, setNotificationOpen] = useState(false);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
-  const [activeNav, setActiveNav] = useState("dashboard");
+  
 
   const dropdownRef = useRef();
 
@@ -36,8 +35,6 @@ const Dashboard = () => {
           user={user}
           profile={profile}
           userLoading={userLoading}
-          activeNav={activeNav}
-          setActiveNav={setActiveNav}
           sidebarOpen={sidebarOpen}
           setSidebarOpen={setSidebarOpen}
         ></SidebarNav>
@@ -50,8 +47,6 @@ const Dashboard = () => {
             dropdownRef={dropdownRef}
             sidebarOpen={sidebarOpen}
             setSidebarOpen={setSidebarOpen}
-            notificationOpen={notificationOpen}
-            setNotificationOpen={setNotificationOpen}
             profileDropdownOpen={profileDropdownOpen}
             setProfileDropdownOpen={setProfileDropdownOpen}
           ></TopNavbar>

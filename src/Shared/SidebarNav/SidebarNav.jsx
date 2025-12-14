@@ -1,10 +1,4 @@
-import {
-  FiHome,
-  FiBriefcase,
-  FiSettings,
-  FiUsers,
-  FiX,
-} from "react-icons/fi";
+import { FiHome, FiBriefcase, FiSettings, FiUsers, FiX } from "react-icons/fi";
 import { MdOutlineContactPage } from "react-icons/md";
 import { NavLink } from "react-router";
 
@@ -12,8 +6,6 @@ const SidebarNav = ({
   user,
   profile,
   userLoading,
-  activeNav,
-  setActiveNav,
   sidebarOpen,
   setSidebarOpen,
 }) => {
@@ -34,7 +26,7 @@ const SidebarNav = ({
     const roleRoutes = {
       Admin: [
         {
-          id: "overview",
+          id: "admin-overview",
           path: "/dashboard/admin-overview",
           label: "Overview",
           icon: <FiHome size={20} />,
@@ -48,7 +40,7 @@ const SidebarNav = ({
       ],
       Recruiter: [
         {
-          id: "overview",
+          id: "rec-overview",
           path: "/dashboard/recruiter-overview",
           label: "Overview",
           icon: <FiHome size={20} />,
@@ -63,18 +55,18 @@ const SidebarNav = ({
           id: "job-applications",
           path: "/dashboard/recruiter-job-applications",
           label: "Application",
-          icon: <MdOutlineContactPage size={22} />
+          icon: <MdOutlineContactPage size={22} />,
         },
       ],
       "Job Seeker": [
         {
-          id: "overview",
+          id: "user-overview",
           path: "/dashboard/user-overview",
           label: "Overview",
           icon: <FiHome size={20} />,
         },
         {
-          id: "application",
+          id: "my-application",
           path: "/dashboard/user-applications",
           label: "My Applications",
           icon: <FiHome size={20} />,
@@ -149,14 +141,14 @@ const SidebarNav = ({
                 <NavLink
                   to={item.path}
                   key={item.id}
-                  onClick={() => setActiveNav(item.id)}
                   className={({ isActive }) =>
                     `flex items-center w-full px-4 py-3 text-left rounded-xl transition-all duration-200 border-2 ${
-                      isActive || activeNav === item.id
+                      isActive
                         ? "bg-[#3C8F63] text-white border-[#3C8F63] shadow-lg shadow-[#3C8F63]/20"
                         : "text-gray-600 border-transparent hover:border-gray-200 hover:bg-gray-50 hover:text-[#3C8F63]"
                     }`
                   }
+                  end // Add this for exact matching
                 >
                   <span className="mr-3">{item.icon}</span>
                   <span className="font-medium">{item.label}</span>
@@ -176,12 +168,7 @@ const SidebarNav = ({
               </div>
             ) : (
               <button
-                className={`flex items-center w-full px-4 py-3 text-left rounded-xl transition-all duration-200 border-2 ${
-                  activeNav === "settings"
-                    ? "bg-[#3C8F63] text-white border-[#3C8F63] shadow-lg"
-                    : "text-gray-600 border-transparent hover:border-gray-200 hover:bg-gray-50 hover:text-[#3C8F63]"
-                }`}
-                onClick={() => setActiveNav("settings")}
+                className={"flex items-center w-full px-4 py-3 text-left rounded-xl transition-all duration-200 border-2 text-gray-600 border-transparent hover:border-gray-200 hover:bg-gray-50 hover:text-[#3C8F63]"}
               >
                 <FiSettings size={20} className="mr-3" />
                 <span className="font-medium">Settings</span>

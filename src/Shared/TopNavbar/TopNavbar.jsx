@@ -1,12 +1,11 @@
 import {
   FiUser,
-  FiBell,
   FiMenu,
   FiLogOut,
   FiChevronUp,
   FiChevronDown,
 } from "react-icons/fi";
-import { Link, NavLink } from "react-router";
+import { NavLink } from "react-router";
 import { TbMessage } from "react-icons/tb";
 
 const TopNavbar = ({
