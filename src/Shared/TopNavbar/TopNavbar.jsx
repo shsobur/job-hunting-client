@@ -35,31 +35,49 @@ const TopNavbar = ({
             <FiMenu size={20} />
           </button>
 
-          {/* Navigation Routes - Like your main navbar */}
-          <div className="hidden md:flex items-center space-x-8 navbar_routes_container">
+          {/* Navigation Routes - Exact same design but all links always active */}
+          <div className="hidden md:flex items-center">
             {userLoading ? (
               // Skeleton for navigation routes
               <>
                 {[...Array(3)].map((_, index) => (
                   <div
                     key={index}
-                    className="h-8 bg-gray-200 rounded-lg animate-pulse w-20"
+                    className="h-8 bg-gray-200 rounded-lg animate-pulse w-20 mx-1"
                   ></div>
                 ))}
               </>
             ) : (
-              // Actual navigation routes
-              <>
-                <NavLink to="/" className="router_none_active_style">
+              // Actual navigation routes - ALL ACTIVE STYLE
+              <ul className="flex items-center gap-3 list-none m-0 bg-[#3c8f6308] rounded-[16px] p-[5px] border border-[#3c8f631a]">
+                <NavLink
+                  to="/"
+                  className="text-[#3C8F63] no-underline inline-block px-4 py-2 text-[15px] font-semibold rounded-[12px] bg-white border border-[#3c8f636f] shadow-[0_2px_10px_#3c8f631a] transform -translate-y-[1px]"
+                >
                   <li>Home</li>
                 </NavLink>
-                <NavLink to="/" className="router_none_active_style">
+
+                <NavLink
+                  to="/jobs"
+                  className="text-[#3C8F63] no-underline inline-block px-4 py-2 text-[15px] font-semibold rounded-[12px] bg-white border border-[#3c8f636f] shadow-[0_2px_10px_#3c8f631a] transform -translate-y-[1px]"
+                >
+                  <li>Jobs</li>
+                </NavLink>
+
+                <NavLink
+                  to="/community"
+                  className="text-[#3C8F63] no-underline inline-block px-4 py-2 text-[15px] font-semibold rounded-[12px] bg-white border border-[#3c8f636f] shadow-[0_2px_10px_#3c8f631a] transform -translate-y-[1px]"
+                >
                   <li>Community</li>
                 </NavLink>
-                <NavLink to="/" className="router_none_active_style">
+
+                <NavLink
+                  to="/about"
+                  className="text-[#3C8F63] no-underline inline-block px-4 py-2 text-[15px] font-semibold rounded-[12px] bg-white border border-[#3c8f636f] shadow-[0_2px_10px_#3c8f631a] transform -translate-y-[1px]"
+                >
                   <li>About Us</li>
                 </NavLink>
-              </>
+              </ul>
             )}
           </div>
 
