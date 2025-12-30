@@ -11,51 +11,45 @@ import AdminChatLayout from "../../../Components/ChatLayouts/AdminChatLayout/Adm
 import { useLocation, useNavigate } from "react-router";
 
 // From react__
-import { useContext } from "react";
+import { useContext, useMemo } from "react";
+import useChatSocket from "../../../Hooks/useChatSocket";
 
 const Chat = () => {
-  const { logOut } = useContext(AuthContext);
+  const { user, logOut } = useContext(AuthContext);
   const { profile } = useUserData();
   const location = useLocation();
   const navigate = useNavigate();
-  const role = profile?.userRole;
 
+  // Socket user data__
+  const socketUserData = useMemo(() => {
+    if (!profile || !user) return null;
+    return {
+      email: user.email,
+      username: profile.userName,
+      role: profile.userRole,
+      profilePhoto: profile.profilePhoto,
+    };
+  }, [profile, user]);
+
+  const { isConnected, onlineUsers, messages, error, sendMessage } =
+    useChatSocket(socketUserData);
+
+  // Role check from route__
   const getRoleFromRoute = () => {
     const path = location.pathname;
-    if (role) {
-      if (path.includes("admin-chat")) {
-        if (role === "Admin") {
-          return "admin";
-        } else {
-          navigate("/");
+    const role = profile?.userRole;
 
-          handleLogout();
+    if (!role) return null;
 
-          return null;
-        }
-      } else if (path.includes("recruiter-chat")) {
-        if (role === "Recruiter") {
-          return "recruiter";
-        } else {
-          navigate("/");
-
-          handleLogout();
-
-          return null;
-        }
-      } else if (path.includes("user-chat")) {
-        if (role === "Job Seeker") {
-          return "user";
-        } else {
-          navigate("/");
-
-          handleLogout();
-
-          return null;
-        }
-      }
+    if (path.includes("admin-chat")) {
+      return role === "Admin" ? "admin" : null;
     }
-
+    if (path.includes("recruiter-chat")) {
+      return role === "Recruiter" ? "recruiter" : null;
+    }
+    if (path.includes("user-chat")) {
+      return role === "Job Seeker" ? "user" : null;
+    }
     return null;
   };
 
@@ -70,12 +64,17 @@ const Chat = () => {
 
   const userRole = getRoleFromRoute();
 
-  // Loading for unauthorized access__
-  if (userRole === null) {
+  // Loading states
+  if (!socketUserData || userRole === null) {
+    if (userRole === null) {
+      navigate("/");
+      handleLogout();
+    }
+
     return (
       <div className="loading-container">
         <div className="spinner"></div>
-        <p>Verifying access permissions...</p>
+        <p>Loading chat...</p>
       </div>
     );
   }
@@ -83,14 +82,35 @@ const Chat = () => {
   const renderChatLayout = () => {
     switch (userRole) {
       case "admin":
-        return <AdminChatLayout></AdminChatLayout>;
-
+        return (
+          <AdminChatLayout
+            onlineUsers={onlineUsers}
+            messages={messages}
+            sendMessage={sendMessage}
+            isConnected={isConnected}
+            error={error}
+          />
+        );
       case "recruiter":
-        return <RecruiterChatLayout></RecruiterChatLayout>;
-
+        return (
+          <RecruiterChatLayout
+            onlineUsers={onlineUsers}
+            messages={messages}
+            sendMessage={sendMessage}
+            isConnected={isConnected}
+            error={error}
+          />
+        );
       case "user":
-        return <UserChatLayout></UserChatLayout>;
-
+        return (
+          <UserChatLayout
+            onlineUsers={onlineUsers}
+            messages={messages}
+            sendMessage={sendMessage}
+            isConnected={isConnected}
+            error={error}
+          />
+        );
       default:
         return (
           <div className="error-container">
@@ -102,9 +122,9 @@ const Chat = () => {
   };
 
   return (
-    <>
-      <div className="chat-page">{renderChatLayout()}</div>
-    </>
+    <div className="chat-page">
+      {renderChatLayout()}
+    </div>
   );
 };
 

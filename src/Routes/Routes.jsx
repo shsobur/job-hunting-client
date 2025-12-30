@@ -1,6 +1,9 @@
 // File__
 import Main from "../MainLayout/Main";
+import Jobs from "../MainLayout/Pages/Jobs/Jobs";
 import Dashboard from "../DashboardLayout/Dashboard";
+import Chat from "../DashboardLayout/Pages/Chat/Chat";
+import JobDetails from "../MainLayout/Pages/JobDetails/JobDetails";
 import SignIn from "../MainLayout/Pages/Authentication/SignIn/SignIn";
 import SignUp from "../MainLayout/Pages/Authentication/SignUp/SignUp";
 import UserProfile from "../MainLayout/Pages/UserProfile/UserProfile";
@@ -8,16 +11,14 @@ import HomeLayout from "../MainLayout/Pages/HomePageLayout/HomeLayout/HomeLayout
 import RecPostJob from "../DashboardLayout/Pages/Recruiter/RecPostJob/RecPostJob";
 import RecruiterProfile from "../MainLayout/Pages/RecruiterProfile/RecruiterProfile";
 import RecOverview from "../DashboardLayout/Pages/Recruiter/RecOverview/RecOverview";
+import AdminOverview from "../DashboardLayout/Pages/Admin/AdminOverview/AdminOverview";
+import VerifyCompany from "../DashboardLayout/Pages/Admin/VerifyCompany/VerifyCompany";
+import UserOverview from "../DashboardLayout/Pages/JobSeeker/UserOverview/UserOverview";
+import RecApplications from "../DashboardLayout/Pages/Recruiter/RecApplications/RecApplications";
 
 // Package__
 import { createBrowserRouter } from "react-router-dom";
-import AdminOverview from "../DashboardLayout/Pages/Admin/AdminOverview/AdminOverview";
-import VerifyCompany from "../DashboardLayout/Pages/Admin/VerifyCompany/VerifyCompany";
-import Jobs from "../MainLayout/Pages/Jobs/Jobs";
-import JobDetails from "../MainLayout/Pages/JobDetails/JobDetails";
-import RecApplications from "../DashboardLayout/Pages/Recruiter/RecApplications/RecApplications";
-import Chat from "../DashboardLayout/Pages/Chat/Chat";
-import UserOverview from "../DashboardLayout/Pages/JobSeeker/UserOverview/UserOverview";
+import UserList from "../DashboardLayout/Pages/Admin/UserList/UserList";
 
 const router = createBrowserRouter([
   {
@@ -76,6 +77,11 @@ const router = createBrowserRouter([
       {
         path: "/dashboard/verify-company",
         element: <VerifyCompany></VerifyCompany>,
+      },
+
+      {
+        path: "/dashboard/user-list",
+        element: <UserList></UserList>,
       },
 
       {

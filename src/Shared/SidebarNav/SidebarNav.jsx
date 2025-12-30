@@ -32,9 +32,15 @@ const SidebarNav = ({
           icon: <FiHome size={20} />,
         },
         {
-          id: "admin-panel",
+          id: "company-verify",
           path: "/dashboard/verify-company",
           label: "Verify Company",
+          icon: <FiUsers size={20} />,
+        },
+        {
+          id: "user-list",
+          path: "/dashboard/user-list",
+          label: "User List",
           icon: <FiUsers size={20} />,
         },
       ],
@@ -106,7 +112,7 @@ const SidebarNav = ({
             ) : (
               <div className="flex items-end space-x-3">
                 <img
-                  src={profile?.companyLogo || profile?.profilePhoto}
+                  src={profile?.companyLogo || profile?.profilePhoto|| null}
                   className="w-10 h-10 bg-[#3C8F63] rounded-xl flex items-center justify-center shadow-md"
                 ></img>
                 <h1 className="text-xl font-bold text-gray-800">Dashboard</h1>
