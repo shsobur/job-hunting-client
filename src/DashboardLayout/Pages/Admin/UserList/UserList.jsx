@@ -7,6 +7,8 @@ import {
   FaUserTie,
   FaSort,
   FaEye,
+  FaUser,
+  FaEye as FaEyeIcon,
 } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 import AdminTableSkeleton from "../../../../Components/AdminTableSkeleton/AdminTableSkeleton";
@@ -15,7 +17,6 @@ import useAxios from "../../../../Hooks/Axios";
 const UserList = () => {
   const api = useAxios();
   const [users, setUsers] = useState([]);
-  console.log(users);
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
@@ -86,7 +87,6 @@ const UserList = () => {
       results = results.filter(
         (user) =>
           user?.userName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          user?.companyName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
           user?.userEmail?.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
@@ -98,12 +98,12 @@ const UserList = () => {
     setFilteredUsers(results);
   }, [searchTerm, roleFilter, users]);
 
-  // Safe fallback image__
+  // Safe fallback image
   const getImageUrl = (user) => {
     return (
       user?.profilePhoto ||
       user?.companyLogo ||
-      "https://res.cloudinary.com/dmfsmcy2y/image/upload/v1767460341/no-picrute_cjhjlk.jpg"
+      "https://via.placeholder.com/40"
     );
   };
 
@@ -111,6 +111,48 @@ const UserList = () => {
   const getUserStatus = (user) => {
     return user?.status || "active"; // Default to active if not specified
   };
+
+  // Calculate stats
+  const calculateStats = () => {
+    if (!Array.isArray(users)) {
+      return {
+        total: 0,
+        jobSeekers: 0,
+        recruiters: 0,
+        activeToday: 0,
+        activeRate: "0%",
+      };
+    }
+
+    const jobSeekers = users.filter(
+      (user) => user?.userRole === "Job Seeker"
+    ).length;
+    const recruiters = users.filter(
+      (user) => user?.userRole === "Recruiter"
+    ).length;
+    const activeUsers = users.filter(
+      (user) => user?.status === "active"
+    ).length;
+    const activeRate =
+      users.length > 0 ? Math.round((activeUsers / users.length) * 100) : 0;
+
+    // For "Active Today" - you might want to adjust this based on your backend data
+    // This is a simple example - you might have a lastLogin field
+    const activeToday = users.filter((user) => {
+      const today = new Date().toISOString().split("T")[0];
+      return user?.lastLogin?.includes(today);
+    }).length;
+
+    return {
+      total: users.length,
+      jobSeekers,
+      recruiters,
+      activeToday,
+      activeRate: `${activeRate}%`,
+    };
+  };
+
+  const stats = calculateStats();
 
   // Loading skeleton component
   const LoadingSkeleton = () => {
@@ -188,6 +230,77 @@ const UserList = () => {
           <p className="text-gray-600">
             Manage all registered users, recruiters, and job seekers
           </p>
+        </div>
+
+        {/* Stats Cards - With Optional Chaining */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          <div className="bg-white rounded-xl p-5 border border-gray-200 shadow-sm">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-gray-500 text-sm">Total Users</p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {stats.total}
+                </p>
+              </div>
+              <div className="p-3 bg-blue-50 rounded-lg">
+                <FaUser className="text-blue-600 text-xl" />
+              </div>
+            </div>
+            <div className="mt-3 text-sm text-green-600 font-medium">
+              All registered users
+            </div>
+          </div>
+
+          <div className="bg-white rounded-xl p-5 border border-gray-200 shadow-sm">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-gray-500 text-sm">Job Seekers</p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {stats.jobSeekers}
+                </p>
+              </div>
+              <div className="p-3 bg-emerald-50 rounded-lg">
+                <FaBriefcase className="text-[#3c8f63] text-xl" />
+              </div>
+            </div>
+            <div className="mt-3 text-sm text-green-600 font-medium">
+              Active job seekers
+            </div>
+          </div>
+
+          <div className="bg-white rounded-xl p-5 border border-gray-200 shadow-sm">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-gray-500 text-sm">Recruiters</p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {stats.recruiters}
+                </p>
+              </div>
+              <div className="p-3 bg-purple-50 rounded-lg">
+                <FaUserTie className="text-purple-600 text-xl" />
+              </div>
+            </div>
+            <div className="mt-3 text-sm text-green-600 font-medium">
+              Company recruiters
+            </div>
+          </div>
+
+          <div className="bg-white rounded-xl p-5 border border-gray-200 shadow-sm">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-gray-500 text-sm">Active Rate</p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {stats.activeRate}
+                </p>
+              </div>
+              <div className="p-3 bg-green-50 rounded-lg">
+                <FaEyeIcon className="text-green-600 text-xl" />
+              </div>
+            </div>
+            <div className="mt-3 text-sm text-gray-500">
+              {stats.activeToday} active today
+            </div>
+          </div>
         </div>
 
         {/* Filters Section */}
@@ -299,9 +412,7 @@ const UserList = () => {
                                 </div>
                                 <div>
                                   <p className="font-medium text-gray-900">
-                                    {user?.userName ||
-                                      user?.companyName ||
-                                      "Unknown User"}
+                                    {user?.userName || "Unknown User"}
                                   </p>
                                   <p className="text-sm text-gray-500 flex items-center gap-1">
                                     <MdEmail className="text-xs" />

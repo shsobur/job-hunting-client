@@ -2,380 +2,329 @@ import {
   FaPaperPlane,
   FaTrash,
   FaCircle,
-  FaComments,
   FaSearch,
   FaEllipsisV,
   FaBuilding,
   FaUser,
+  FaTimes,
 } from "react-icons/fa";
 import { HiOutlineEmojiHappy } from "react-icons/hi";
-import { useState, useEffect, useRef } from "react";
 
-const AdminChatLayout = ({
-  onlineUsers,
-  messages,
-  sendMessage,
-  isConnected,
-}) => {
-  const [selectedUser, setSelectedUser] = useState(null);
-  const [messageInput, setMessageInput] = useState("");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [unreadCounts, setUnreadCounts] = useState({});
-  const messagesEndRef = useRef(null);
+const AdminChatLayout = () => {
+  // Static data for now - will replace with state later
+  const conversations = [
+    {
+      id: 1,
+      userId: "user_123",
+      name: "John Doe",
+      avatar: "JD",
+      role: "Job Seeker",
+      lastMessage: "Hello, I have a question about...",
+      lastMessageTime: "10:45 AM",
+      unreadCount: 2,
+      isOnline: true,
+    },
+    {
+      id: 2,
+      userId: "user_456",
+      name: "Jane Smith",
+      avatar: "JS",
+      role: "Recruiter",
+      lastMessage: "Thanks for the update!",
+      lastMessageTime: "Yesterday",
+      unreadCount: 0,
+      isOnline: false,
+    },
+    {
+      id: 3,
+      userId: "user_789",
+      name: "Mike Johnson",
+      avatar: "MJ",
+      role: "Job Seeker",
+      lastMessage: "When is the interview?",
+      lastMessageTime: "2 days ago",
+      unreadCount: 5,
+      isOnline: true,
+    },
+  ];
 
-  // Filter and sort online users with search
-  const filteredUsers = onlineUsers.filter((user) => {
-    if (!searchQuery.trim()) return true;
-    const searchLower = searchQuery.toLowerCase();
-    return (
-      user.username?.toLowerCase().includes(searchLower) ||
-      user.email.toLowerCase().includes(searchLower) ||
-      user.role.toLowerCase().includes(searchLower)
-    );
-  });
+  const messages = [
+    {
+      id: 1,
+      senderId: "user_123",
+      senderName: "John Doe",
+      text: "Hello! How can I help you?",
+      timestamp: "10:40 AM",
+      isAdmin: false,
+    },
+    {
+      id: 2,
+      senderId: "admin",
+      senderName: "You",
+      text: "I need help with the dashboard.",
+      timestamp: "10:41 AM",
+      isAdmin: true,
+    },
+    {
+      id: 3,
+      senderId: "user_123",
+      senderName: "John Doe",
+      text: "Sure, what specific issue are you facing?",
+      timestamp: "10:42 AM",
+      isAdmin: false,
+    },
+  ];
 
-  // Filter messages for selected user
-  const filteredMessages = messages.filter(
-    (msg) =>
-      msg.to?.email === selectedUser?.email ||
-      msg.from?.email === selectedUser?.email
-  );
+  const selectedUser = {
+    id: "user_123",
+    name: "John Doe",
+    avatar: "JD",
+    role: "Job Seeker",
+    isOnline: true,
+  };
 
-  // Calculate unread messages for each user
-  useEffect(() => {
-    const counts = {};
-    onlineUsers.forEach((user) => {
-      const userMessages = messages.filter(
-        (msg) =>
-          (msg.from?.email === user.email && msg.type === "received") ||
-          (msg.to?.email === user.email && msg.type === "sent")
-      );
-      const unread = userMessages.filter(
-        (msg) => msg.type === "received" && !msg.read
-      ).length;
-      counts[user.email] = unread;
-    });
-    setUnreadCounts(counts);
-  }, [messages, onlineUsers]);
-
-  // Auto-scroll to latest message
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [filteredMessages]);
-
+  // Handler functions - will implement later
   const handleSendMessage = () => {
-    if (!messageInput.trim() || !selectedUser) return;
+    console.log("Send message - will implement with socket");
+  };
 
-    const success = sendMessage(selectedUser.email, messageInput);
-    if (success) {
-      setMessageInput("");
-    }
+  const handleSelectUser = (userId) => {
+    console.log("Select user:", userId);
+  };
+
+  const handleSearch = (query) => {
+    console.log("Search:", query);
   };
 
   const handleClearChat = () => {
-    setSelectedUser(null);
-    // In future, we can add API call to clear chat from database
-  };
-
-  const handleUserSelect = (user) => {
-    setSelectedUser(user);
-    // Mark messages as read when user is selected
-    setUnreadCounts((prev) => ({
-      ...prev,
-      [user.email]: 0,
-    }));
+    console.log("Clear chat - will implement later");
   };
 
   return (
-    <div className="flex flex-col md:flex-row h-[calc(100vh-80px)] bg-gray-100">
-      {/* Left Sidebar - Users List */}
-      <div className="w-full md:w-80 lg:w-96 border-r border-gray-200 bg-gray-50 flex flex-col flex-shrink-0">
-        {/* Sidebar Header */}
-        <div className="p-4 md:p-5 border-b border-gray-200">
+    <div className="flex h-[calc(100vh-80px)] bg-gray-50">
+      {/* LEFT SIDEBAR - Conversation List */}
+      <div className="w-full md:w-80 lg:w-96 border-r border-gray-200 bg-white flex flex-col">
+        {/* Header */}
+        <div className="p-4 border-b border-gray-200">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
+            <div className="flex items-center gap-2">
               <FaUser className="text-[#3C8F63]" />
-              Admin Panel
-            </h2>
-            <button className="p-2 rounded-lg hover:bg-gray-100">
-              <FaEllipsisV className="text-gray-500" />
+              <h2 className="text-xl font-bold text-gray-800">
+                Admin Messages
+              </h2>
+            </div>
+            <button className="text-gray-500 hover:text-gray-700">
+              <FaEllipsisV />
             </button>
           </div>
 
-          {/* Connection Status */}
-          <div
-            className={`mb-4 px-3 py-2 rounded-lg text-sm font-medium ${
-              isConnected
-                ? "bg-green-50 text-green-700 border border-green-200"
-                : "bg-red-50 text-red-700 border border-red-200"
-            }`}
-          >
-            {isConnected
-              ? `🟢 ${onlineUsers.length} users online`
-              : "🔴 Connecting to server..."}
+          {/* Online Status */}
+          <div className="px-3 py-2 rounded-lg text-sm bg-green-50 text-green-700 border border-green-200 mb-4">
+            <div className="flex items-center gap-2">
+              <FaCircle className="text-xs text-green-500" />
+              <span>3 users online</span>
+            </div>
           </div>
 
-          {/* Search Box */}
-          <div className="flex gap-2">
-            <div className="flex-1 relative">
-              <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search users..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:border-[#3C8F63] focus:ring-2 focus:ring-[#3C8F63]/20"
-              />
-            </div>
+          {/* Search */}
+          <div className="relative">
+            <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Search users..."
+              className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3C8F63] focus:border-transparent"
+              onChange={(e) => handleSearch(e.target.value)}
+            />
           </div>
         </div>
 
-        {/* Users List */}
-        <div className="flex-1 overflow-y-auto p-3 md:p-4">
-          {filteredUsers.length === 0 ? (
-            <div className="text-center py-8 text-gray-500">
-              <p>{searchQuery ? "No users found" : "No users online"}</p>
-            </div>
-          ) : (
-            filteredUsers.map((user) => (
-              <div
-                key={user.email}
-                onClick={() => handleUserSelect(user)}
-                className={`flex items-center gap-3 p-3 md:p-4 rounded-xl mb-3 cursor-pointer transition-all border ${
-                  selectedUser?.email === user.email
-                    ? "bg-[#E8F5EE] border-[#3C8F63]"
-                    : "bg-white border-gray-200 hover:border-gray-300"
-                }`}
-              >
-                {/* User Avatar with Role Badge */}
-                <div className="relative">
-                  <div
-                    className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg text-white ${
-                      user.role === "recruiter"
-                        ? "bg-blue-600"
-                        : user.role === "admin"
-                        ? "bg-purple-600"
-                        : "bg-[#3C8F63]"
-                    }`}
-                  >
-                    {user.role === "recruiter" ? (
-                      <FaBuilding />
-                    ) : (
-                      user.username?.charAt(0)?.toUpperCase() ||
-                      user.email.charAt(0).toUpperCase()
-                    )}
-                  </div>
-                  {isConnected && (
-                    <FaCircle className="absolute bottom-0 right-0 text-green-500 text-xs bg-white rounded-full" />
+        {/* Conversation List */}
+        <div className="flex-1 overflow-y-auto">
+          {conversations.map((user) => (
+            <div
+              key={user.id}
+              className={`flex items-center gap-3 p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer transition-colors ${
+                selectedUser.id === user.id
+                  ? "bg-green-50 border-l-4 border-l-[#3C8F63]"
+                  : ""
+              }`}
+              onClick={() => handleSelectUser(user.userId)}
+            >
+              {/* Avatar with Online Status */}
+              <div className="relative">
+                <div className="w-12 h-12 rounded-full bg-[#3C8F63] text-white flex items-center justify-center font-bold">
+                  {user.avatar}
+                </div>
+                {user.isOnline && (
+                  <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full"></div>
+                )}
+              </div>
+
+              {/* User Info */}
+              <div className="flex-1 min-w-0">
+                <div className="flex justify-between items-start">
+                  <h4 className="font-semibold text-gray-800 truncate">
+                    {user.name}
+                  </h4>
+                  <span className="text-xs text-gray-500 whitespace-nowrap">
+                    {user.lastMessageTime}
+                  </span>
+                </div>
+
+                <div className="flex justify-between items-center mt-1">
+                  <span className="text-xs text-gray-600 truncate max-w-[120px]">
+                    {user.lastMessage}
+                  </span>
+                  {user.unreadCount > 0 && (
+                    <span className="w-6 h-6 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
+                      {user.unreadCount}
+                    </span>
                   )}
                 </div>
 
-                {/* User Info */}
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between">
-                    <h4 className="font-semibold text-gray-800 truncate">
-                      {user.username || user.email.split("@")[0]}
-                    </h4>
-                    <span className="text-xs text-gray-500">
-                      {user.joinedAt
-                        ? new Date(user.joinedAt).toLocaleTimeString([], {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })
-                        : "Just now"}
-                    </span>
-                  </div>
-
-                  <div className="flex items-center justify-between mt-1">
-                    <span
-                      className={`inline-block px-2.5 py-0.5 text-xs font-medium rounded-full ${
-                        user.role === "recruiter"
-                          ? "bg-blue-100 text-blue-700 border border-blue-200"
-                          : user.role === "admin"
-                          ? "bg-purple-100 text-purple-700 border border-purple-200"
-                          : "bg-gray-100 text-gray-700 border border-gray-200"
-                      }`}
-                    >
-                      {user.role}
-                    </span>
-
-                    {/* Unread Message Badge */}
-                    {unreadCounts[user.email] > 0 && (
-                      <span className="w-6 h-6 bg-red-500 text-white text-xs rounded-full flex items-center justify-center font-bold">
-                        {unreadCounts[user.email]}
-                      </span>
-                    )}
-                  </div>
+                {/* Role Badge */}
+                <div className="mt-1">
+                  <span
+                    className={`text-xs px-2 py-0.5 rounded-full ${
+                      user.role === "Admin"
+                        ? "bg-purple-100 text-purple-700"
+                        : user.role === "Recruiter"
+                        ? "bg-blue-100 text-blue-700"
+                        : "bg-gray-100 text-gray-700"
+                    }`}
+                  >
+                    {user.role}
+                  </span>
                 </div>
               </div>
-            ))
-          )}
+            </div>
+          ))}
+        </div>
+
+        {/* Footer */}
+        <div className="p-4 border-t border-gray-200 text-center">
+          <p className="text-sm text-gray-500">
+            {conversations.length} conversations
+          </p>
         </div>
       </div>
 
-      {/* Right Side - Chat Area */}
-      <div className="flex-1 flex flex-col bg-white">
-        {selectedUser ? (
-          <>
-            {/* Chat Header */}
-            <div className="flex items-center justify-between p-4 md:p-5 border-b border-gray-200 bg-gray-50">
-              <div className="flex items-center gap-3 md:gap-4">
-                <div className="relative">
-                  <div
-                    className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg text-white ${
-                      selectedUser.role === "recruiter"
-                        ? "bg-blue-600"
-                        : "bg-[#3C8F63]"
-                    }`}
-                  >
-                    {selectedUser.role === "recruiter" ? (
-                      <FaBuilding />
-                    ) : (
-                      selectedUser.username?.charAt(0)?.toUpperCase() ||
-                      selectedUser.email.charAt(0).toUpperCase()
-                    )}
-                  </div>
-                  <FaCircle className="absolute bottom-0 right-0 text-green-500 text-xs bg-white rounded-full" />
-                </div>
-                <div>
-                  <h3 className="font-bold text-gray-800 text-lg">
-                    {selectedUser.username || selectedUser.email.split("@")[0]}
-                  </h3>
-                  <div className="flex items-center gap-2">
-                    <FaCircle className="text-green-500 text-xs" />
-                    <p className="text-sm text-green-600 font-medium">Online</p>
-                    <span className="text-xs text-gray-500 ml-2">
-                      {selectedUser.role}
-                    </span>
-                  </div>
-                </div>
-              </div>
-              <button
-                onClick={handleClearChat}
-                className="flex items-center gap-2 px-4 py-2.5 bg-red-50 text-red-600 hover:bg-red-100 border border-red-200 rounded-lg transition-colors font-medium"
-              >
-                <FaTrash />
-                Clear Chat
-              </button>
-            </div>
+      {/* RIGHT PANEL - Chat Area */}
+      <div className="flex-1 flex flex-col">
+        {/* Chat Header */}
+        <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-white">
+          <div className="flex items-center gap-3">
+            {/* Back button for mobile (hidden on desktop) */}
+            <button className="md:hidden text-gray-500 hover:text-gray-700">
+              <FaTimes />
+            </button>
 
-            {/* Messages Container */}
-            <div className="flex-1 overflow-y-auto p-4 md:p-5 bg-gradient-to-b from-gray-100 to-white">
-              {filteredMessages.length === 0 ? (
-                <div className="text-center py-8 text-gray-500">
-                  <FaComments className="text-5xl mx-auto mb-4 text-gray-300" />
-                  <h3 className="text-lg font-semibold mb-2">
-                    No messages yet
-                  </h3>
-                  <p>
-                    Start the conversation with{" "}
-                    {selectedUser.username || selectedUser.email.split("@")[0]}
-                  </p>
-                </div>
-              ) : (
-                filteredMessages.map((msg, index) => (
-                  <div
-                    key={index}
-                    className={`flex ${
-                      msg.type === "sent" ? "justify-end" : "gap-3"
-                    } mb-4 md:mb-5`}
-                  >
-                    {msg.type !== "sent" && (
-                      <div
-                        className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0 ${
-                          msg.from?.role === "recruiter"
-                            ? "bg-blue-600"
-                            : "bg-gray-600"
-                        } text-white`}
-                      >
-                        {msg.from?.username?.charAt(0)?.toUpperCase() ||
-                          msg.from?.email?.charAt(0).toUpperCase()}
-                      </div>
-                    )}
-
-                    <div
-                      className={
-                        msg.type === "sent" ? "flex flex-col items-end" : ""
-                      }
-                    >
-                      {msg.type !== "sent" && (
-                        <p className="text-xs font-semibold text-gray-700 mb-1">
-                          {msg.from?.username || msg.from?.email?.split("@")[0]}
-                        </p>
-                      )}
-                      <div
-                        className={`rounded-2xl px-4 py-3 max-w-xs md:max-w-md ${
-                          msg.type === "sent"
-                            ? "bg-[#3C8F63] text-white rounded-br-none"
-                            : "bg-white shadow-sm border border-gray-100 rounded-tl-none"
-                        }`}
-                      >
-                        <p>{msg.message}</p>
-                      </div>
-                      <span className="text-xs text-gray-500 mt-1">
-                        {new Date(msg.timestamp).toLocaleTimeString([], {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
-                      </span>
-                    </div>
-                  </div>
-                ))
-              )}
-              <div ref={messagesEndRef} />
+            <div className="w-12 h-12 rounded-full bg-[#3C8F63] text-white flex items-center justify-center font-bold">
+              {selectedUser.avatar}
             </div>
-
-            {/* Message Input */}
-            <div className="p-4 md:p-5 border-t border-gray-200 bg-white">
-              <div className="flex items-center gap-3">
-                <button className="p-3 rounded-xl hover:bg-gray-100 transition-colors">
-                  <HiOutlineEmojiHappy className="text-2xl text-gray-500" />
-                </button>
-                <input
-                  type="text"
-                  value={messageInput}
-                  onChange={(e) => setMessageInput(e.target.value)}
-                  onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
-                  placeholder={`Message ${
-                    selectedUser.username || selectedUser.email.split("@")[0]
-                  }...`}
-                  className="flex-1 w-full px-5 py-3.5 border border-gray-300 rounded-xl focus:outline-none focus:border-[#3C8F63] focus:ring-2 focus:ring-[#3C8F63]/20"
-                />
-                <button
-                  onClick={handleSendMessage}
-                  disabled={
-                    !messageInput.trim() || !selectedUser || !isConnected
-                  }
-                  className="flex items-center gap-2 px-6 py-3.5 bg-[#3C8F63] text-white rounded-xl hover:bg-[#2E7A55] transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  <FaPaperPlane />
-                  Send
-                </button>
-              </div>
-            </div>
-          </>
-        ) : (
-          <div className="flex-1 flex items-center justify-center">
-            <div className="text-center text-gray-500">
-              <FaComments className="text-6xl mx-auto mb-4 text-gray-300" />
-              <h3 className="text-xl font-semibold mb-2">
-                Select a user to chat
+            <div>
+              <h3 className="font-bold text-lg text-gray-800">
+                {selectedUser.name}
               </h3>
-              <p className="mb-6">
-                Choose from the online users list to start messaging
-              </p>
-              <div className="text-sm text-gray-600 bg-gray-50 p-4 rounded-lg max-w-md mx-auto">
-                <p className="font-medium mb-2">💡 Features available:</p>
-                <ul className="space-y-1 text-left">
-                  <li>• Real-time messaging with online users</li>
-                  <li>• User search by name, email, or role</li>
-                  <li>• Unread message indicators</li>
-                  <li>• Online/offline status</li>
-                </ul>
+              <div className="flex items-center gap-2">
+                <div
+                  className={`w-2 h-2 rounded-full ${
+                    selectedUser.isOnline ? "bg-green-500" : "bg-gray-400"
+                  }`}
+                ></div>
+                <span className="text-sm text-gray-600">
+                  {selectedUser.isOnline ? "Online" : "Offline"}
+                </span>
+                <span className="text-xs text-gray-500 ml-2">
+                  {selectedUser.role}
+                </span>
               </div>
             </div>
           </div>
-        )}
+
+          <button
+            onClick={handleClearChat}
+            className="px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors flex items-center gap-2"
+          >
+            <FaTrash />
+            Clear Chat
+          </button>
+        </div>
+
+        {/* Messages Container */}
+        <div className="flex-1 overflow-y-auto p-4 bg-gray-50">
+          <div className="max-w-3xl mx-auto">
+            {messages.map((message) => (
+              <div
+                key={message.id}
+                className={`mb-4 ${
+                  message.isAdmin ? "flex justify-end" : "flex"
+                }`}
+              >
+                {!message.isAdmin && (
+                  <div className="w-8 h-8 rounded-full bg-gray-600 text-white flex items-center justify-center text-sm mr-2">
+                    {selectedUser.avatar.charAt(0)}
+                  </div>
+                )}
+
+                <div
+                  className={`max-w-[70%] ${
+                    message.isAdmin ? "text-right" : ""
+                  }`}
+                >
+                  {!message.isAdmin && (
+                    <p className="text-xs font-semibold text-gray-700 mb-1">
+                      {message.senderName}
+                    </p>
+                  )}
+                  <div
+                    className={`px-4 py-3 rounded-2xl ${
+                      message.isAdmin
+                        ? "bg-[#3C8F63] text-white rounded-br-none"
+                        : "bg-white border border-gray-200 rounded-bl-none"
+                    }`}
+                  >
+                    {message.text}
+                  </div>
+                  <span className="text-xs text-gray-500 mt-1 block">
+                    {message.timestamp}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Message Input */}
+        <div className="p-4 border-t border-gray-200 bg-white">
+          <div className="max-w-3xl mx-auto">
+            <div className="flex items-center gap-3">
+              <button className="text-gray-500 hover:text-gray-700 p-2">
+                <HiOutlineEmojiHappy className="text-2xl" />
+              </button>
+
+              <input
+                type="text"
+                placeholder={`Message ${selectedUser.name}...`}
+                className="flex-1 px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#3C8F63] focus:border-transparent"
+                onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
+              />
+
+              <button
+                onClick={handleSendMessage}
+                className="px-6 py-3 bg-[#3C8F63] text-white rounded-xl hover:bg-green-700 transition-colors flex items-center gap-2"
+              >
+                <FaPaperPlane />
+                <span className="hidden sm:inline">Send</span>
+              </button>
+            </div>
+
+            {/* Optional: Typing indicator - will implement with socket */}
+            <div className="mt-2 text-sm text-gray-500">
+              {/* {isTyping && <span>{selectedUser.name} is typing...</span>} */}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

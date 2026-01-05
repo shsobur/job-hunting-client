@@ -7,13 +7,14 @@ import DashboardContent from "../Shared/DashboardMain/DashboardContent";
 
 // From react__
 import { useState, useRef, useEffect, useContext } from "react";
+import useSocket from "../Hooks/useSocket";
 
 const Dashboard = () => {
   const { profile } = useUserData();
+  const { connectSocket } = useSocket();
   const { user, userLoading } = useContext(AuthContext);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
-  
 
   const dropdownRef = useRef();
 
@@ -27,6 +28,16 @@ const Dashboard = () => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  useEffect(() => {
+    if (user && profile) {
+      connectSocket({
+        _id: profile._id,
+        email: user.email,
+        role: profile.userRole,
+      });
+    }
+  }, [connectSocket, profile, user]);
 
   return (
     <section className="bg-[#f8fafc]">
