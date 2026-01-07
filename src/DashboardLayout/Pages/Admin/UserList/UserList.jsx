@@ -413,7 +413,9 @@ const UserList = () => {
                                 </div>
                                 <div>
                                   <p className="font-medium text-gray-900">
-                                    {user?.userName || "Unknown User"}
+                                    {user?.userName ||
+                                      user?.companyName ||
+                                      "Unknown User"}
                                   </p>
                                   <p className="text-sm text-gray-500 flex items-center gap-1">
                                     <MdEmail className="text-xs" />
@@ -473,9 +475,23 @@ const UserList = () => {
                               <div className="flex items-center space-x-2">
                                 <button
                                   onClick={() =>
-                                    navigate(
-                                      `/dashboard/admin-chat?userId=${user.userEmail}`
-                                    )
+                                    navigate("/dashboard/admin-chat", {
+                                      state: {
+                                        selectedUser: {
+                                          email: user.userEmail,
+                                          name:
+                                            user.userName ||
+                                            user.companyName ||
+                                            "User",
+                                          role: user.userRole,
+                                          image:
+                                            user.profilePhoto ||
+                                            user.companyLogo ||
+                                            "",
+                                          _id: user._id,
+                                        },
+                                      },
+                                    })
                                   }
                                   className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
                                 >
@@ -551,9 +567,23 @@ const UserList = () => {
                         <div className="flex items-center space-x-2">
                           <button
                             onClick={() =>
-                              navigate(
-                                `/dashboard/admin-chat?userId=${user.userEmail}`
-                              )
+                              navigate("/dashboard/admin-chat", {
+                                state: {
+                                  selectedUser: {
+                                    email: user.userEmail,
+                                    name:
+                                      user.userName ||
+                                      user.companyName ||
+                                      "User",
+                                    role: user.userRole,
+                                    image:
+                                      user.profilePhoto ||
+                                      user.companyLogo ||
+                                      "",
+                                    _id: user._id,
+                                  },
+                                },
+                              })
                             }
                             className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg"
                           >

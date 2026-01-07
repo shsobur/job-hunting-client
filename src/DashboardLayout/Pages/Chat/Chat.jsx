@@ -51,11 +51,15 @@ const Chat = () => {
     handleLogout();
   }
 
+  // Data from use list for chat__
+  const selectedUserFromState = location.state?.selectedUser;
+
   return (
     <div className="chat-page">
       <ReusableChatLayout
         userRole={userRole}
-        userName={profile?.userName || profile?.companyName || "User"}
+        userName={profile?.name || "User"}
+        selectedUserFromState={selectedUserFromState}
       />
     </div>
   );
