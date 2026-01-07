@@ -11,9 +11,9 @@ import LoadingScreen from "../../../../Components/LoadingScreen/LoadingScreen";
 import { useContext } from "react";
 
 const HomeLayout = () => {
-  const { userLoading } = useContext(AuthContext);
+  const { user, userLoading } = useContext(AuthContext);
 
-  if (userLoading) {
+  if (user && userLoading) {
     return <LoadingScreen />;
   }
 
@@ -43,4 +43,4 @@ const HomeLayout = () => {
   );
 };
 
-export default HomeLayout;  
+export default HomeLayout;

@@ -26,6 +26,7 @@ const ReusableChatLayout = ({ userRole, userName }) => {
       userId: "user_123",
       name: "John Doe",
       avatar: "JD",
+      email: "john@example.com", // ✅ ADD THIS
       role: "Job Seeker",
       lastMessage: "Hello, I have a question...",
       lastMessageTime: "10:45 AM",
@@ -37,6 +38,7 @@ const ReusableChatLayout = ({ userRole, userName }) => {
       userId: "user_456",
       name: "Jane Smith",
       avatar: "JS",
+      email: "jane@example.com", // ✅ ADD THIS
       role: userRole === "admin" ? "Recruiter" : "Admin",
       lastMessage: "Thanks for the update!",
       lastMessageTime: "Yesterday",
@@ -45,7 +47,7 @@ const ReusableChatLayout = ({ userRole, userName }) => {
     },
   ];
 
-  const messages = [
+  const [messages, setMessages] = useState([
     {
       id: 1,
       senderId: "user_123",
@@ -62,7 +64,7 @@ const ReusableChatLayout = ({ userRole, userName }) => {
       timestamp: "10:41 AM",
       isCurrentUser: true,
     },
-  ];
+  ]);
 
   // Role-based configurations
   const getRoleConfig = () => {
@@ -99,11 +101,31 @@ const ReusableChatLayout = ({ userRole, userName }) => {
     if (!messageInput.trim() || !selectedUser) return;
 
     if (socket && isConnected) {
+      console.log("📤 Sending to:", selectedUser.email);
+
       socket.emit("send_message", {
         to: selectedUser.email,
         text: messageInput,
         timestamp: new Date().toISOString(),
       });
+
+      // Add message to UI immediately
+      const newMessage = {
+        id: Date.now(),
+        senderId: "current",
+        senderName: "You",
+        text: messageInput,
+        timestamp: new Date().toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+        isCurrentUser: true,
+      };
+
+      // Add to messages array
+      setMessages((prev) => [...prev, newMessage]);
+    } else {
+      console.error("❌ Socket not connected");
     }
 
     setMessageInput("");

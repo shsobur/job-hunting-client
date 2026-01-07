@@ -32,9 +32,11 @@ const Dashboard = () => {
   useEffect(() => {
     if (user && profile) {
       connectSocket({
-        _id: profile._id,
-        email: user.email,
-        role: profile.userRole,
+        userData: {
+          _id: profile._id,
+          email: user.email,
+          role: profile.userRole,
+        },
       });
     }
   }, [connectSocket, profile, user]);

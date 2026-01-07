@@ -13,9 +13,11 @@ import {
 import { MdEmail } from "react-icons/md";
 import AdminTableSkeleton from "../../../../Components/AdminTableSkeleton/AdminTableSkeleton";
 import useAxios from "../../../../Hooks/Axios";
+import { useNavigate } from "react-router";
 
 const UserList = () => {
   const api = useAxios();
+  const navigate = useNavigate();
   const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -30,7 +32,6 @@ const UserList = () => {
         const res = await api.get(
           `/admin-api/all-user-list?search=${searchTerm}&role=${roleFilter}`
         );
-        // Add optional chaining here too
         setUsers(res?.data || []);
         setFilteredUsers(res?.data || []);
         setLoading(false);
@@ -45,7 +46,7 @@ const UserList = () => {
     userData();
   }, [api, searchTerm, roleFilter]);
 
-  // Handle responsive view mode
+  // Handle responsive view mode__
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth < 1200) {
@@ -470,9 +471,17 @@ const UserList = () => {
 
                             <td className="py-4 px-6">
                               <div className="flex items-center space-x-2">
-                                <button className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
+                                <button
+                                  onClick={() =>
+                                    navigate(
+                                      `/dashboard/admin-chat?userId=${user.userEmail}`
+                                    )
+                                  }
+                                  className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                                >
                                   <FaEnvelope className="text-lg" />
                                 </button>
+
                                 <button className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors">
                                   <FaEye className="text-lg" />
                                 </button>
@@ -540,7 +549,14 @@ const UserList = () => {
                           </span>
                         </div>
                         <div className="flex items-center space-x-2">
-                          <button className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg">
+                          <button
+                            onClick={() =>
+                              navigate(
+                                `/dashboard/admin-chat?userId=${user.userEmail}`
+                              )
+                            }
+                            className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg"
+                          >
                             <FaEnvelope />
                           </button>
                           <button className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg">
