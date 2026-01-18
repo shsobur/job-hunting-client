@@ -41,6 +41,24 @@ export const getCroppedImg = (imageSrc, croppedAreaPixels) => {
   });
 };
 
+// Message to job seeker__
+export const getRecruiterWelcomeMessage = (
+  candidateName,
+  recruiterEmail = "out team"
+) => {
+  const messages = [
+    `Dear ${candidateName}, we've reviewed your profile and are impressed with your qualifications. We'd like to continue the conversation about your application. Our team will contact you shortly with next steps.`,
+
+    `Hello ${candidateName}, thank you for applying! We've reviewed your application and would like to move forward. We'll be in touch soon with more details.`,
+
+    `Hi ${candidateName}, we appreciate your interest in the position. After reviewing your profile, we believe you could be a great fit. We'll contact you within 24-48 hours regarding next steps.`,
+
+    `Dear ${candidateName}, we've carefully reviewed your application and would like to proceed to the next stage. Please expect an email from ${recruiterEmail} with further instructions.`,
+  ];
+
+  return messages[0];
+};
+
 // JH Theme Configuration
 const JH_SWAL_CONFIG = {
   background: "#ffffff",
