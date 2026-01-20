@@ -35,6 +35,7 @@ const ReusableChatLayout = ({
   const [messageInput, setMessageInput] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [messages, setMessages] = useState([]);
+  console.log(messages);
   const [loadingMessages, setLoadingMessages] = useState(false);
 
   // Get user display info (name, avatar, role)
