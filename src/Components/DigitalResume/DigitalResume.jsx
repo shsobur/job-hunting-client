@@ -58,6 +58,7 @@ const DigitalResume = ({ clickedApp, resumeLink }) => {
         // Listen for confirmation
         socket.once("auto_message_sent", (data) => {
           console.log("Auto message sent successfully:", data);
+          handleAcceptApplication();
         });
 
         socket.once("auto_message_error", (error) => {
@@ -81,6 +82,11 @@ const DigitalResume = ({ clickedApp, resumeLink }) => {
       redirectToChat();
     }
   };
+
+  // After accept application__
+  const handleAcceptApplication = () => {
+    // __
+  }
 
   // Helper function to redirect to chat
   const redirectToChat = () => {

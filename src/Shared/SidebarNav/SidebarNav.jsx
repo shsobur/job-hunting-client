@@ -73,7 +73,7 @@ const SidebarNav = ({
         },
         {
           id: "my-application",
-          path: "/dashboard/user-applications",
+          path: "/dashboard/user-my-applications",
           label: "My Applications",
           icon: <FiHome size={20} />,
         },

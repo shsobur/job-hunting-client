@@ -19,6 +19,9 @@ import RecApplications from "../DashboardLayout/Pages/Recruiter/RecApplications/
 // Package__
 import { createBrowserRouter } from "react-router-dom";
 import UserList from "../DashboardLayout/Pages/Admin/UserList/UserList";
+import MyApplication from "../DashboardLayout/Pages/JobSeeker/MyApplication/MyApplication";
+
+
 
 const router = createBrowserRouter([
   {
@@ -115,6 +118,10 @@ const router = createBrowserRouter([
         path: "/dashboard/user-chat",
         element: <Chat></Chat>,
       },
+      {
+        path: "/dashboard/user-my-applications",
+        element: <MyApplication></MyApplication>
+      }
     ],
   },
 ]);
